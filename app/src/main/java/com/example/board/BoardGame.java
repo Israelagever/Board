@@ -12,6 +12,7 @@ import android.widget.Toast;
 import java.util.Arrays;
 import java.util.Random;
 
+
 import static com.example.board.MainActivity.handler;
 
 
@@ -232,9 +233,10 @@ public class BoardGame extends View {
             invalidate();
 
             if(isWin()){
-                Toast.makeText(context, "ניצחת אלוף!!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "ניצחת אלוף!!", Toast.LENGTH_SHORT).show();
                 MainActivity.btnReset.setVisibility(VISIBLE);
                 time.isRun = false;
+
             }
         }
         return true;

@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityOptionsCompat;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -19,20 +20,24 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowInsets;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import static com.example.board.BoardGame.time;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnApplyWindowInsetsListener {
 
-    static Button btnReset, btnStart;
+    static Button btnReset, btnStart, btnSolved;
+
     BoardGame boardGame;
     static TextView tvTime, tvMoves;
      int sizeOfBoard = 4;
      int colorOfTile = Color.MAGENTA;
     LinearLayout l;
+
+    Dialog solvedD;
 
     boolean ifStart;
     static Handler handler;
@@ -47,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         l.addView(boardGame);
 
         doHandler();
+
 
     }
 
@@ -101,6 +107,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnReset = findViewById(R.id.btnReset);
         btnReset.setOnClickListener(this);
 
+        btnReset.setOnApplyWindowInsetsListener(this);
+
+
         l = findViewById(R.id.lGame);
 
     }
@@ -118,6 +127,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             time.start();
         }
         else if (v == btnStart) {
+            resetGame();
+            ifStart = true;
+        }
+        else {
             resetGame();
             ifStart = true;
         }
@@ -152,5 +165,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         l.addView(boardGame);
         btnReset.setVisibility(View.INVISIBLE);
 
+    }
+
+    public void createSolvedDialog()
+    {
+        solvedD=new Dialog(this);
+        solvedD.setContentView(R.layout.custom_solved);
+        solvedD.setCancelable(false);
+        btnSolved = solvedD.findViewById(R.id.btnSolved);
+        btnSolved.setOnClickListener(this);
+        solvedD.show();
+
+
+    }
+
+
+    @Override
+    public WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
+        if(view.getVisibility() == View.VISIBLE){
+            createSolvedDialog();
+        }
+        return null;
     }
 }
