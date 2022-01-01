@@ -5,7 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.util.Log;
+
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -237,7 +237,7 @@ public class BoardGame extends View {
 
             if(isWin()){
                 //Toast.makeText(context, "ניצחת אלוף!!", Toast.LENGTH_SHORT).show();
-                MainActivity.btnReset.setVisibility(VISIBLE);
+
                 time.isRun = false;
                 createSolvedDialog();
 

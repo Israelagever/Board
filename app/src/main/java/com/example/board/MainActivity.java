@@ -11,6 +11,7 @@ import androidx.core.app.ActivityOptionsCompat;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      int sizeOfBoard = 4;
      int colorOfTile = Color.MAGENTA;
     LinearLayout l;
-
+    SharedPreferences getSetting;
     static Dialog solvedD;
 
     boolean ifStart;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         init();
+        update();
         boardGame = new BoardGame(this, sizeOfBoard,colorOfTile);
 
         l.addView(boardGame);
@@ -86,12 +88,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == Activity.RESULT_OK) {
-                        Intent intent = result.getData();
-                        int size = intent.getExtras().getInt("size");
-                        sizeOfBoard =size;
-                        int color = intent.getExtras().getInt("color");
-                        int b = Color.GREEN;
-                        colorOfTile = color;
+                        update();
                         ifStart = true;
                         resetGame();
                     }
@@ -110,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnPause = findViewById(R.id.btnPause);
         btnPause.setOnClickListener(this);
 
-
+        getSetting = getSharedPreferences("settings",0);
 
         l = findViewById(R.id.lGame);
 
@@ -167,5 +164,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         l.addView(boardGame);
 
 
+    }
+
+    public void update()
+    {
+        int size = getSetting.getInt("size", 0);
+        if (size != 0) sizeOfBoard =size;
+        int color = getSetting.getInt("color", 0);
+        if (color != 0) colorOfTile = color;
     }
 }

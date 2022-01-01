@@ -3,6 +3,7 @@ package com.example.board;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -22,6 +23,7 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
     int choiceOfSize, choiceOfColor;
 
     ArrayAdapter<String> dataAdapter;
+    SharedPreferences saveSetting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,8 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
         spinnerColor = findViewById(R.id.spinnerColor);
         createSpinnerOfSize();
         createSpinnerOfColor();
+
+        saveSetting = getSharedPreferences("settings",0);
 
 
     }
@@ -79,48 +83,32 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String temp = adapterView.getItemAtPosition(i).toString();
                 int tempColor = 0;
-                /*
+                SharedPreferences.Editor editor = saveSetting.edit();
+
                 switch (temp) {
                     case "magenta":
-                        tempColor = Color.MAGENTA;
-
+                        editor.putInt("color",Color.MAGENTA);
+                        break;
                     case "green":
-                        tempColor =Color.GREEN;
-
+                        editor.putInt("color",Color.GREEN);
+                        break;
                     case "yellow":
-                        tempColor =  Color.YELLOW;
-
+                        editor.putInt("color",Color.YELLOW);
+                        break;
                     case "black":
-                        tempColor = Color.BLACK;
-
+                        editor.putInt("color",Color.BLACK);
+                        break;
                     case "blue":
-                        tempColor = Color.BLUE;
-
+                        editor.putInt("color",Color.LTGRAY);
+                        break;
                     case "cyan":
-                        tempColor = Color.CYAN;
-
+                        editor.putInt("color",Color.CYAN);
+                        break;
                     case "red":
-                        tempColor = Color.RED;
-                 }
-
-                 */
-                if (temp == "magenta")
-                    tempColor = Color.MAGENTA;
-                if (temp == "green")
-                    tempColor = Color.GREEN;
-                if (temp == "yellow")
-                    tempColor = Color.YELLOW;
-                if (temp == "black")
-                    tempColor = Color.BLACK;
-                if (temp == "blue")
-                    tempColor = Color.BLUE;
-                if (temp == "cyan")
-                    tempColor = Color.CYAN;
-                if (temp == "red")
-                    tempColor = Color.RED;
-
-
-                intent.putExtra("color", tempColor);
+                        editor.putInt("color",Color.RED);
+                        break;
+                }
+                editor.commit();
                 setResult(RESULT_OK, intent);
             }
 
@@ -134,9 +122,10 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
+        SharedPreferences.Editor editor = saveSetting.edit();
         String temp = adapterView.getItemAtPosition(i).toString();
-        intent.putExtra("size", Integer.parseInt(temp));
-
+        editor.putInt("size", Integer.parseInt(temp));
+        editor.commit();
 
         setResult(RESULT_OK, intent);
     }
