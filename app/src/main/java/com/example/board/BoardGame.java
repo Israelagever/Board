@@ -1,6 +1,7 @@
 package com.example.board;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -13,7 +14,9 @@ import java.util.Arrays;
 import java.util.Random;
 
 
+import static com.example.board.MainActivity.btnSolved;
 import static com.example.board.MainActivity.handler;
+import static com.example.board.MainActivity.solvedD;
 
 
 public class BoardGame extends View {
@@ -236,6 +239,7 @@ public class BoardGame extends View {
                 //Toast.makeText(context, "ניצחת אלוף!!", Toast.LENGTH_SHORT).show();
                 MainActivity.btnReset.setVisibility(VISIBLE);
                 time.isRun = false;
+                createSolvedDialog();
 
             }
         }
@@ -275,6 +279,19 @@ public class BoardGame extends View {
             }
         }
         return null;
+    }
+
+
+    public void createSolvedDialog()
+    {
+        solvedD=new Dialog(context);
+        solvedD.setContentView(R.layout.custom_solved);
+        solvedD.setCancelable(false);
+        btnSolved = solvedD.findViewById(R.id.btnSolved);
+        btnSolved.setOnClickListener((OnClickListener) context);
+        solvedD.show();
+
+
     }
 
 }

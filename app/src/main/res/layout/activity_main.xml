@@ -8,16 +8,36 @@
     android:background="@color/teal_200"
     tools:context=".MainActivity">
 
-
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:orientation="horizontal">
 
-        android:textSize="40dp"
-        android:textColor="@color/purple_700"
-        android:text="the game"
-        />
+
+
+        <Button
+            android:id="@+id/btnStart"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="start"
+            android:textSize="25sp"/>
+
+        <Button
+
+            android:id="@+id/btnPause"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
+            android:text="pause"
+            android:textSize="25sp" />
+
+
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -54,14 +74,7 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btnStart"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:text="start"
-            android:textSize="25sp"/>
+
 
 
 
@@ -75,16 +88,6 @@
         android:id="@+id/lGame"
         android:orientation="vertical"></LinearLayout>
 
-    <Button
-        android:id="@+id/btnReset"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="reset"
-        android:layout_marginTop="30dp"
-        android:textColor="#FFD147"
-        android:textSize="20sp"
-        android:visibility="invisible"
-        android:background="@color/teal_200"/>
 
 
 </LinearLayout>

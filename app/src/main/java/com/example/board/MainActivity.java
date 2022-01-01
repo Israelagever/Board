@@ -13,6 +13,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -25,11 +26,12 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import static android.view.View.INVISIBLE;
 import static com.example.board.BoardGame.time;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnApplyWindowInsetsListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    static Button btnReset, btnStart, btnSolved;
+    static Button btnStart, btnSolved, btnPause;
 
     BoardGame boardGame;
     static TextView tvTime, tvMoves;
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      int colorOfTile = Color.MAGENTA;
     LinearLayout l;
 
-    Dialog solvedD;
+    static Dialog solvedD;
 
     boolean ifStart;
     static Handler handler;
@@ -104,10 +106,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnStart.setOnClickListener(this);
         tvTime = findViewById(R.id.tvTime);
         tvMoves = findViewById(R.id.tvMoves);
-        btnReset = findViewById(R.id.btnReset);
-        btnReset.setOnClickListener(this);
 
-        btnReset.setOnApplyWindowInsetsListener(this);
+        btnPause = findViewById(R.id.btnPause);
+        btnPause.setOnClickListener(this);
+
 
 
         l = findViewById(R.id.lGame);
@@ -118,21 +120,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
 
 
-        if (v == btnReset) {
-            resetGame();
 
-        }
-        else if (v==boardGame){
-            Time time = new Time(handler);
-            time.start();
-        }
-        else if (v == btnStart) {
+
+        if (v == btnStart) {
             resetGame();
             ifStart = true;
+
+        }
+        else if (v == btnPause)
+        {
+            time.isRun = false;
         }
         else {
             resetGame();
             ifStart = true;
+            solvedD.dismiss();
         }
 
     }
@@ -163,28 +165,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tvMoves.setText("num of moves: 0");
         tvTime.setText("0.0");
         l.addView(boardGame);
-        btnReset.setVisibility(View.INVISIBLE);
-
-    }
-
-    public void createSolvedDialog()
-    {
-        solvedD=new Dialog(this);
-        solvedD.setContentView(R.layout.custom_solved);
-        solvedD.setCancelable(false);
-        btnSolved = solvedD.findViewById(R.id.btnSolved);
-        btnSolved.setOnClickListener(this);
-        solvedD.show();
 
 
-    }
-
-
-    @Override
-    public WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
-        if(view.getVisibility() == View.VISIBLE){
-            createSolvedDialog();
-        }
-        return null;
     }
 }
