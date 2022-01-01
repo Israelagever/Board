@@ -172,5 +172,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (size != 0) sizeOfBoard =size;
         int color = getSetting.getInt("color", 0);
         if (color != 0) colorOfTile = color;
+
     }
 }

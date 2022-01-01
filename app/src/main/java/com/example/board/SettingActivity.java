@@ -20,7 +20,8 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
     List<String> sizeOption, colorOption;
 
     Intent intent;
-    int choiceOfSize, choiceOfColor;
+    int choiceOfSize;
+    String  choiceOfColor;
 
     ArrayAdapter<String> dataAdapter;
     SharedPreferences saveSetting;
@@ -36,15 +37,16 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
 
     public void init() {
 
-        intent = getIntent();
-        choiceOfSize = intent.getExtras().getInt("size");
-        choiceOfColor = intent.getExtras().getInt("color");
+        saveSetting = getSharedPreferences("settings",0);
+
+        choiceOfSize = saveSetting.getInt("size",4);
+        choiceOfColor = saveSetting.getString("color name",null);
         spinnerSize = findViewById(R.id.spinnerSize);
         spinnerColor = findViewById(R.id.spinnerColor);
         createSpinnerOfSize();
         createSpinnerOfColor();
 
-        saveSetting = getSharedPreferences("settings",0);
+
 
 
     }
@@ -64,48 +66,64 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
     }
 
     private void createSpinnerOfColor() {
+        SharedPreferences.Editor editor = saveSetting.edit();
+
         colorOption = new ArrayList<String>();
         colorOption.add("magenta");
-        colorOption.add("green");
-        colorOption.add("yellow");
-        colorOption.add("black");
-        colorOption.add("blue");
-        colorOption.add("cyan");
-        colorOption.add("red");
+        colorOption.add("green");colorOption.add("yellow");
+        colorOption.add("black");colorOption.add("gray");
+        colorOption.add("cyan");colorOption.add("red");
+
+
         dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, colorOption);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         spinnerColor.setAdapter(dataAdapter);
-        //spinnerColor.setSelection(choiceOfColor-3);
+
+
+        for (int i = 0;i<7;i++)
+        {
+            if (spinnerColor.getAdapter().getItem(i) == choiceOfColor){
+                spinnerColor.setSelection(i);
+                break;
+            }
+        }
+
 
         spinnerColor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String temp = adapterView.getItemAtPosition(i).toString();
                 int tempColor = 0;
-                SharedPreferences.Editor editor = saveSetting.edit();
+
 
                 switch (temp) {
                     case "magenta":
                         editor.putInt("color",Color.MAGENTA);
+                        editor.putString("color name","magenta");
                         break;
                     case "green":
                         editor.putInt("color",Color.GREEN);
+                        editor.putString("color name","green");
                         break;
                     case "yellow":
                         editor.putInt("color",Color.YELLOW);
+                        editor.putString("color name","yellow");
                         break;
                     case "black":
                         editor.putInt("color",Color.BLACK);
+                        editor.putString("color name","black");
                         break;
-                    case "blue":
+                    case "gray":
                         editor.putInt("color",Color.LTGRAY);
+                        editor.putString("color name","gray");
                         break;
                     case "cyan":
                         editor.putInt("color",Color.CYAN);
+                        editor.putString("color name","cyan");
                         break;
                     case "red":
                         editor.putInt("color",Color.RED);
+                        editor.putString("color name","red");
                         break;
                 }
                 editor.commit();
