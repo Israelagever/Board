@@ -80,9 +80,11 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
         spinnerColor.setAdapter(dataAdapter);
 
 
+        String ex = (String) spinnerColor.getAdapter().getItem(4);
+
         for (int i = 0;i<7;i++)
         {
-            if (spinnerColor.getAdapter().getItem(i) == choiceOfColor){
+            if (spinnerColor.getAdapter().getItem(i).equals(choiceOfColor)){
                 spinnerColor.setSelection(i);
                 break;
             }
