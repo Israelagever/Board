@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityOptionsCompat;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     SharedPreferences getSetting;
     static Dialog solvedD;
 
-    boolean ifStart;
+    boolean ifStart, ifPause = false;
     static Handler handler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    @SuppressLint({"SetTextI18n", "Range"})
     @Override
     public void onClick(View v) {
 
@@ -126,7 +128,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if (v == btnPause)
         {
-            time.isRun = false;
+            if (!ifPause) {
+                time.isRun = false;
+                btnPause.setText("continue");
+                ifPause = true;
+                boardGame.setIfPause(true);
+
+
+            }
+            else {
+                time.isRun = true;
+                btnPause.setText("pause");
+                ifPause = false;
+                boardGame.setIfPause(false);
+
+            }
         }
         else {
             resetGame();
@@ -162,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tvMoves.setText("num of moves: 0");
         tvTime.setText("0.0");
         l.addView(boardGame);
+        btnPause.setEnabled(false);
 
 
     }

@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Random;
 
 
+import static com.example.board.MainActivity.btnPause;
 import static com.example.board.MainActivity.btnSolved;
 import static com.example.board.MainActivity.handler;
 import static com.example.board.MainActivity.solvedD;
@@ -21,7 +22,7 @@ import static com.example.board.MainActivity.solvedD;
 
 public class BoardGame extends View {
 
-    boolean ifOne1 = true, ifOne2 = true;
+    boolean ifOne1 = true, ifOne2 = true, ifPause;
     int size,color;
 
     int[] theSort;
@@ -47,9 +48,14 @@ public class BoardGame extends View {
         r = new Random();
         all = size*size;
         theSort = new int[all];
+        ifPause = false;
 
 
         this.setBackgroundColor(Color.BLUE);
+    }
+
+    public void setIfPause(boolean ifPause) {
+        this.ifPause = ifPause;
     }
 
     @Override
@@ -220,30 +226,34 @@ public class BoardGame extends View {
         if (ifOne2){
             time = new Time(handler);
             time.start();
+            btnPause.setEnabled(true);
         }
 
         ifOne2 = false;
 
-        if(event.getAction()==MotionEvent.ACTION_UP) {
-            Square mySquare = findSquare(event.getX(),event.getY());
-            //Square target = blank();
-            if(mySquare!=null&& checkBlank(event.getX(),event.getY())) {
-                slide(mySquare, blank);
+        if (!ifPause) {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                Square mySquare = findSquare(event.getX(), event.getY());
+                //Square target = blank();
+                if (mySquare != null && checkBlank(event.getX(), event.getY())) {
+                    slide(mySquare, blank);
 
-                moves++;
-                MainActivity.tvMoves.setText("num of moves: "+moves);
-            }
-            invalidate();
+                    moves++;
+                    MainActivity.tvMoves.setText("num of moves: " + moves);
+                }
+                invalidate();
 
-            if(isWin()){
-                //Toast.makeText(context, "ניצחת אלוף!!", Toast.LENGTH_SHORT).show();
+                if (isWin()) {
+                    //Toast.makeText(context, "ניצחת אלוף!!", Toast.LENGTH_SHORT).show();
 
-                time.isRun = false;
-                createSolvedDialog();
+                    time.isRun = false;
+                    createSolvedDialog();
 
+                }
             }
         }
         return true;
+
     }
 
     private boolean checkBlank(float x, float y) {
