@@ -124,6 +124,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (v == btnStart) {
             resetGame();
             ifStart = true;
+            if(ifPause)
+            {
+                btnPause.setText("pause");
+                ifPause = false;
+
+            }
 
         }
         else if (v == btnPause)
