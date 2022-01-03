@@ -159,23 +159,16 @@ public class BoardGame extends View {
 
                      */
 
-                    if (theSort[count-1]==0){
-                        squares[i][j] = new Square(this, x, y, w, h,tiles[i][j],count);
-                        x = x + w + 5;
-                        count++;
-                    }
+                    if (theSort[count - 1] != 0) {
 
-
-                    else {
-
-                        tiles[i][j] = new Tile(this, x, y, w , h , theSort[count - 1], color);
+                        tiles[i][j] = new Tile(this, x, y, w, h, theSort[count - 1], color);
                         tiles[i][j].draw(canvas);
-                        squares[i][j] = new Square(this, x, y, w, h, tiles[i][j], count);
 
 
-                        x = x + w + 5;
-                        count++;
                     }
+                    squares[i][j] = new Square(this, x, y, w, h,tiles[i][j],count);
+                    x = x + w + 5;
+                    count++;
 
                 }
                 y = y + h + 5;
@@ -260,7 +253,6 @@ public class BoardGame extends View {
         float distans = squares[0][0].h;
         if (blank.didXAndYInSquare(x,y+distans) || blank.didXAndYInSquare(x,y-distans) || blank.didXAndYInSquare(x+distans,y) || blank.didXAndYInSquare(x-distans,y))
             return true;
-
         return false;
     }
 

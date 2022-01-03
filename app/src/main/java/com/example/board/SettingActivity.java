@@ -62,6 +62,7 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
         spinnerSize.setAdapter(dataAdapter);
         spinnerSize.setSelection(choiceOfSize - 3);
 
+
         spinnerSize.setOnItemSelectedListener(this);
     }
 
@@ -80,7 +81,7 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
         spinnerColor.setAdapter(dataAdapter);
 
 
-        String ex = (String) spinnerColor.getAdapter().getItem(4);
+
 
         for (int i = 0;i<7;i++)
         {

@@ -5,6 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#96F8E1"
     tools:context=".SettingActivity">
 
     <TextView
@@ -13,13 +14,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:text="Size of board"
-        android:textSize="25sp"
+        android:textSize="35sp"
         android:textColor="#3F51B5"/>
     <Spinner
         android:id="@+id/spinnerSize"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
+        android:layout_height="50dp"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown"
         android:prompt="@string/spinner_title"
 
         />
@@ -30,13 +32,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:text="Color of tile"
-        android:textSize="25sp"
+        android:textSize="35sp"
         android:textColor="#3F51B5"/>
     <Spinner
         android:id="@+id/spinnerColor"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
+        android:layout_height="50dp"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown"
         android:prompt="@string/spinner_title"
 
         />
