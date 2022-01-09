@@ -6,7 +6,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityOptionsCompat;
+
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -14,8 +14,8 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.net.Uri;
-import android.os.Build;
+
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,12 +23,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowInsets;
+
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import static android.view.View.INVISIBLE;
+
 import static com.example.board.BoardGame.time;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -73,9 +73,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.setting) {
                 Intent intent = new Intent(MainActivity.this,SettingActivity.class);
-                intent.putExtra("size",sizeOfBoard);
-                //intent.putExtra("color",colorOfTile);
-//                startActivity(intent);
+
+
+
                 mStartForResult.launch(intent);
 
                 return true;
