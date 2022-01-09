@@ -48,7 +48,7 @@ public class BoardGame extends View {
         r = new Random();
         all = size*size;
         theSort = new int[all];
-        ifPause = false;
+        ifPause = true;
 
 
         this.setBackgroundColor(Color.BLUE);
@@ -57,6 +57,7 @@ public class BoardGame extends View {
     public void setIfPause(boolean ifPause) {
         this.ifPause = ifPause;
     }
+    public boolean getIfPause() {return ifPause;}
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -220,6 +221,7 @@ public class BoardGame extends View {
             time = new Time(handler);
             time.start();
             btnPause.setEnabled(true);
+            ifPause = false;
         }
 
         ifOne2 = false;

@@ -134,14 +134,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if (v == btnPause)
         {
-            if (!ifPause) {
-                time.isRun = false;
-                btnPause.setText("continue");
-                ifPause = true;
-                boardGame.setIfPause(true);
+            if (!ifPause)
+                stopGame();
 
-
-            }
             else {
                 time.isRun = true;
                 btnPause.setText("pause");
@@ -188,6 +183,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
+    public void stopGame(){
+        time.isRun = false;
+        btnPause.setText("continue");
+        ifPause = true;
+        boardGame.setIfPause(true);
+    }
 
     public void update()
     {
@@ -196,5 +197,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int color = getSetting.getInt("color", 0);
         if (color != 0) colorOfTile = color;
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (!ifPause&& !boardGame.getIfPause())
+            stopGame();
     }
 }
