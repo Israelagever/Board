@@ -8,7 +8,7 @@
     <android.widget.Button
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/teal_200"
+        android:background="#03A9F4"
         android:text="solved"
         android:textSize="50sp"
         android:textStyle="bold"
