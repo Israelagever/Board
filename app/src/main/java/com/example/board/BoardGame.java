@@ -51,7 +51,7 @@ public class BoardGame extends View {
         ifPause = true;
 
 
-        this.setBackgroundColor(Color.BLUE);
+        this.setBackgroundColor(Color.parseColor("#03A9F4"));
     }
 
     public void setIfPause(boolean ifPause) {
@@ -165,7 +165,6 @@ public class BoardGame extends View {
                         tiles[i][j] = new Tile(this, x, y, w, h, theSort[count - 1], color);
                         tiles[i][j].draw(canvas);
 
-
                     }
                     squares[i][j] = new Square(this, x, y, w, h,tiles[i][j],count);
                     x = x + w + 5;
@@ -252,8 +251,8 @@ public class BoardGame extends View {
     }
 
     private boolean checkBlank(float x, float y) {
-        float distans = squares[0][0].h;
-        if (blank.didXAndYInSquare(x,y+distans) || blank.didXAndYInSquare(x,y-distans) || blank.didXAndYInSquare(x+distans,y) || blank.didXAndYInSquare(x-distans,y))
+        float distant = squares[0][0].h;
+        if (blank.didXAndYInSquare(x,y+distant) || blank.didXAndYInSquare(x,y-distant) || blank.didXAndYInSquare(x+distant,y) || blank.didXAndYInSquare(x-distant,y))
             return true;
         return false;
     }

@@ -13,7 +13,7 @@ public class Square  {
     BoardGame boardGame;
     Tile tile;
     float x,y,w,h;//top left
-    int color;
+
     Paint p;
     int number;
 
@@ -25,10 +25,10 @@ public class Square  {
         this.number = number;
         this.x = x;
         this.y = y;
-        this.color = color;
+
         this.boardGame = boardGame;
         p = new Paint();
-        p.setColor(color);
+
         this.w = w;
         this.h = h;
         this.tile = tile;

@@ -180,9 +180,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tvTime.setText("0.0");
         l.addView(boardGame);
         btnPause.setEnabled(false);
-
-
     }
+
     public void stopGame(){
         time.isRun = false;
         btnPause.setText("continue");
