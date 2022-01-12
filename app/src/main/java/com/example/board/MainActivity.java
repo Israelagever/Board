@@ -199,8 +199,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
+        super.onPause();
         if (!ifPause&& !boardGame.getIfPause())
             stopGame();
     }

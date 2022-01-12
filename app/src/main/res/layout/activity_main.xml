@@ -81,13 +81,26 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_gravity="center"
-        android:layout_width="400dp"
-        android:layout_height="400dp"
-        android:layout_marginTop="30dp"
-        android:id="@+id/lGame"
-        android:orientation="vertical" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <View
+            android:layout_gravity="center_horizontal"
+            android:layout_width="400dp"
+            android:layout_height="400dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/black" />
+        <LinearLayout
+            android:layout_gravity="center_horizontal"
+            android:layout_width="380dp"
+            android:layout_height="380dp"
+            android:layout_marginTop="28dp"
+            android:id="@+id/lGame"
+            android:orientation="vertical" >
+
+
+        </LinearLayout>
+    </FrameLayout>
 
 
 

@@ -52,6 +52,7 @@ public class BoardGame extends View {
 
 
         this.setBackgroundColor(Color.parseColor("#03A9F4"));
+
     }
 
     public void setIfPause(boolean ifPause) {

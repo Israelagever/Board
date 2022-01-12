@@ -35,7 +35,7 @@ public class Tile {
 
         paintTitle.setARGB(255, 255, 255, 255);
         paintTitle.setTextAlign(Paint.Align.CENTER);
-        paintTitle.setTextSize(50);
+        paintTitle.setTextSize(70);
         //textp.setColor(Color.GREEN);
 
         p2 = new Paint();
