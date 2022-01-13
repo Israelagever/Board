@@ -84,8 +84,8 @@ public class Tile {
 
 
         Path path = new Path();
-        float rx = 30;
-        float ry = 30;
+        float rx = 25;
+        float ry = 25;
         float width = right - left;
         float height = bottom - top;
         if (rx > width / 2) rx = width / 2;
