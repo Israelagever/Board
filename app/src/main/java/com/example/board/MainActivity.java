@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import static com.example.board.BoardGame.time;
@@ -43,12 +44,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     SharedPreferences getSetting;
     static Dialog solvedD;
 
-    boolean ifStart, ifPause = false;
+    boolean ifStart, ifPause = false, passToIntent = false;
     static Handler handler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         init();
         update();
@@ -72,13 +74,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.setting) {
-                Intent intent = new Intent(MainActivity.this,SettingActivity.class);
+            Intent intent = new Intent(MainActivity.this,SettingActivity.class);
+//          if (!ifPause && !boardGame.getIfPause()) stopGame();
+            passToIntent = true;
+            mStartForResult.launch(intent);
 
-
-
-                mStartForResult.launch(intent);
-
-                return true;
+            return true;
         }
         return true;
 
@@ -90,6 +91,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         update();
+                        btnPause.setText("pause");
+                        ifPause = false;
                         ifStart = true;
                         resetGame();
                     }
@@ -184,7 +187,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void stopGame(){
         time.isRun = false;
-        btnPause.setText("continue");
+        if (!passToIntent)
+            btnPause.setText("continue");
+        passToIntent = false;
         ifPause = true;
         boardGame.setIfPause(true);
     }
@@ -198,9 +203,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+
+
     @Override
     protected void onPause() {
         super.onPause();
+
+
         if (!ifPause&& !boardGame.getIfPause())
             stopGame();
     }

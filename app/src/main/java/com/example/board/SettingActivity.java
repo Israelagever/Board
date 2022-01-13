@@ -1,11 +1,14 @@
 package com.example.board;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -37,6 +40,12 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
 
     public void init() {
 
+        ActionBar actionBar = getSupportActionBar();
+
+        // showing the back button in action bar
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+
         saveSetting = getSharedPreferences("settings",0);
 
         choiceOfSize = saveSetting.getInt("size",4);
@@ -46,9 +55,15 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
         createSpinnerOfSize();
         createSpinnerOfColor();
 
-
-
-
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 
@@ -96,7 +111,6 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String temp = adapterView.getItemAtPosition(i).toString();
-                int tempColor = 0;
 
 
                 switch (temp) {
