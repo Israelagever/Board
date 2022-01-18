@@ -60,9 +60,9 @@ public class Tile {
     }
 
     public void draw(Canvas canvas) {
-        //canvas.drawRect(x,y,x+w,y+h,p);
+        canvas.drawRect(x,y,x+w,y+h,p);
 
-        drawRoundRect(x, y, x + w, y + h, p2, canvas);
+        //drawRoundRect(x, y, x + w, y + h, p2, canvas);
 
         canvas.drawText(String.valueOf(number), x + (w / 2), y + (h / 2), paintTitle);
     }

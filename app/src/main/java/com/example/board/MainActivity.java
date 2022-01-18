@@ -19,11 +19,13 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -33,7 +35,7 @@ import android.widget.Toast;
 import static com.example.board.BoardGame.time;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-
+    DisplayMetrics displayMetrics;
     static Button btnStart, btnSolved, btnPause;
 
     BoardGame boardGame;
@@ -50,19 +52,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSetting = getSharedPreferences("settings",0);
 
-
-        init();
         update();
-        boardGame = new BoardGame(this, sizeOfBoard,colorOfTile);
+        init();
 
-        l.addView(boardGame);
+
+
 
         doHandler();
 
 
     }
 
+    public void createBoardGame(){
+
+        int width = displayMetrics.widthPixels;
+        boardGame = new BoardGame(this, sizeOfBoard,colorOfTile);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width,width);
+        boardGame.setLayoutParams(params);
+        l.addView(boardGame);
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -104,6 +114,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void init(){
 
+        displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+
         btnStart = findViewById(R.id.btnStart);
         btnStart.setOnClickListener(this);
         tvTime = findViewById(R.id.tvTime);
@@ -115,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getSetting = getSharedPreferences("settings",0);
 
         l = findViewById(R.id.lGame);
+        createBoardGame();
 
     }
 
@@ -179,12 +194,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void resetGame()
     {
         l.removeView(boardGame);
-        boardGame = new BoardGame(this, sizeOfBoard,colorOfTile);
+        createBoardGame();
         if (time != null)
             time.isRun = false;
         tvMoves.setText("num of moves: 0");
         tvTime.setText("0.0");
-        l.addView(boardGame);
+
         btnPause.setEnabled(false);
     }
 
@@ -208,8 +223,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onPause() {
         super.onPause();
-
-
         if (!ifPause&& !boardGame.getIfPause()) {
             stopGame();
             if (passToIntent) btnPause.setText("pause");

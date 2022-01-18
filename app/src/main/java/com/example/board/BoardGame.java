@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 
+import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -51,7 +52,7 @@ public class BoardGame extends View {
         ifPause = true;
 
 
-        this.setBackgroundColor(Color.parseColor("#03A9F4"));
+        //this.setBackgroundColor(Color.parseColor("#393939"));
 
     }
 
@@ -141,13 +142,22 @@ public class BoardGame extends View {
             }while (!isSolvable(theSort));
 
             int count = 1;
-            int x = 5;
-            int y = 5;
-            int h = (canvas.getWidth() / size)-5;
-            int w = (canvas.getWidth() / size)-5;
+            int x = 10;
+            int y = 10;
+            int h = (canvas.getWidth()/size)-10;
+            int w = (canvas.getWidth()/size)-10;
 
-
+            Paint dark = new Paint();
+            dark.setStrokeWidth(15);
+            dark.setColor(Color.MAGENTA);
+/*
+            for (int i = 0; i < size; i++) {
+                canvas.drawLine(0, i * (x+h), getWidth(), i * (y+w), dark);
+                canvas.drawLine(i * (x+h), 0, i * (x+h), getHeight(), dark);
+            }
             moves=0;
+
+ */
 
             for (int i = 0; i < squares.length; i++) {
                 for (int j = 0; j < squares.length; j++) {
@@ -168,12 +178,12 @@ public class BoardGame extends View {
 
                     }
                     squares[i][j] = new Square(this, x, y, w, h,tiles[i][j],count);
-                    x = x + w + 5;
+                    x = x + w + 10;
                     count++;
 
                 }
-                y = y + h + 5;
-                x = 5;
+                y = y + h + 10;
+                x = 10;
             }
         }
         ifOne1 = false;
