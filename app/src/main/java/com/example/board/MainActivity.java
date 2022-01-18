@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         btnPause.setText("pause");
                         ifPause = false;
                         ifStart = true;
+                        passToIntent = false;
                         resetGame();
                     }
                 }
@@ -137,8 +138,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if (v == btnPause)
         {
-            if (!ifPause)
+            if (!ifPause) {
                 stopGame();
+                btnPause.setText("continue");
+            }
 
             else {
                 time.isRun = true;
@@ -187,9 +190,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void stopGame(){
         time.isRun = false;
-        if (!passToIntent)
-            btnPause.setText("continue");
-        passToIntent = false;
         ifPause = true;
         boardGame.setIfPause(true);
     }
@@ -210,7 +210,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onPause();
 
 
-        if (!ifPause&& !boardGame.getIfPause())
+        if (!ifPause&& !boardGame.getIfPause()) {
             stopGame();
+            if (passToIntent) btnPause.setText("pause");
+            else btnPause.setText("continue");
+        }
     }
 }
