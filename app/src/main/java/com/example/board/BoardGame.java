@@ -144,8 +144,9 @@ public class BoardGame extends View {
             int count = 1;
             int x = 10;
             int y = 10;
-            int h = (canvas.getWidth()/size)-10;
-            int w = (canvas.getWidth()/size)-10;
+            int e = canvas.getWidth(),f = canvas.getHeight();
+            int h = ((canvas.getWidth()-10)/size)-10;
+            int w = ((canvas.getWidth()-10)/size)-10;
 
             Paint dark = new Paint();
             dark.setStrokeWidth(15);
