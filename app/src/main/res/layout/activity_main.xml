@@ -86,4 +86,9 @@
         android:orientation="vertical" >
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#C61E1E"/>
+
 </LinearLayout>

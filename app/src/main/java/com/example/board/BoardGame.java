@@ -52,7 +52,7 @@ public class BoardGame extends View {
         ifPause = true;
 
 
-        //this.setBackgroundColor(Color.parseColor("#393939"));
+        this.setBackgroundColor(Color.parseColor("#393939"));
 
     }
 
@@ -142,23 +142,16 @@ public class BoardGame extends View {
             }while (!isSolvable(theSort));
 
             int count = 1;
-            int x = 10;
-            int y = 10;
+            int x = 15;
+            int y = 15;
             int e = canvas.getWidth(),f = canvas.getHeight();
-            int h = ((canvas.getWidth()-10)/size)-10;
-            int w = ((canvas.getWidth()-10)/size)-10;
+            int h = ((canvas.getWidth()-15)/size)-15;
+            int w = ((canvas.getWidth()-15)/size)-15;
 
-            Paint dark = new Paint();
-            dark.setStrokeWidth(15);
-            dark.setColor(Color.MAGENTA);
-/*
-            for (int i = 0; i < size; i++) {
-                canvas.drawLine(0, i * (x+h), getWidth(), i * (y+w), dark);
-                canvas.drawLine(i * (x+h), 0, i * (x+h), getHeight(), dark);
-            }
+
             moves=0;
 
- */
+
 
             for (int i = 0; i < squares.length; i++) {
                 for (int j = 0; j < squares.length; j++) {
@@ -179,12 +172,12 @@ public class BoardGame extends View {
 
                     }
                     squares[i][j] = new Square(this, x, y, w, h,tiles[i][j],count);
-                    x = x + w + 10;
+                    x = x + w + 15;
                     count++;
 
                 }
-                y = y + h + 10;
-                x = 10;
+                y = y + h + 15;
+                x = 15;
             }
         }
         ifOne1 = false;

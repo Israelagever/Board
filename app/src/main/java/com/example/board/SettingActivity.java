@@ -88,7 +88,7 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
         colorOption.add("magenta");
         colorOption.add("green");colorOption.add("yellow");
         colorOption.add("black");colorOption.add("gray");
-        colorOption.add("cyan");colorOption.add("red");
+        colorOption.add("purple");colorOption.add("red");
 
 
         dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, colorOption);
@@ -119,11 +119,11 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
                         editor.putString("color name","magenta");
                         break;
                     case "green":
-                        editor.putInt("color",Color.GREEN);
+                        editor.putInt("color",Color.parseColor("#4CAF50"));
                         editor.putString("color name","green");
                         break;
                     case "yellow":
-                        editor.putInt("color",Color.YELLOW);
+                        editor.putInt("color",Color.parseColor("#FFC107"));
                         editor.putString("color name","yellow");
                         break;
                     case "black":
@@ -131,15 +131,15 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
                         editor.putString("color name","black");
                         break;
                     case "gray":
-                        editor.putInt("color",Color.LTGRAY);
+                        editor.putInt("color",Color.parseColor("#8E8E8E"));
                         editor.putString("color name","gray");
                         break;
-                    case "cyan":
-                        editor.putInt("color",Color.CYAN);
-                        editor.putString("color name","cyan");
+                    case "purple":
+                        editor.putInt("color",Color.parseColor("#5F4195"));
+                        editor.putString("color name","purple");
                         break;
                     case "red":
-                        editor.putInt("color",Color.RED);
+                        editor.putInt("color",Color.parseColor("#C61E1E"));
                         editor.putString("color name","red");
                         break;
                 }
