@@ -11,12 +11,17 @@ public class Time extends Thread {
 
     Handler handler;
 
-    int milliSeconds, seconds;
+    int milliSeconds, seconds, minute;
     public Time(Handler handler)
     {
         this.handler=handler;
         milliSeconds = 0;
         seconds = 0;
+        minute = 0;
+    }
+
+    public int getMinute() {
+        return minute;
     }
 
     @Override
@@ -39,8 +44,14 @@ public class Time extends Thread {
                     milliSeconds = 0;
                     seconds++;
                 }
+                if (seconds == 60)
+                {
+                    minute++;
+                    seconds = 0;
+                }
                 msg.arg1 = milliSeconds;
                 msg.arg2 = seconds;
+
                 handler.sendMessage(msg);
 
             }

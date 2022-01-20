@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     boolean ifStart, ifPause = false, passToIntent = false;
     static Handler handler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -179,8 +180,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public boolean handleMessage(Message msg)
             {
+                if (msg.arg2<10)
+                    tvTime.setText(time.getMinute() +":0"+msg.arg2 +"."+ msg.arg1);
+                else
+                    tvTime.setText(time.getMinute() +":"+msg.arg2 +"."+ msg.arg1);
 
-                tvTime.setText(msg.arg2 +"."+ msg.arg1);
                 if (ifStart) {
                     tvTime.setText("0.0");
                     ifStart = false;
@@ -198,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (time != null)
             time.isRun = false;
         tvMoves.setText("num of moves: 0");
-        tvTime.setText("0.0");
+        tvTime.setText("0:00.0");
 
         btnPause.setEnabled(false);
     }
