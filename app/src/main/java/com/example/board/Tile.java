@@ -65,6 +65,7 @@ public class Tile {
         canvas.drawRect(x,y,x+w,y+h,p);
 
         //drawRoundRect(x, y, x + w, y + h, p2, canvas);
+        float a = paintTitle.ascent(),d = paintTitle.descent();
         canvas.drawText(String.valueOf(number), x + (w / 2), (y + (h/2))- ((paintTitle.descent() + paintTitle.ascent()) / 2), paintTitle);
     }
 
