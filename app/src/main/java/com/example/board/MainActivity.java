@@ -180,9 +180,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public boolean handleMessage(Message msg)
             {
 
-                tvTime.setText(msg.arg2 +"."+ msg.arg1);
+                tvTime.setText(String.format("%02d",time.getMinute())+":"+String.format("%02d",msg.arg2) +"."+ msg.arg1);
                 if (ifStart) {
-                    tvTime.setText("0.0");
+                    tvTime.setText("00:00.0");
                     ifStart = false;
                 }
                 return true;
@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (time != null)
             time.isRun = false;
         tvMoves.setText("num of moves: 0");
-        tvTime.setText("0.0");
+        tvTime.setText("00:00.0");
 
         btnPause.setEnabled(false);
     }
