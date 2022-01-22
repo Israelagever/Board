@@ -9,7 +9,7 @@ import android.os.Build;
 
 public class Tile {
     float lastx, lasty;
-    float x, y, w, h;
+    float x, y, w, h, radius = 40;
 
 
     int number, color;
@@ -34,10 +34,8 @@ public class Tile {
         paintTitle = new Paint();
 
         paintTitle.setARGB(255, 255, 255, 255);
-
         paintTitle.setTextAlign(Paint.Align.CENTER);
         paintTitle.setTextSize(70);
-
         //textp.setColor(Color.GREEN);
 
         p2 = new Paint();
@@ -65,8 +63,8 @@ public class Tile {
         canvas.drawRect(x,y,x+w,y+h,p);
 
         //drawRoundRect(x, y, x + w, y + h, p2, canvas);
-        float a = paintTitle.ascent(),d = paintTitle.descent();
-        canvas.drawText(String.valueOf(number), x + (w / 2), (y + (h/2))- ((paintTitle.descent() + paintTitle.ascent()) / 2), paintTitle);
+
+        canvas.drawText(String.valueOf(number), x + (w / 2), y + (h / 2), paintTitle);
     }
 
     public boolean didUserTouchMe(float xu, float yu) {
@@ -86,8 +84,8 @@ public class Tile {
 
 
         Path path = new Path();
-        float rx = 15;
-        float ry = 15;
+        float rx = 25;
+        float ry = 25;
         float width = right - left;
         float height = bottom - top;
         if (rx > width / 2) rx = width / 2;

@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     boolean ifStart, ifPause = false, passToIntent = false;
     static Handler handler;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -177,16 +176,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void doHandler(){
         handler=new Handler(new Handler.Callback() {
-            @SuppressLint({"SetTextI18n", "DefaultLocale"})
             @Override
             public boolean handleMessage(Message msg)
             {
 
-                tvTime.setText(String.format("%02d",time.getMinute()) +":"+String.format("%02d", msg.arg2) +"."+ msg.arg1);
-
-
+                tvTime.setText(msg.arg2 +"."+ msg.arg1);
                 if (ifStart) {
-                    tvTime.setText("00:00.0");
+                    tvTime.setText("0.0");
                     ifStart = false;
                 }
                 return true;
@@ -195,7 +191,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    @SuppressLint("SetTextI18n")
     public void resetGame()
     {
         l.removeView(boardGame);
@@ -203,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (time != null)
             time.isRun = false;
         tvMoves.setText("num of moves: 0");
-        tvTime.setText("00:00.0");
+        tvTime.setText("0.0");
 
         btnPause.setEnabled(false);
     }
