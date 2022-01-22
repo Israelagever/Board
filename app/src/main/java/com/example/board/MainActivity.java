@@ -48,6 +48,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     boolean ifStart, ifPause = false, passToIntent = false;
     static Handler handler;
+
+    RecordHelper helper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,6 +134,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         l = findViewById(R.id.lGame);
         createBoardGame();
 
+        helper = new RecordHelper(this);
+        helper.open();
+
+
     }
 
     @SuppressLint({"SetTextI18n", "Range"})
@@ -153,6 +160,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if (v == btnPause)
         {
+            Record r = new Record(10,"30.5","2021");
+            System.out.println(helper.createProduct2(r).getRecordId());
+
             if (!ifPause) {
                 stopGame();
                 btnPause.setText("continue");
