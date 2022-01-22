@@ -64,7 +64,7 @@ public class Tile {
 
         //drawRoundRect(x, y, x + w, y + h, p2, canvas);
 
-        canvas.drawText(String.valueOf(number), x + (w / 2), y + (h / 2), paintTitle);
+        canvas.drawText(String.valueOf(number), x + (w / 2), (y + (h / 2))-(paintTitle.descent()+paintTitle.ascent())/2, paintTitle);
     }
 
     public boolean didUserTouchMe(float xu, float yu) {
