@@ -20,36 +20,43 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+
+import static com.example.board.BoardGame.blank;
 import static com.example.board.BoardGame.time;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
     DisplayMetrics displayMetrics;
-    static Button btnStart, btnSolved, btnPause;
+    Button btnStart, btnSolved, btnPause;
 
     BoardGame boardGame;
-    static TextView tvTime, tvMoves;
+    TextView tvTime, tvMoves;
      int sizeOfBoard = 4;
      int colorOfTile = Color.MAGENTA;
     LinearLayout l;
     SharedPreferences getSetting;
-    static Dialog solvedD;
-
-    boolean ifStart, ifPause = false, passToIntent = false;
-    static Handler handler;
+    Dialog solvedD;
+    int moves;
+    boolean ifStart, ifPause = false, passToIntent = false, ifOne = true;
+    Handler handler;
 
     RecordHelper helper;
+    ArrayList<Record> records;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +66,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         update();
         init();
-
-
-
-
         doHandler();
+
+
+
 
 
     }
@@ -74,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         boardGame = new BoardGame(this, sizeOfBoard,colorOfTile);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width,width);
         boardGame.setLayoutParams(params);
+        boardGame.setOnTouchListener(this);
         l.addView(boardGame);
     }
     @Override
@@ -135,7 +142,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         createBoardGame();
 
         helper = new RecordHelper(this);
-        helper.open();
+
+
+        moves = 0;
 
 
     }
@@ -160,8 +169,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if (v == btnPause)
         {
-            Record r = new Record(10,"30.5","2021");
-            System.out.println(helper.createProduct2(r).getRecordId());
+
 
             if (!ifPause) {
                 stopGame();
@@ -209,8 +217,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             time.isRun = false;
         tvMoves.setText("num of moves: 0");
         tvTime.setText("00:00.0");
-
+        moves = 0;
         btnPause.setEnabled(false);
+        ifOne = true;
     }
 
     public void stopGame(){
@@ -238,5 +247,60 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (passToIntent) btnPause.setText("pause");
             else btnPause.setText("continue");
         }
+    }
+    public void createSolvedDialog()
+    {
+        solvedD=new Dialog(this);
+        solvedD.setContentView(R.layout.custom_solved);
+        solvedD.setCancelable(false);
+        btnSolved = solvedD.findViewById(R.id.btnSolved);
+        btnSolved.setOnClickListener((View.OnClickListener) this);
+        solvedD.show();
+
+
+    }
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (ifOne){
+            time = new Time(handler);
+            time.start();
+            btnPause.setEnabled(true);
+            //ifPause = false;
+        }
+
+        ifOne = false;
+
+        if (!ifPause) {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                Square mySquare = boardGame.findSquare(event.getX(), event.getY());
+                //Square target = blank();
+                if (mySquare != null && boardGame.checkBlank(event.getX(), event.getY())) {
+                    boardGame.slide(mySquare, blank);
+
+                    moves++;
+                    tvMoves.setText("num of moves: " + moves);
+                }
+                boardGame.invalidate();
+
+                if (boardGame.isWin()) {
+                    //Toast.makeText(context, "ניצחת אלוף!!", Toast.LENGTH_SHORT).show();
+                    helper.open();
+                    String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+                    Record r = new Record(moves,tvTime.getText().toString(),currentDate);
+                    System.out.println(helper.createProduct2(r).getRecordId());
+
+
+                    records = helper.getAllRecord();
+                    if (records.size() > 0) {
+                        Log.d("data1", records.toString());
+                    }
+                    helper.close();
+                    time.isRun = false;
+                    createSolvedDialog();
+
+                }
+            }
+        }
+        return true;
     }
 }

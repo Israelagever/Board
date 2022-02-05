@@ -3,9 +3,12 @@ package com.example.board;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import java.util.ArrayList;
 
 public class RecordHelper extends SQLiteOpenHelper {
 
@@ -20,7 +23,7 @@ public class RecordHelper extends SQLiteOpenHelper {
 
     SQLiteDatabase database;
 
-    private static final String CREATE_TABLE_PPRODUCT = "CREATE TABLE IF NOT EXISTS " +
+    private static final String CREATE_TABLE_RECORD = "CREATE TABLE IF NOT EXISTS " +
             TABLE_RECORDS + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_MOVE + " INTEGER," + COLUMN_TIME + " VARCHAR,"
             + COLUMN_DATE + " INTEGER " + ");";
 
@@ -37,7 +40,7 @@ public class RecordHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_TABLE_PPRODUCT);
+        db.execSQL(CREATE_TABLE_RECORD);
         Log.d("data1", "Table customer created");
     }
 
@@ -60,8 +63,28 @@ public class RecordHelper extends SQLiteOpenHelper {
         values.put(RecordHelper.COLUMN_DATE, r.getDate());
 
         long insertId = database.insert(RecordHelper.TABLE_RECORDS, null, values);
-        Log.d("data1", "Product " + insertId + "insert to database");
+        Log.d("data1", "Record " + insertId + " insert to database");
         r.setRecordId(insertId);
         return r;
+    }
+
+    public ArrayList<Record> getAllRecord() {
+
+        ArrayList<Record> l = new ArrayList<Record>();
+        Cursor cursor=database.query(RecordHelper.TABLE_RECORDS, allColumns, null, null, null, null, null);
+
+        if(cursor.getCount()>0)
+        {
+            while(cursor.moveToNext())
+            {
+                long id=cursor.getLong(cursor.getColumnIndex(RecordHelper.COLUMN_ID));
+                int move=cursor.getInt(cursor.getColumnIndex(RecordHelper.COLUMN_MOVE));
+                String time=cursor.getString(cursor.getColumnIndex(RecordHelper.COLUMN_TIME));
+                String date=cursor.getString(cursor.getColumnIndex(RecordHelper.COLUMN_DATE));
+                Record r=new Record(id,move,time,date);
+                l.add(r);
+            }
+        }
+        return l;
     }
 }

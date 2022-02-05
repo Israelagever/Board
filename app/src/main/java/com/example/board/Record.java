@@ -23,37 +23,37 @@ public class Record {
     public int getMove() {
         return move;
     }
-
     public void setMove(int move) {
         this.move = move;
     }
+
     public String getTime() {
         return time;
     }
-
-    public void setTime(String description) {
-        this.time = description;
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public String getDate() {
         return date;
     }
-
-    public void setPrice(String date) {
+    public void setDate(String date) {
         this.date = date;
     }
+
     public long getRecordId() {
         return recordId;
     }
     public void setRecordId(long recordId) {
         this.recordId = recordId;
     }
+
     @Override
     public String toString() {
-        return "Product{" +
-                "name='" + move + '\'' +
-                ", description='" + time + '\'' +
-                ", price=" + date +
+        return "Record{" +
+                "move='" + move + '\'' +
+                ", time='" + time + '\'' +
+                ", date=" + date +
                 ", productId=" + recordId +
                 '}';
     }

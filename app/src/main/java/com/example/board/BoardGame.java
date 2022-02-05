@@ -15,15 +15,12 @@ import java.util.Arrays;
 import java.util.Random;
 
 
-import static com.example.board.MainActivity.btnPause;
-import static com.example.board.MainActivity.btnSolved;
-import static com.example.board.MainActivity.handler;
-import static com.example.board.MainActivity.solvedD;
+
 
 
 public class BoardGame extends View {
 
-    boolean ifOne1 = true, ifOne2 = true, ifPause;
+    boolean ifOne1 = true, ifPause;
     int size,color;
 
     int[] theSort;
@@ -35,7 +32,7 @@ public class BoardGame extends View {
 
     Context context;
 
-    Square blank;
+    static Square blank;
     int moves;
 
     static Time time;
@@ -216,46 +213,9 @@ public class BoardGame extends View {
         }
     }
 
-    @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
 
 
-        if (ifOne2){
-            time = new Time(handler);
-            time.start();
-            btnPause.setEnabled(true);
-            ifPause = false;
-        }
-
-        ifOne2 = false;
-
-        if (!ifPause) {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                Square mySquare = findSquare(event.getX(), event.getY());
-                //Square target = blank();
-                if (mySquare != null && checkBlank(event.getX(), event.getY())) {
-                    slide(mySquare, blank);
-
-                    moves++;
-                    MainActivity.tvMoves.setText("num of moves: " + moves);
-                }
-                invalidate();
-
-                if (isWin()) {
-                    //Toast.makeText(context, "ניצחת אלוף!!", Toast.LENGTH_SHORT).show();
-
-                    time.isRun = false;
-                    createSolvedDialog();
-
-                }
-            }
-        }
-        return true;
-
-    }
-
-    private boolean checkBlank(float x, float y) {
+    public boolean checkBlank(float x, float y) {
         float distant = squares[0][0].h;
         if (blank.didXAndYInSquare(x,y+distant) || blank.didXAndYInSquare(x,y-distant) || blank.didXAndYInSquare(x+distant,y) || blank.didXAndYInSquare(x-distant,y))
             return true;
@@ -278,7 +238,7 @@ public class BoardGame extends View {
         return true;
     }
 
-    private Square findSquare(float x, float y) {
+    public Square findSquare(float x, float y) {
         for(int i = 0;i<squares.length;i++) {
             for (int j = 0; j < squares.length; j++) {
                 if(squares[i][j].didXAndYInSquare(x,y))
@@ -290,16 +250,6 @@ public class BoardGame extends View {
     }
 
 
-    public void createSolvedDialog()
-    {
-        solvedD=new Dialog(context);
-        solvedD.setContentView(R.layout.custom_solved);
-        solvedD.setCancelable(false);
-        btnSolved = solvedD.findViewById(R.id.btnSolved);
-        btnSolved.setOnClickListener((OnClickListener) context);
-        solvedD.show();
 
-
-    }
 
 }
