@@ -6,6 +6,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 import android.annotation.SuppressLint;
@@ -42,7 +44,7 @@ import static com.example.board.BoardGame.time;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
     DisplayMetrics displayMetrics;
-    Button btnStart, btnSolved, btnPause;
+    Button btnStart, btnSolved, btnPause, btnRecord;
 
     BoardGame boardGame;
     TextView tvTime, tvMoves;
@@ -50,13 +52,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      int colorOfTile = Color.MAGENTA;
     LinearLayout l;
     SharedPreferences getSetting;
-    Dialog solvedD;
+    Dialog solvedD,recordsD;
     int moves;
     boolean ifStart, ifPause = false, passToIntent = false, ifOne = true;
     Handler handler;
 
     RecordHelper helper;
     ArrayList<Record> records;
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +70,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         update();
         init();
         doHandler();
-
-
-
-
-
     }
 
     public void createBoardGame(){
@@ -136,6 +134,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnPause = findViewById(R.id.btnPause);
         btnPause.setOnClickListener(this);
 
+        btnRecord = findViewById(R.id.btnRecord);
+        btnRecord.setOnClickListener(this);
+
         getSetting = getSharedPreferences("settings",0);
 
         l = findViewById(R.id.lGame);
@@ -183,6 +184,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 boardGame.setIfPause(false);
 
             }
+        }
+        else if (v == btnRecord){
+            createRecordsDialog();
         }
         else {
             resetGame();
@@ -248,6 +252,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             else btnPause.setText("continue");
         }
     }
+    public void createRecordsDialog()
+    {
+        helper.open();
+        recordsD=new Dialog(this);
+        recordsD.setContentView(R.layout.custom_dialog_records);
+        recordsD.setCancelable(true);
+        recyclerView = (RecyclerView) recordsD.findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        RecordAdapter recordAdapter = new RecordAdapter(this,helper.getAllRecord());
+        recyclerView.setAdapter(recordAdapter);
+        recordsD.show();
+        helper.close();
+
+    }
     public void createSolvedDialog()
     {
         solvedD=new Dialog(this);
@@ -256,8 +276,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnSolved = solvedD.findViewById(R.id.btnSolved);
         btnSolved.setOnClickListener((View.OnClickListener) this);
         solvedD.show();
-
-
     }
     @Override
     public boolean onTouch(View view, MotionEvent event) {
@@ -287,7 +305,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     helper.open();
                     String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
                     Record r = new Record(moves,tvTime.getText().toString(),currentDate);
-                    System.out.println(helper.createProduct2(r).getRecordId());
+                    System.out.println(helper.createRecord(r).getRecordId());
 
 
                     records = helper.getAllRecord();

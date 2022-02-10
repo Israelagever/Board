@@ -56,7 +56,7 @@ public class RecordHelper extends SQLiteOpenHelper {
         Log.d("data1", "Database connection open");
     }
 
-    public Record createProduct2(Record r) {
+    public Record createRecord(Record r) {
         ContentValues values = new ContentValues();
         values.put(RecordHelper.COLUMN_MOVE, r.getMove());
         values.put(RecordHelper.COLUMN_TIME, r.getTime());
@@ -71,7 +71,7 @@ public class RecordHelper extends SQLiteOpenHelper {
     public ArrayList<Record> getAllRecord() {
 
         ArrayList<Record> l = new ArrayList<Record>();
-        Cursor cursor=database.query(RecordHelper.TABLE_RECORDS, allColumns, null, null, null, null, null);
+        Cursor cursor=database.query(RecordHelper.TABLE_RECORDS, allColumns, null, null, null, null, COLUMN_MOVE+ " ASC");
 
         if(cursor.getCount()>0)
         {
