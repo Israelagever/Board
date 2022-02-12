@@ -9,8 +9,6 @@ import android.view.View;
 
 import android.view.ViewGroup;
 
-import android.widget.ImageView;
-
 import android.widget.TextView;
 
 
@@ -33,97 +31,58 @@ public class RecordAdapter extends  RecyclerView.Adapter<RecordAdapter.RecordVie
 
 
     //this context we will use to inflate the layout
-
-    private Context mCtx;
-
+    private final Context context;
     //we are storing all the products in a list
-
-    private List<Record> recordList;
-
+    private final List<Record> recordList;
     //getting the context and product list with constructor
 
-    public RecordAdapter(Context mCtx, List<Record> recordList)
+    public RecordAdapter(Context context, List<Record> recordList)
 
     {
-
-        this.mCtx = mCtx;
-
+        this.context = context;
         this.recordList = recordList;
-
     }
 
 
-
     @Override
-
     public RecordViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         //inflating and returning our view holder
-
-        LayoutInflater inflater = LayoutInflater.from(mCtx);
-
+        LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.records_layuot, null);
-
         return new RecordViewHolder(view);
 
     }
 
-
-
     @Override
-
     public void onBindViewHolder(RecordViewHolder holder, int position) {
 
         //getting the product of the specified position
-
         Record record = recordList.get(position);
-
         //binding the data with the viewholder views
-
-        holder.tvId.setText(String.valueOf(record.getRecordId()));
-
+        holder.tvId.setText(String.valueOf(position+1));
         holder.tvMove.setText(String.valueOf(record.getMove()));
-
         holder.tvTime.setText(record.getTime());
-
         holder.tvDate.setText(record.getDate());
-
     }
 
     @Override
 
     public int getItemCount() {
-
         return recordList.size();
-
     }
-
-
 
     class RecordViewHolder extends RecyclerView.ViewHolder {
 
-
-
         TextView tvId, tvMove, tvTime,tvDate;
 
-
-
         public RecordViewHolder(View itemView) {
-
             super(itemView);
 
             tvId = itemView.findViewById(R.id.tvId);
-
             tvMove = itemView.findViewById(R.id.tvMoves);
-
             tvTime = itemView.findViewById(R.id.tvTime);
-
             tvDate = itemView.findViewById(R.id.tvDate);
-
         }
-
     }
-
-
-
 }

@@ -1,6 +1,7 @@
 package com.example.board;
 
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -67,7 +68,7 @@ public class RecordHelper extends SQLiteOpenHelper {
         r.setRecordId(insertId);
         return r;
     }
-
+    @SuppressLint("Range")
     public ArrayList<Record> getAllRecord() {
 
         ArrayList<Record> l = new ArrayList<Record>();
@@ -77,7 +78,7 @@ public class RecordHelper extends SQLiteOpenHelper {
         {
             while(cursor.moveToNext())
             {
-                long id=cursor.getLong(cursor.getColumnIndex(RecordHelper.COLUMN_ID));
+                 long id=cursor.getLong(cursor.getColumnIndex(RecordHelper.COLUMN_ID));
                 int move=cursor.getInt(cursor.getColumnIndex(RecordHelper.COLUMN_MOVE));
                 String time=cursor.getString(cursor.getColumnIndex(RecordHelper.COLUMN_TIME));
                 String date=cursor.getString(cursor.getColumnIndex(RecordHelper.COLUMN_DATE));
