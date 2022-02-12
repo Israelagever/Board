@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         doHandler();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     public void createBoardGame(){
 
         int width = displayMetrics.widthPixels;
@@ -142,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         l = findViewById(R.id.lGame);
         createBoardGame();
 
-        helper = new RecordHelper(this);
+
 
 
         moves = 0;
@@ -238,6 +239,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (size != 0) sizeOfBoard =size;
         int color = getSetting.getInt("color", 0);
         if (color != 0) colorOfTile = color;
+        helper = new RecordHelper(this,"records"+sizeOfBoard+".db","tblrecords"+sizeOfBoard);
 
     }
 
@@ -277,6 +279,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnSolved.setOnClickListener((View.OnClickListener) this);
         solvedD.show();
     }
+
     @Override
     public boolean onTouch(View view, MotionEvent event) {
         if (ifOne){

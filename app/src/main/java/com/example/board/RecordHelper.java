@@ -13,8 +13,8 @@ import java.util.ArrayList;
 
 public class RecordHelper extends SQLiteOpenHelper {
 
-    public static final String DATABASENAME = "records.db";
-    public static final String TABLE_RECORDS = "tblrecords";
+    //public static final String DATABASENAME = "records.db";
+    public static  String table_records;
     public static final int DATABASEVERSION = 1;
 
     public static final String COLUMN_ID = "recordId";
@@ -24,17 +24,19 @@ public class RecordHelper extends SQLiteOpenHelper {
 
     SQLiteDatabase database;
 
-    private static final String CREATE_TABLE_RECORD = "CREATE TABLE IF NOT EXISTS " +
-            TABLE_RECORDS + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_MOVE + " INTEGER," + COLUMN_TIME + " VARCHAR,"
-            + COLUMN_DATE + " INTEGER " + ");";
+    private static String CREATE_TABLE_RECORD;
 
 
     String[] allColumns = {RecordHelper.COLUMN_ID, RecordHelper.COLUMN_MOVE, RecordHelper.COLUMN_TIME,
             RecordHelper.COLUMN_DATE};
 
 
-    public RecordHelper(Context context) {
+    public RecordHelper(Context context,final String DATABASENAME, final String table_records) {
         super(context, DATABASENAME, null, DATABASEVERSION);
+        this.table_records = table_records;
+        CREATE_TABLE_RECORD = "CREATE TABLE IF NOT EXISTS " +
+                table_records + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_MOVE + " INTEGER," + COLUMN_TIME + " VARCHAR,"
+                + COLUMN_DATE + " INTEGER " + ");";
         // TODO Auto-generated constructor stub
     }
 
@@ -48,7 +50,7 @@ public class RecordHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECORDS);
+        db.execSQL("DROP TABLE IF EXISTS " + table_records);
         onCreate(db);
     }
 
@@ -63,7 +65,7 @@ public class RecordHelper extends SQLiteOpenHelper {
         values.put(RecordHelper.COLUMN_TIME, r.getTime());
         values.put(RecordHelper.COLUMN_DATE, r.getDate());
 
-        long insertId = database.insert(RecordHelper.TABLE_RECORDS, null, values);
+        long insertId = database.insert(RecordHelper.table_records, null, values);
         Log.d("data1", "Record " + insertId + " insert to database");
         r.setRecordId(insertId);
         return r;
@@ -72,7 +74,7 @@ public class RecordHelper extends SQLiteOpenHelper {
     public ArrayList<Record> getAllRecord() {
 
         ArrayList<Record> l = new ArrayList<Record>();
-        Cursor cursor=database.query(RecordHelper.TABLE_RECORDS, allColumns, null, null, null, null, COLUMN_MOVE+ " ASC");
+        Cursor cursor=database.query(RecordHelper.table_records, allColumns, null, null, null, null, COLUMN_MOVE+ " ASC");
 
         if(cursor.getCount()>0)
         {
