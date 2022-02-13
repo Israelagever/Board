@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     boolean ifStart, ifPause = false, passToIntent = false, ifOne = true;
     Handler handler;
 
-    RecordHelper helper;
+    RecordHelper RecordHelper;
     ArrayList<Record> records;
     RecyclerView recyclerView;
 
@@ -239,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (size != 0) sizeOfBoard =size;
         int color = getSetting.getInt("color", 0);
         if (color != 0) colorOfTile = color;
-        helper = new RecordHelper(this,"records"+sizeOfBoard+".db","tblrecords"+sizeOfBoard);
+        RecordHelper = new RecordHelper(this,"tblrecords"+sizeOfBoard);
 
     }
 
@@ -256,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     public void createRecordsDialog()
     {
-        helper.open();
+        RecordHelper.open();
         recordsD=new Dialog(this);
         recordsD.setContentView(R.layout.custom_dialog_records);
         recordsD.setCancelable(true);
@@ -264,10 +264,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        RecordAdapter recordAdapter = new RecordAdapter(this,helper.getAllRecord());
+        RecordAdapter recordAdapter = new RecordAdapter(this, RecordHelper.getAllRecord());
         recyclerView.setAdapter(recordAdapter);
         recordsD.show();
-        helper.close();
+        RecordHelper.close();
 
     }
     public void createSolvedDialog()
@@ -305,17 +305,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 if (boardGame.isWin()) {
                     //Toast.makeText(context, "ניצחת אלוף!!", Toast.LENGTH_SHORT).show();
-                    helper.open();
+                    RecordHelper.open();
                     String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
                     Record r = new Record(moves,tvTime.getText().toString(),currentDate);
-                    System.out.println(helper.createRecord(r).getRecordId());
+                    System.out.println(RecordHelper.createRecord(r).getRecordId());
 
 
-                    records = helper.getAllRecord();
+                    records = RecordHelper.getAllRecord();
                     if (records.size() > 0) {
                         Log.d("data1", records.toString());
                     }
-                    helper.close();
+                    RecordHelper.close();
                     time.isRun = false;
                     createSolvedDialog();
 

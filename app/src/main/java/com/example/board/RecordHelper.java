@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class RecordHelper extends SQLiteOpenHelper {
 
-    //public static final String DATABASENAME = "records.db";
+    public static final String DATABASENAME = "records.db";
     public static  String table_records;
     public static final int DATABASEVERSION = 1;
 
@@ -31,13 +31,12 @@ public class RecordHelper extends SQLiteOpenHelper {
             RecordHelper.COLUMN_DATE};
 
 
-    public RecordHelper(Context context,final String DATABASENAME, final String table_records) {
+    public RecordHelper(Context context, final String table_records) {
         super(context, DATABASENAME, null, DATABASEVERSION);
         this.table_records = table_records;
         CREATE_TABLE_RECORD = "CREATE TABLE IF NOT EXISTS " +
-                table_records + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_MOVE + " INTEGER," + COLUMN_TIME + " VARCHAR,"
+                this.table_records + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_MOVE + " INTEGER," + COLUMN_TIME + " VARCHAR,"
                 + COLUMN_DATE + " INTEGER " + ");";
-        // TODO Auto-generated constructor stub
     }
 
 
