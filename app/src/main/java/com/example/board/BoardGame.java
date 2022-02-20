@@ -20,7 +20,7 @@ import java.util.Random;
 
 public class BoardGame extends View {
 
-    boolean ifOne1 = true, ifPause;
+    boolean ifOne1 = true;
     int size,color;
 
     int[] theSort;
@@ -46,17 +46,14 @@ public class BoardGame extends View {
         r = new Random();
         all = size*size;
         theSort = new int[all];
-        ifPause = true;
+
 
 
         this.setBackgroundColor(Color.parseColor("#393939"));
 
     }
 
-    public void setIfPause(boolean ifPause) {
-        this.ifPause = ifPause;
-    }
-    public boolean getIfPause() {return ifPause;}
+
 
     @Override
     protected void onDraw(Canvas canvas) {

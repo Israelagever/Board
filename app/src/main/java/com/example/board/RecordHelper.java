@@ -35,7 +35,7 @@ public class RecordHelper extends SQLiteOpenHelper {
         super(context, DATABASENAME, null, DATABASEVERSION);
         this.table_records = table_records;
         CREATE_TABLE_RECORD = "CREATE TABLE IF NOT EXISTS " +
-                this.table_records + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_MOVE + " INTEGER," + COLUMN_TIME + " VARCHAR,"
+                table_records + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_MOVE + " INTEGER," + COLUMN_TIME + " VARCHAR,"
                 + COLUMN_DATE + " INTEGER " + ");";
     }
 
@@ -72,8 +72,9 @@ public class RecordHelper extends SQLiteOpenHelper {
     @SuppressLint("Range")
     public ArrayList<Record> getAllRecord() {
 
+        onCreate(database);
         ArrayList<Record> l = new ArrayList<Record>();
-        Cursor cursor=database.query(RecordHelper.table_records, allColumns, null, null, null, null, COLUMN_MOVE+ " ASC");
+        Cursor cursor=database.query(this.table_records, allColumns, null, null, null, null, COLUMN_MOVE+ " ASC");
 
         if(cursor.getCount()>0)
         {

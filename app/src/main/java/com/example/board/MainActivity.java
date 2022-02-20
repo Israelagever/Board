@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     SharedPreferences getSetting;
     Dialog solvedD,recordsD;
     int moves;
-    boolean ifStart, ifPause = false, passToIntent = false, ifOne = true;
+    boolean ifStart, ifPause = true, passToIntent = false, ifOne = true;
     Handler handler;
 
     RecordHelper RecordHelper;
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         update();
                         btnPause.setText("pause");
-                        ifPause = false;
+                        ifPause = true;
                         ifStart = true;
                         passToIntent = false;
                         resetGame();
@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 time.isRun = true;
                 btnPause.setText("pause");
                 ifPause = false;
-                boardGame.setIfPause(false);
+
 
             }
         }
@@ -228,9 +228,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void stopGame(){
-        time.isRun = false;
+        if (time!=null) time.isRun = false;
         ifPause = true;
-        boardGame.setIfPause(true);
+
     }
 
     public void update()
@@ -248,12 +248,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onPause() {
         super.onPause();
-        if (!ifPause&& !boardGame.getIfPause()) {
+        if (!ifPause) {
             stopGame();
             if (passToIntent) btnPause.setText("pause");
             else btnPause.setText("continue");
         }
     }
+
     public void createRecordsDialog()
     {
         RecordHelper.open();
@@ -286,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             time = new Time(handler);
             time.start();
             btnPause.setEnabled(true);
-            //ifPause = false;
+            ifPause = false;
         }
 
         ifOne = false;
