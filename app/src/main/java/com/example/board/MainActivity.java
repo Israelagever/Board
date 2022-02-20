@@ -44,7 +44,7 @@ import static com.example.board.BoardGame.time;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
     DisplayMetrics displayMetrics;
-    Button btnStart, btnSolved, btnPause, btnRecord;
+    Button btnStart, btnSolved, btnPause;
 
     BoardGame boardGame;
     TextView tvTime, tvMoves;
@@ -98,8 +98,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             passToIntent = true;
             mStartForResult.launch(intent);
 
+
             return true;
         }
+        else if (item.getItemId() == R.id.records)
+            createRecordsDialog();
         return true;
 
     }
@@ -134,9 +137,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         btnPause = findViewById(R.id.btnPause);
         btnPause.setOnClickListener(this);
-
-        btnRecord = findViewById(R.id.btnRecord);
-        btnRecord.setOnClickListener(this);
 
         getSetting = getSharedPreferences("settings",0);
 
@@ -185,9 +185,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
             }
-        }
-        else if (v == btnRecord){
-            createRecordsDialog();
         }
         else {
             resetGame();
