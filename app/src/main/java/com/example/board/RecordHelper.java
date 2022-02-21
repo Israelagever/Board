@@ -87,6 +87,7 @@ public class RecordHelper extends SQLiteOpenHelper {
                 Record r=new Record(id,move,time,date);
                 l.add(r);
             }
+
         }
         return l;
     }
