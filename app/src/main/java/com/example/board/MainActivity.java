@@ -196,6 +196,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void doHandler(){
         handler=new Handler(new Handler.Callback() {
+            @SuppressLint({"DefaultLocale", "SetTextI18n"})
             @Override
             public boolean handleMessage(Message msg)
             {
