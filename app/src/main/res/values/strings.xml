@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">Board</string>
+    <string name="app_name">15 puzzle</string>
     <string name="spinner_title">spinner title</string>
 </resources>
