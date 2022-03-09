@@ -26,14 +26,16 @@ public class RecordHelper extends SQLiteOpenHelper {
 
     private static String CREATE_TABLE_RECORD;
 
+    private String orderBy;
 
     String[] allColumns = {RecordHelper.COLUMN_ID, RecordHelper.COLUMN_MOVE, RecordHelper.COLUMN_TIME,
             RecordHelper.COLUMN_DATE};
 
 
-    public RecordHelper(Context context, final String table_records) {
+    public RecordHelper(Context context, final String table_records,String orderBy) {
         super(context, DATABASENAME, null, DATABASEVERSION);
         this.table_records = table_records;
+        this.orderBy = orderBy;
         CREATE_TABLE_RECORD = "CREATE TABLE IF NOT EXISTS " +
                 table_records + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_MOVE + " INTEGER," + COLUMN_TIME + " VARCHAR,"
                 + COLUMN_DATE + " INTEGER " + ");";
@@ -74,7 +76,7 @@ public class RecordHelper extends SQLiteOpenHelper {
 
         onCreate(database);
         ArrayList<Record> l = new ArrayList<Record>();
-        Cursor cursor=database.query(this.table_records, allColumns, null, null, null, null, COLUMN_MOVE+ " ASC");
+        Cursor cursor=database.query(this.table_records, allColumns, null, null, null, null, orderBy+ " ASC");
 
         if(cursor.getCount()>0)
         {

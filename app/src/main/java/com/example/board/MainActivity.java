@@ -44,7 +44,7 @@ import static com.example.board.BoardGame.time;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
     DisplayMetrics displayMetrics;
-    Button btnStart, btnSolved, btnPause;
+    Button btnStart, btnSolved, btnPause, btnOrder;
 
     BoardGame boardGame;
     TextView tvTime, tvMoves;
@@ -66,6 +66,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSetting = getSharedPreferences("settings",0);
+        if (getSetting.getString("orderBy",null) == null) {
+            SharedPreferences.Editor editor = getSetting.edit();
+            editor.putString("orderBy", "move");
+            editor.commit();
+        }
 
         update();
         init();
@@ -138,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnPause = findViewById(R.id.btnPause);
         btnPause.setOnClickListener(this);
 
-        getSetting = getSharedPreferences("settings",0);
+
 
         l = findViewById(R.id.lGame);
         createBoardGame();
@@ -236,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (size != 0) sizeOfBoard =size;
         int color = getSetting.getInt("color", 0);
         if (color != 0) colorOfTile = color;
-        RecordHelper = new RecordHelper(this,"tblrecords"+sizeOfBoard);
+        RecordHelper = new RecordHelper(this,"tblrecords"+sizeOfBoard, getSetting.getString("orderBy",null));
 
     }
 
@@ -266,6 +271,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         recyclerView.setAdapter(recordAdapter);
         recordsD.show();
         RecordHelper.close();
+
+        btnOrder = recordsD.findViewById(R.id.btnOrder);
+        btnOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences.Editor editor = getSetting.edit();
+                if (getSetting.getString("orderBy",null).equals("move")) {
+                    editor.putString("orderBy", "time");
+                    btnOrder.setText("order by time");
+                }
+                else {
+                    editor.putString("orderBy", "move");
+                    btnOrder.setText("order by move");
+                }
+                editor.commit();
+                update();
+                RecordHelper.open();
+                RecordAdapter recordAdapter = new RecordAdapter(MainActivity.this, RecordHelper.getAllRecord());
+                recyclerView.setAdapter(recordAdapter);
+                recordsD.show();
+                RecordHelper.close();
+            }
+        });
 
     }
     public void createSolvedDialog()

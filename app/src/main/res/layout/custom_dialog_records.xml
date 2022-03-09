@@ -5,6 +5,13 @@
     android:background="#aaa"
     android:layout_height="match_parent">
 
+
+    <Button
+        android:id="@+id/btnOrder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="order by move"
+        android:layout_marginBottom="20sp"/>
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
