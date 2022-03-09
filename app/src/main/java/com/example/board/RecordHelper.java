@@ -41,6 +41,9 @@ public class RecordHelper extends SQLiteOpenHelper {
                 + COLUMN_DATE + " INTEGER " + ");";
     }
 
+    public String getOrderBy() {
+        return orderBy;
+    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {

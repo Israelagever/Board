@@ -274,6 +274,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         RecordHelper.close();
 
         btnOrder = recordsD.findViewById(R.id.btnOrder);
+        if(RecordHelper.getOrderBy().equals("time")) btnOrder.setText("order by time");
         btnOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
