@@ -8,6 +8,7 @@
     android:background="#5C92AA"
     tools:context=".MainActivity">
 
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -75,6 +76,21 @@
 
 
         </LinearLayout>
+
+        <eo.view.batterymeter.BatteryMeterView
+            android:id="@+id/battery"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            app:batteryMeterChargeLevel="80"
+            app:batteryMeterChargingColor="#4caf50"
+            app:batteryMeterColor="#0277bd"
+            app:batteryMeterCriticalChargeLevel="15"
+            app:batteryMeterCriticalColor="#d84315"
+            app:batteryMeterIndicatorColor="@android:color/transparent"
+            app:batteryMeterIsCharging="true"
+            app:batteryMeterTheme="rounded"
+            app:batteryMeterUnknownColor="#e0e0e0" />
 
     </LinearLayout>
 

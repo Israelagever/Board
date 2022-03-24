@@ -13,11 +13,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 
 
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -29,9 +33,11 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import java.text.SimpleDateFormat;
@@ -41,6 +47,9 @@ import java.util.Locale;
 
 import static com.example.board.BoardGame.blank;
 import static com.example.board.BoardGame.time;
+
+import eo.view.batterymeter.BatteryMeter;
+import eo.view.batterymeter.BatteryMeterView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
     DisplayMetrics displayMetrics;
@@ -61,9 +70,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ArrayList<Record> records;
     RecyclerView recyclerView;
 
+    BroadCastBattery broadCastBattery;
+    BatteryMeter batteryMeter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
         getSetting = getSharedPreferences("settings",0);
         if (getSetting.getString("orderBy",null) == null) {
@@ -72,10 +86,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             editor.commit();
         }
 
+
+
         update();
         init();
         doHandler();
     }
+
+    private class BroadCastBattery extends BroadcastReceiver
+
+    {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int battery = intent.getIntExtra("level",0);
+
+            if (intent.getAction().equals(Intent.ACTION_POWER_CONNECTED)) {
+                batteryMeter.setCharging(true);
+            } else {
+                batteryMeter.setCharging(false);
+            }
+            batteryMeter.setChargeLevel(battery);
+
+
+        }
+    }
+
 
     @SuppressLint("ClickableViewAccessibility")
     public void createBoardGame(){
@@ -99,7 +134,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.setting) {
             Intent intent = new Intent(MainActivity.this,SettingActivity.class);
-//          if (!ifPause && !boardGame.getIfPause()) stopGame();
             passToIntent = true;
             mStartForResult.launch(intent);
 
@@ -149,7 +183,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         createBoardGame();
 
 
-
+        broadCastBattery = new BroadCastBattery();
+        batteryMeter = findViewById(R.id.battery);
 
         moves = 0;
 
@@ -251,12 +286,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onPause() {
         super.onPause();
+        unregisterReceiver(broadCastBattery);
         if (!ifPause) {
             stopGame();
             if (passToIntent) btnPause.setText("pause");
             else btnPause.setText("continue");
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(broadCastBattery,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+    }
+
 
     public void createRecordsDialog()
     {
