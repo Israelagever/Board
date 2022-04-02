@@ -49,8 +49,7 @@ import java.util.Locale;
 import static com.example.board.BoardGame.blank;
 import static com.example.board.BoardGame.time;
 
-import eo.view.batterymeter.BatteryMeter;
-import eo.view.batterymeter.BatteryMeterView;
+
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
     DisplayMetrics displayMetrics;
@@ -77,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -94,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         init();
         doHandler();
     }
+
 
 
 
@@ -271,7 +273,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onPause() {
         super.onPause();
-
+        Intent intent=new Intent(MainActivity.this,NotificationService.class);
+        startService(intent);
         if (!ifPause) {
             stopGame();
             if (passToIntent) btnPause.setText("pause");
@@ -280,9 +283,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Intent intent=new Intent(MainActivity.this,NotificationService.class);
+        stopService(intent);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-
+        Intent intent=new Intent(MainActivity.this,NotificationService.class);
+        stopService(intent);
     }
 
     public List<Record> createRecordListForShow()
