@@ -43,6 +43,7 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import static com.example.board.BoardGame.blank;
@@ -70,14 +71,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ArrayList<Record> records;
     RecyclerView recyclerView;
 
-    BroadCastBattery broadCastBattery;
-    BatteryMeter batteryMeter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_main);
         getSetting = getSharedPreferences("settings",0);
         if (getSetting.getString("orderBy",null) == null) {
@@ -93,23 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         doHandler();
     }
 
-    private class BroadCastBattery extends BroadcastReceiver
 
-    {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int battery = intent.getIntExtra("level",0);
-
-            if (intent.getAction().equals(Intent.ACTION_POWER_CONNECTED)) {
-                batteryMeter.setCharging(true);
-            } else {
-                batteryMeter.setCharging(false);
-            }
-            batteryMeter.setChargeLevel(battery);
-
-
-        }
-    }
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -183,8 +169,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         createBoardGame();
 
 
-        broadCastBattery = new BroadCastBattery();
-        batteryMeter = findViewById(R.id.battery);
+
 
         moves = 0;
 
@@ -286,7 +271,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(broadCastBattery);
+
         if (!ifPause) {
             stopGame();
             if (passToIntent) btnPause.setText("pause");
@@ -297,13 +282,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(broadCastBattery,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+
     }
 
-
-    public void createRecordsDialog()
+    public List<Record> createRecordListForShow()
     {
         RecordHelper.open();
+        ArrayList<Record> oldList = RecordHelper.getAllRecord();
+        ArrayList<Record> newList = new ArrayList<>();
+        if (oldList.size()>10) {
+            for (int i = 0; i < 10; i++) {
+
+                newList.add(oldList.get(i));
+            }
+            RecordHelper.close();
+            return newList;
+        }
+        else return oldList;
+
+    }
+    public void createRecordsDialog()
+    {
+
         recordsD=new Dialog(this);
         recordsD.setContentView(R.layout.custom_dialog_records);
         recordsD.setCancelable(true);
@@ -311,10 +311,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        RecordAdapter recordAdapter = new RecordAdapter(this, RecordHelper.getAllRecord());
+        RecordAdapter recordAdapter = new RecordAdapter(this, createRecordListForShow());
+
         recyclerView.setAdapter(recordAdapter);
         recordsD.show();
-        RecordHelper.close();
+
 
         btnOrder = recordsD.findViewById(R.id.btnOrder);
         if(RecordHelper.getOrderBy().equals("time")) btnOrder.setText("order by time");
@@ -333,7 +334,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 editor.commit();
                 update();
                 RecordHelper.open();
-                RecordAdapter recordAdapter = new RecordAdapter(MainActivity.this, RecordHelper.getAllRecord());
+                RecordAdapter recordAdapter = new RecordAdapter(MainActivity.this, createRecordListForShow());
                 recyclerView.setAdapter(recordAdapter);
                 recordsD.show();
                 RecordHelper.close();
@@ -375,6 +376,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 boardGame.invalidate();
 
                 if (boardGame.isWin()) {
+                    time.isRun = false;
+                    createSolvedDialog();
                     //Toast.makeText(context, "ניצחת אלוף!!", Toast.LENGTH_SHORT).show();
                     RecordHelper.open();
                     String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
@@ -387,8 +390,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Log.d("data1", records.toString());
                     }
                     RecordHelper.close();
-                    time.isRun = false;
-                    createSolvedDialog();
+
 
                 }
             }

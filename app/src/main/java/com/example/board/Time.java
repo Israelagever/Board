@@ -38,21 +38,22 @@ public class Time extends Thread {
                     e.printStackTrace();
                 }
 
-                Message msg = new Message();
-                milliSeconds++;
-                if (milliSeconds == 10) {
-                    milliSeconds = 0;
-                    seconds++;
-                }
-                if (seconds == 60)
-                {
-                    minute++;
-                    seconds = 0;
-                }
-                msg.arg1 = milliSeconds;
-                msg.arg2 = seconds;
+                if (isRun) {
+                    Message msg = new Message();
+                    milliSeconds++;
+                    if (milliSeconds == 10) {
+                        milliSeconds = 0;
+                        seconds++;
+                    }
+                    if (seconds == 60) {
+                        minute++;
+                        seconds = 0;
+                    }
+                    msg.arg1 = milliSeconds;
+                    msg.arg2 = seconds;
 
-                handler.sendMessage(msg);
+                    handler.sendMessage(msg);
+                }
 
             }
         }

@@ -85,4 +85,5 @@ public class RecordAdapter extends  RecyclerView.Adapter<RecordAdapter.RecordVie
             tvDate = itemView.findViewById(R.id.tvDate);
         }
     }
+
 }
