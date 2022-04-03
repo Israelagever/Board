@@ -273,8 +273,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onPause() {
         super.onPause();
-        Intent intent=new Intent(MainActivity.this,NotificationService.class);
-        startService(intent);
+
         if (!ifPause) {
             stopGame();
             if (passToIntent) btnPause.setText("pause");
@@ -283,10 +282,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
+        super.onStop();
         Intent intent=new Intent(MainActivity.this,NotificationService.class);
-        stopService(intent);
+        startService(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        Toast.makeText(this, "נהרסה", Toast.LENGTH_SHORT).show();
+        super.onDestroy();
     }
 
     @Override
