@@ -17,6 +17,7 @@ import androidx.core.app.NotificationCompat;
 
 import java.time.LocalTime;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 public class NotificationService extends Service {
 
@@ -82,43 +83,37 @@ public class NotificationService extends Service {
         public void run() {
             super.run();
             while (isRun) {
-                try {
-                    Thread.sleep(60000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+
+
+                int icon = android.R.drawable.star_on;
+                String ticket = " this is ticket message";
+                long when = System.currentTimeMillis();
+                String title = "important message";
+                String ticker = "ticker";
+                String text = "What are you going out for ?! Get back in the game right away! now!!";
+                //phase 2
+                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+
+                PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
+                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "M_CH_ID");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    String channelId = "YOUR_CHANNEL_ID";
+                    NotificationChannel channel = new NotificationChannel(channelId,
+                            "Channel human readable title",
+                            NotificationManager.IMPORTANCE_DEFAULT);
+                    notificationManager.createNotificationChannel(channel);
+                    builder.setChannelId(channelId);
                 }
-                timeCount++;
-                if (timeCount == 3){
+                //phase 3
+                Notification notification = builder.setContentIntent(pendingIntent)
+                        .setSmallIcon(icon).setTicker(ticker).setWhen(when)
+                        .setAutoCancel(true).setContentTitle(title)
+                        .setContentText(text).build();
+                notificationManager.notify(1, notification);
+                stopSelf();
 
-                    int icon = android.R.drawable.star_on;
-                    String ticket = " this is ticket message";
-                    long when = System.currentTimeMillis();
-                    String title = "important message";
-                    String ticker = "ticker";
-                    String text = "You're already three minutes out of the game !!";
-                    //phase 2
-                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-
-                    PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
-                    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "M_CH_ID");
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        String channelId = "YOUR_CHANNEL_ID";
-                        NotificationChannel channel = new NotificationChannel(channelId,
-                                "Channel human readable title",
-                                NotificationManager.IMPORTANCE_DEFAULT);
-                        notificationManager.createNotificationChannel(channel);
-                        builder.setChannelId(channelId);
-                    }
-                    //phase 3
-                    Notification notification = builder.setContentIntent(pendingIntent)
-                            .setSmallIcon(icon).setTicker(ticker).setWhen(when)
-                            .setAutoCancel(true).setContentTitle(title)
-                            .setContentText(text).build();
-                    notificationManager.notify(1, notification);
-                    stopSelf();
-                }
 
             }
 
