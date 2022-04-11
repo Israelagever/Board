@@ -6,6 +6,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,6 +23,7 @@ import android.graphics.Color;
 
 
 import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -285,12 +287,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onStop() {
         super.onStop();
         Intent intent=new Intent(MainActivity.this,NotificationService.class);
-        startService(intent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) startForegroundService(intent);
+        else startService(intent);
+        //ContextCompat.startForegroundService(this, new Intent(this, NotificationService.class));
     }
 
     @Override
     protected void onDestroy() {
         Toast.makeText(this, "נהרסה", Toast.LENGTH_SHORT).show();
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction("restartservice");
+        broadcastIntent.setClass(this, Restarter.class);
+        this.sendBroadcast(broadcastIntent);
         super.onDestroy();
     }
 
@@ -299,6 +307,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
         Intent intent=new Intent(MainActivity.this,NotificationService.class);
         stopService(intent);
+
     }
 
     public List<Record> createRecordListForShow()
