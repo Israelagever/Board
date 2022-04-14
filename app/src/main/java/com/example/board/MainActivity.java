@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -37,6 +39,7 @@ import android.view.View;
 
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +47,7 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -72,13 +76,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ArrayList<Record> records;
     RecyclerView recyclerView;
 
+    AlarmManager alarmManager;
+    PendingIntent pendingIntent;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -90,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             editor.putString("orderBy", "move");
             editor.commit();
         }
-
+        startNotification();
 
 
         update();
@@ -285,28 +289,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onStop() {
+        //startNotification();
         super.onStop();
-        Intent intent=new Intent(MainActivity.this,NotificationService.class);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) startForegroundService(intent);
-        else startService(intent);
-        //ContextCompat.startForegroundService(this, new Intent(this, NotificationService.class));
+
     }
 
     @Override
     protected void onDestroy() {
         Toast.makeText(this, "נהרסה", Toast.LENGTH_SHORT).show();
-        Intent broadcastIntent = new Intent();
-        broadcastIntent.setAction("restartservice");
-        broadcastIntent.setClass(this, Restarter.class);
-        this.sendBroadcast(broadcastIntent);
+        //startNotification();
         super.onDestroy();
+    }
+    public void startNotification(){
+
+        Intent intent = new Intent(this, receiverNotification.class);
+        pendingIntent = PendingIntent.getBroadcast(
+                this.getApplicationContext(), 234324243, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.set(Calendar.HOUR_OF_DAY, 23); // For 1 PM or 2 PM
+        calendar.set(Calendar.MINUTE, 30);
+        calendar.set(Calendar.SECOND, 0);
+
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, pendingIntent);
+
+        //alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()
+        //        + 62000, pendingIntent);
+        //Toast.makeText(this, "Alarm set in " + 1.5 + " minute",Toast.LENGTH_LONG).show();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Intent intent=new Intent(MainActivity.this,NotificationService.class);
-        stopService(intent);
+        /*
+        if (alarmManager != null) {
+            alarmManager.cancel(pendingIntent);
+            Log.d("data1","the alarm canceled");
+        }
+
+         */
+
 
     }
 

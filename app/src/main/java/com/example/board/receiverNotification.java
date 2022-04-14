@@ -1,0 +1,51 @@
+package com.example.board;
+
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.media.MediaPlayer;
+import android.os.Build;
+import android.widget.Toast;
+
+import androidx.core.app.NotificationCompat;
+
+public class receiverNotification extends BroadcastReceiver {
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+
+        int icon = android.R.drawable.star_on;
+        String ticket = " this is ticket message";
+        long when = System.currentTimeMillis();
+        String title = "important message";
+        String ticker = "ticker";
+        String text = "don't forget to play today !!";
+        //phase 2
+        Intent intent1 = new Intent(context, MainActivity.class);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent1, 0);
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "M_CH_ID");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String channelId = "YOUR_CHANNEL_ID";
+            NotificationChannel channel = new NotificationChannel(channelId,
+                    "Channel human readable title",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            notificationManager.createNotificationChannel(channel);
+            builder.setChannelId(channelId);
+        }
+        //phase 3
+        Notification notification = builder.setContentIntent(pendingIntent)
+                .setSmallIcon(icon).setTicker(ticker).setWhen(when)
+                .setAutoCancel(true).setContentTitle(title)
+                .setContentText(text).build();
+        notificationManager.notify(3, notification);
+
+        Toast.makeText(context, "Alarm....", Toast.LENGTH_LONG).show();
+    }
+}

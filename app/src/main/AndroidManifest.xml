@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.board">
 
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
 
 
     <application
@@ -14,15 +14,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Board">
 
-        <receiver
-            android:name=".Restarter"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="restartservice" />
-            </intent-filter>
-        </receiver>
-
         <activity android:name=".SettingActivity"></activity>
         <activity android:name=".MainActivity"
             tools:ignore="IntentFilterExportedReceiver">
@@ -32,7 +23,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".NotificationService"></service>
+        <receiver android:name=".receiverNotification" >
+        </receiver>
     </application>
 
 </manifest>
