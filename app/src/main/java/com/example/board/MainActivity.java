@@ -126,7 +126,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-
     @SuppressLint("ClickableViewAccessibility")
     public void createBoardGame(){
 
