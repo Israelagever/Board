@@ -26,7 +26,28 @@ public class receiverNotification extends BroadcastReceiver {
         String title = "important message";
         String ticker = "ticker";
         int random = new Random().nextInt(5)+1;
-        String text = context.getResources().getString(Integer.parseInt("R.string.message"+random));
+        String message = "";
+        switch (random) {
+            case 1:
+                message = context.getResources().getString(R.string.message1);
+                break;
+            case 2:
+                message = context.getResources().getString(R.string.message2);
+                break;
+            case 3:
+            message = context.getResources().getString(R.string.message3);
+                break;
+            case 4:
+                message = context.getResources().getString(R.string.message4);
+                break;
+            case 5:
+                message = context.getResources().getString(R.string.message5);
+                break;
+        }
+
+
+
+
         //phase 2
         Intent intent1 = new Intent(context, MainActivity.class);
 
@@ -46,7 +67,7 @@ public class receiverNotification extends BroadcastReceiver {
         Notification notification = builder.setContentIntent(pendingIntent)
                 .setSmallIcon(icon).setTicker(ticker).setWhen(when)
                 .setAutoCancel(true).setContentTitle(title)
-                .setContentText(text).build();
+                .setContentText(message).build();
         notificationManager.notify(3, notification);
 
         Toast.makeText(context, "Alarm....", Toast.LENGTH_LONG).show();

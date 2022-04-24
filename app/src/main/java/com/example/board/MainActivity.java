@@ -187,13 +187,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Calendar calendar = Calendar.getInstance();
 
-        calendar.set(Calendar.HOUR_OF_DAY, 9);
-        calendar.set(Calendar.MINUTE, 20);
+        calendar.set(Calendar.HOUR_OF_DAY, 20);
+        calendar.set(Calendar.MINUTE, 30);
         calendar.set(Calendar.SECOND, 0);
 
 
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                60000, pendingIntent);
+                alarmManager.INTERVAL_DAY, pendingIntent);
 
     }
 
@@ -300,34 +300,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    @Override
-    protected void onStop() {
-        //startNotification();
-        super.onStop();
-
-    }
-
-    @Override
-    protected void onDestroy() {
-        Toast.makeText(this, "נהרסה", Toast.LENGTH_SHORT).show();
-        //startNotification();
-        super.onDestroy();
-    }
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        /*
-        if (alarmManager != null) {
-            alarmManager.cancel(pendingIntent);
-            Log.d("data1","the alarm canceled");
-        }
-
-         */
 
 
-    }
+
+
 
     public List<Record> createRecordListForShow()
     {
