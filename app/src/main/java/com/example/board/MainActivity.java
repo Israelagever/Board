@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             editor.putString("orderBy", "move");
             editor.commit();
         }
+
         startNotification();
 
 
@@ -101,7 +102,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         init();
         doHandler();
     }
+    private void init(){
 
+        displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+
+        btnStart = findViewById(R.id.btnStart);
+        btnStart.setOnClickListener(this);
+        tvTime = findViewById(R.id.tvTime);
+        tvMoves = findViewById(R.id.tvMoves);
+
+        btnPause = findViewById(R.id.btnPause);
+        btnPause.setOnClickListener(this);
+
+
+
+        l = findViewById(R.id.lGame);
+        createBoardGame();
+
+        moves = 0;
+    }
 
 
 
@@ -157,30 +178,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-    private void init(){
+    public void startNotification(){
 
-        displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
-
-        btnStart = findViewById(R.id.btnStart);
-        btnStart.setOnClickListener(this);
-        tvTime = findViewById(R.id.tvTime);
-        tvMoves = findViewById(R.id.tvMoves);
-
-        btnPause = findViewById(R.id.btnPause);
-        btnPause.setOnClickListener(this);
+        Intent intent = new Intent(this, receiverNotification.class);
+        pendingIntent = PendingIntent.getBroadcast(
+                this.getApplicationContext(), 234324243, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
 
+        Calendar calendar = Calendar.getInstance();
 
-        l = findViewById(R.id.lGame);
-        createBoardGame();
+        calendar.set(Calendar.HOUR_OF_DAY, 9);
+        calendar.set(Calendar.MINUTE, 20);
+        calendar.set(Calendar.SECOND, 0);
 
 
-
-
-        moves = 0;
-
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                60000, pendingIntent);
 
     }
 
@@ -300,27 +314,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //startNotification();
         super.onDestroy();
     }
-    public void startNotification(){
 
-        Intent intent = new Intent(this, receiverNotification.class);
-        pendingIntent = PendingIntent.getBroadcast(
-                this.getApplicationContext(), 234324243, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-
-        Calendar calendar = Calendar.getInstance();
-
-        calendar.set(Calendar.HOUR_OF_DAY, 23); // For 1 PM or 2 PM
-        calendar.set(Calendar.MINUTE, 30);
-        calendar.set(Calendar.SECOND, 0);
-
-
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, pendingIntent);
-
-        //alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()
-        //        + 62000, pendingIntent);
-        //Toast.makeText(this, "Alarm set in " + 1.5 + " minute",Toast.LENGTH_LONG).show();
-    }
 
     @Override
     protected void onResume() {

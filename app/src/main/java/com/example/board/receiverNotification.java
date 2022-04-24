@@ -7,11 +7,13 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.media.MediaPlayer;
+
 import android.os.Build;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
+
+import java.util.Random;
 
 public class receiverNotification extends BroadcastReceiver {
 
@@ -19,11 +21,12 @@ public class receiverNotification extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         int icon = android.R.drawable.star_on;
-        String ticket = " this is ticket message";
+
         long when = System.currentTimeMillis();
         String title = "important message";
         String ticker = "ticker";
-        String text = "don't forget to play today !!";
+        int random = new Random().nextInt(5)+1;
+        String text = context.getResources().getString(Integer.parseInt("R.string.message"+random));
         //phase 2
         Intent intent1 = new Intent(context, MainActivity.class);
 
