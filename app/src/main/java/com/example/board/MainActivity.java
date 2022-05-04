@@ -6,7 +6,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,16 +15,11 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 
 
-import android.os.BatteryManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -39,10 +33,8 @@ import android.view.View;
 
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import java.text.SimpleDateFormat;
@@ -72,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     boolean ifStart, ifPause = true, passToIntent = false, ifOne = true;
     Handler handler;
 
-    RecordHelper RecordHelper;
+    RecordHelper recordHelper;
     ArrayList<Record> records;
     RecyclerView recyclerView;
 
@@ -210,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if(ifPause)
             {
                 btnPause.setText("pause");
-                ifPause = false;
+                //ifPause = false;
 
             }
 
@@ -283,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (size != 0) sizeOfBoard =size;
         int color = getSetting.getInt("color", 0);
         if (color != 0) colorOfTile = color;
-        RecordHelper = new RecordHelper(this,"tblrecords"+sizeOfBoard, getSetting.getString("orderBy",null));
+        recordHelper = new RecordHelper(this,"tblrecords"+sizeOfBoard, getSetting.getString("orderBy",null));
 
     }
 
@@ -309,15 +301,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public List<Record> createRecordListForShow()
     {
-        RecordHelper.open();
-        ArrayList<Record> oldList = RecordHelper.getAllRecord();
+        recordHelper.open();
+        ArrayList<Record> oldList = recordHelper.getAllRecord();
         ArrayList<Record> newList = new ArrayList<>();
         if (oldList.size()>10) {
             for (int i = 0; i < 10; i++) {
 
                 newList.add(oldList.get(i));
             }
-            RecordHelper.close();
+            recordHelper.close();
             return newList;
         }
         else return oldList;
@@ -340,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         btnOrder = recordsD.findViewById(R.id.btnOrder);
-        if(RecordHelper.getOrderBy().equals("time")) btnOrder.setText("order by time");
+        if(recordHelper.getOrderBy().equals("time")) btnOrder.setText("order by time");
         btnOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -355,11 +347,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 editor.commit();
                 update();
-                RecordHelper.open();
+                recordHelper.open();
                 RecordAdapter recordAdapter = new RecordAdapter(MainActivity.this, createRecordListForShow());
                 recyclerView.setAdapter(recordAdapter);
                 recordsD.show();
-                RecordHelper.close();
+                recordHelper.close();
             }
         });
 
@@ -401,17 +393,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     time.isRun = false;
                     createSolvedDialog();
                     //Toast.makeText(context, "ניצחת אלוף!!", Toast.LENGTH_SHORT).show();
-                    RecordHelper.open();
+                    recordHelper.open();
                     String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
                     Record r = new Record(moves,tvTime.getText().toString(),currentDate);
-                    System.out.println(RecordHelper.createRecord(r).getRecordId());
+                    System.out.println(recordHelper.createRecord(r).getRecordId());
 
 
-                    records = RecordHelper.getAllRecord();
+                    records = recordHelper.getAllRecord();
                     if (records.size() > 0) {
                         Log.d("data1", records.toString());
                     }
-                    RecordHelper.close();
+                    recordHelper.close();
 
 
                 }
