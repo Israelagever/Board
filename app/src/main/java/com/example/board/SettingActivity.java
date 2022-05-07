@@ -54,7 +54,7 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
         saveSetting = getSharedPreferences("settings",0);
 
         choiceOfSize = saveSetting.getInt("size",4);
-        choiceOfColor = saveSetting.getString("color name",null);
+        choiceOfColor = saveSetting.getString("colorOfTile name",null);
         spinnerSize = findViewById(R.id.spinnerSize);
         spinnerColor = findViewById(R.id.spinnerColor);
         createSpinnerOfSize();
@@ -121,31 +121,31 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
                 switch (temp) {
                     case "magenta":
                         editor.putInt("color",Color.MAGENTA);
-                        editor.putString("color name","magenta");
+                        editor.putString("colorOfTile name","magenta");
                         break;
                     case "green":
                         editor.putInt("color",Color.parseColor("#4CAF50"));
-                        editor.putString("color name","green");
+                        editor.putString("colorOfTile name","green");
                         break;
                     case "yellow":
                         editor.putInt("color",Color.parseColor("#FFC107"));
-                        editor.putString("color name","yellow");
+                        editor.putString("colorOfTile name","yellow");
                         break;
                     case "black":
                         editor.putInt("color",Color.BLACK);
-                        editor.putString("color name","black");
+                        editor.putString("colorOfTile name","black");
                         break;
                     case "gray":
                         editor.putInt("color",Color.parseColor("#8E8E8E"));
-                        editor.putString("color name","gray");
+                        editor.putString("colorOfTile name","gray");
                         break;
                     case "purple":
                         editor.putInt("color",Color.parseColor("#5F4195"));
-                        editor.putString("color name","purple");
+                        editor.putString("colorOfTile name","purple");
                         break;
                     case "red":
                         editor.putInt("color",Color.parseColor("#C61E1E"));
-                        editor.putString("color name","red");
+                        editor.putString("colorOfTile name","red");
                         break;
                 }
                 editor.commit();

@@ -21,56 +21,52 @@ import android.graphics.Color;
 
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.util.DisplayMetrics;
-import android.util.Log;
+
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
+
 import android.view.View;
 
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
-import static com.example.board.BoardGame.blank;
+import java.util.List;
+
+
+
 import static com.example.board.BoardGame.time;
 
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
-    DisplayMetrics displayMetrics;
-    Button btnStart, btnSolved, btnPause, btnOrder;
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    BoardGame boardGame;
-    TextView tvTime, tvMoves;
+    static Button btnStart, btnPause, btnOrder;
+
+
+
      int sizeOfBoard = 4;
      int colorOfTile = Color.MAGENTA;
-    LinearLayout l;
+
     SharedPreferences getSetting;
-    Dialog solvedD,recordsD;
-    int moves;
-    boolean ifStart, ifPause = true, passToIntent = false, ifOne = true;
-    Handler handler;
+    Dialog recordsD;
+
+    boolean passToIntent = false;
+
 
     RecordHelper recordHelper;
-    ArrayList<Record> records;
+
     RecyclerView recyclerView;
 
     AlarmManager alarmManager;
     PendingIntent pendingIntent;
 
+    Game game;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,45 +85,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         startNotification();
 
-
         update();
+
         init();
-        doHandler();
+        //doHandler();
     }
     private void init(){
-
-        displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
-
         btnStart = findViewById(R.id.btnStart);
         btnStart.setOnClickListener(this);
-        tvTime = findViewById(R.id.tvTime);
-        tvMoves = findViewById(R.id.tvMoves);
-
         btnPause = findViewById(R.id.btnPause);
         btnPause.setOnClickListener(this);
-
-
-
-        l = findViewById(R.id.lGame);
-        createBoardGame();
-
-        moves = 0;
+        game = new Game(this);
     }
 
 
 
-    @SuppressLint("ClickableViewAccessibility")
-    public void createBoardGame(){
-
-        int width = displayMetrics.widthPixels;
-        boardGame = new BoardGame(this, sizeOfBoard,colorOfTile);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width,width);
-        boardGame.setLayoutParams(params);
-        boardGame.setOnTouchListener(this);
-        l.addView(boardGame);
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -151,18 +123,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
 
     }
+    @SuppressLint({"SetTextI18n", "Range"})
+    @Override
+    public void onClick(View v) {
 
+
+
+
+        if (v == btnStart) {
+
+
+            game.tvTime.setText("00:00.0");
+            game = new Game(this);
+
+        }
+        else if (v == btnPause)
+        {
+
+
+            if (!game.ifPause)
+                game.stopMode();
+            else
+                game.runMode();
+
+        }
+        else {
+            game.solvedD.dismiss();
+            game = new Game(this);
+
+        }
+
+    }
     ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == Activity.RESULT_OK) {
-                        update();
-                        btnPause.setText("pause");
-                        ifPause = true;
-                        ifStart = true;
+
+
                         passToIntent = false;
-                        resetGame();
+                        game = new Game(MainActivity.this);
                     }
                 }
             });
@@ -189,85 +189,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    @SuppressLint({"SetTextI18n", "Range"})
-    @Override
-    public void onClick(View v) {
-
-
-
-
-        if (v == btnStart) {
-            resetGame();
-            ifStart = true;
-            if(ifPause)
-            {
-                btnPause.setText("pause");
-                //ifPause = false;
-
-            }
-
-        }
-        else if (v == btnPause)
-        {
-
-
-            if (!ifPause) {
-                stopGame();
-                btnPause.setText("continue");
-            }
-
-            else {
-                time.isRun = true;
-                btnPause.setText("pause");
-                ifPause = false;
-
-
-            }
-        }
-        else {
-            resetGame();
-            ifStart = true;
-            solvedD.dismiss();
-        }
-
-    }
-
-    public void doHandler(){
-        handler=new Handler(new Handler.Callback() {
-            @SuppressLint({"DefaultLocale", "SetTextI18n"})
-            @Override
-            public boolean handleMessage(Message msg)
-            {
-
-                tvTime.setText(String.format("%02d",time.getMinute())+":"+String.format("%02d",msg.arg2) +"."+ msg.arg1);
-                if (ifStart) {
-                    tvTime.setText("00:00.0");
-                    ifStart = false;
-                }
-                return true;
-            }
-
-        });
-    }
-
-    public void resetGame()
-    {
-        l.removeView(boardGame);
-        createBoardGame();
-        if (time != null)
-            time.isRun = false;
-        tvMoves.setText("num of moves: 0");
-        tvTime.setText("00:00.0");
-        moves = 0;
-        btnPause.setEnabled(false);
-        ifOne = true;
-    }
-
-    public void stopGame(){
-        if (time!=null) time.isRun = false;
-        ifPause = true;
-
-    }
 
     public void update()
     {
@@ -285,10 +206,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onPause() {
         super.onPause();
 
-        if (!ifPause) {
-            stopGame();
+        if (!game.ifPause) {
+            game.stopMode();
+            /*
             if (passToIntent) btnPause.setText("pause");
             else btnPause.setText("continue");
+
+             */
         }
     }
 
@@ -356,59 +280,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
     }
-    public void createSolvedDialog()
-    {
-        solvedD=new Dialog(this);
-        solvedD.setContentView(R.layout.custom_solved);
-        solvedD.setCancelable(false);
-        btnSolved = solvedD.findViewById(R.id.btnSolved);
-        btnSolved.setOnClickListener((View.OnClickListener) this);
-        solvedD.show();
-    }
 
-    @Override
-    public boolean onTouch(View view, MotionEvent event) {
-        if (ifOne){
-            time = new Time(handler);
-            time.start();
-            btnPause.setEnabled(true);
-            ifPause = false;
-        }
-
-        ifOne = false;
-
-        if (!ifPause) {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                Square mySquare = boardGame.findSquare(event.getX(), event.getY());
-                //Square target = blank();
-                if (mySquare != null && boardGame.checkBlank(event.getX(), event.getY())) {
-                    boardGame.slide(mySquare, blank);
-
-                    moves++;
-                    tvMoves.setText("num of moves: " + moves);
-                }
-                boardGame.invalidate();
-
-                if (boardGame.isWin()) {
-                    time.isRun = false;
-                    createSolvedDialog();
-                    //Toast.makeText(context, "ניצחת אלוף!!", Toast.LENGTH_SHORT).show();
-                    recordHelper.open();
-                    String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
-                    Record r = new Record(moves,tvTime.getText().toString(),currentDate);
-                    System.out.println(recordHelper.createRecord(r).getRecordId());
-
-
-                    records = recordHelper.getAllRecord();
-                    if (records.size() > 0) {
-                        Log.d("data1", records.toString());
-                    }
-                    recordHelper.close();
-
-
-                }
-            }
-        }
-        return true;
-    }
 }

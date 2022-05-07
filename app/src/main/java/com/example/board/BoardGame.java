@@ -153,7 +153,7 @@ public class BoardGame extends View {
 
                     /*
                     if(i==size-1&&j==size-1){
-                        squares[i][j] = new Square(this, x, y, w, h, color,tiles[i][j],count);
+                        squares[i][j] = new Square(this, x, y, w, h, colorOfTile,tiles[i][j],count);
                         break;
                     }
 

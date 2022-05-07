@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -22,18 +21,19 @@ import java.util.Locale;
 
 import static com.example.board.BoardGame.blank;
 import static com.example.board.BoardGame.time;
+import static com.example.board.MainActivity.btnPause;
 
-public class Game implements View.OnTouchListener, View.OnClickListener {
+public class Game implements View.OnTouchListener {
     private BoardGame boardGame;
-    private Button btnStart, btnSolved, btnPause, btnOrder;
+    Button btnSolved;
     Dialog solvedD;
     TextView tvTime, tvMoves;
     private Context context;
     SharedPreferences getSetting;
     LinearLayout l;
 
-    boolean ifOne = true, ifStart, ifPause = true;
-    int moves;
+    boolean ifOne = true, ifStart=false, ifPause = true;
+    int moves, sizeOfBoard, colorOfTile;
     Handler handler;
     RecordHelper recordHelper;
 
@@ -41,33 +41,40 @@ public class Game implements View.OnTouchListener, View.OnClickListener {
     public Game(Context context) {
         this.context = context;
 
-        btnStart = ((Activity)context).findViewById(R.id.btnStart);
-        btnPause = ((Activity)context).findViewById(R.id.btnPause);
-        btnStart.setOnClickListener(this);
-        btnPause.setOnClickListener(this);
-
         tvTime = ((Activity)context).findViewById(R.id.tvTime);
         tvMoves = ((Activity)context).findViewById(R.id.tvMoves);
+        if (time!=null) time.isRun = false;
+        ifStart=false;
+        doHandler();
+        time = new Time(handler);
+        tvTime.setText("00:00.0");
+        tvMoves.setText("num of moves: 0");
+        btnPause.setText("pause");
+        btnPause.setEnabled(false);
+
 
         l = ((Activity)context).findViewById(R.id.lGame);
-        doHandler();
+        l.removeView(l.getChildAt(0));
+
+        getSetting = context.getSharedPreferences("settings",0);
+        update();
         moves = 0;
         createBoardGame();
 
+
     }
     public void createBoardGame(){
-        getSetting = context.getSharedPreferences("settings",0);
-        int size = getSetting.getInt("size", 0);
-        int color = getSetting.getInt("color", 0);
-        if (size != 0 && color != 0)
-            boardGame = new BoardGame(context,size,color);
+
+        if (sizeOfBoard != 0 && colorOfTile != 0)
+            boardGame = new BoardGame(context,sizeOfBoard, colorOfTile);
         else
             boardGame = new BoardGame(context,4, Color.MAGENTA);
+
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
-        boardGame = new BoardGame(context, size,color);
+
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width,width);
         boardGame.setLayoutParams(params);
         boardGame.setOnTouchListener(this);
@@ -82,23 +89,38 @@ public class Game implements View.OnTouchListener, View.OnClickListener {
             {
 
                 tvTime.setText(String.format("%02d",time.getMinute())+":"+String.format("%02d",msg.arg2) +"."+ msg.arg1);
-                if (ifStart) {
+                if (ifStart = false)
                     tvTime.setText("00:00.0");
-                    ifStart = false;
-                }
                 return true;
             }
 
         });
     }
 
+    public void runMode(){
+        if (time!=null) time.isRun = true;
+        btnPause.setEnabled(true);
+        btnPause.setText("pause");
+        ifStart = true;
+        ifPause = false;
+    }
+
+    public void stopMode(){
+        if (time!=null) time.isRun = false;
+        btnPause.setText("continue");
+        ifStart = true;
+        ifPause = true;
+
+    }
+
+
     @Override
     public boolean onTouch(View view, MotionEvent event) {
         if (ifOne){
-            time = new Time(handler);
+
             time.start();
-            btnPause.setEnabled(true);
-            ifPause = false;
+
+            runMode();
         }
 
         ifOne = false;
@@ -134,7 +156,7 @@ public class Game implements View.OnTouchListener, View.OnClickListener {
         }
         return true;
     }
-
+/*
     @SuppressLint({"SetTextI18n", "Range"})
     @Override
     public void onClick(View v) {
@@ -143,7 +165,9 @@ public class Game implements View.OnTouchListener, View.OnClickListener {
 
 
         if (v == btnStart) {
+
             resetGame();
+            /*
             ifStart = true;
             if(ifPause)
             {
@@ -151,6 +175,8 @@ public class Game implements View.OnTouchListener, View.OnClickListener {
                 //ifPause = false;
 
             }
+
+
 
         }
         else if (v == btnPause)
@@ -177,22 +203,31 @@ public class Game implements View.OnTouchListener, View.OnClickListener {
         }
 
     }
+    */
     public void stopGame(){
         if (time!=null) time.isRun = false;
         ifPause = true;
 
     }
-    public void resetGame()
+    public void startMode()
     {
-        l.removeView(boardGame);
-        createBoardGame();
+
         if (time != null)
             time.isRun = false;
-        tvMoves.setText("num of moves: 0");
-        tvTime.setText("00:00.0");
-        moves = 0;
         btnPause.setEnabled(false);
+        ifStart = false;
+        ifPause = true;
         ifOne = true;
+
+    }
+    public void update()
+    {
+        int size = getSetting.getInt("size", 0);
+        if (size != 0) sizeOfBoard =size;
+        int color = getSetting.getInt("color", 0);
+        if (color != 0) colorOfTile = color;
+        recordHelper = new RecordHelper(context,"tblrecords"+sizeOfBoard, getSetting.getString("orderBy",null));
+
     }
     public void createSolvedDialog()
     {
@@ -200,7 +235,7 @@ public class Game implements View.OnTouchListener, View.OnClickListener {
         solvedD.setContentView(R.layout.custom_solved);
         solvedD.setCancelable(false);
         btnSolved = solvedD.findViewById(R.id.btnSolved);
-        btnSolved.setOnClickListener((View.OnClickListener) this);
+        btnSolved.setOnClickListener((View.OnClickListener) context);
         solvedD.show();
     }
 }
