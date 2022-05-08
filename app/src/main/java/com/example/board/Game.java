@@ -135,9 +135,8 @@ public class Game implements View.OnTouchListener {
                     moves++;
                     tvMoves.setText("num of moves: " + moves);
                 }
-                boardGame.invalidate();
-
                 if (boardGame.isWin()) {
+
                     time.isRun = false;
                     createSolvedDialog();
                     //Toast.makeText(context, "ניצחת אלוף!!", Toast.LENGTH_SHORT).show();
@@ -149,9 +148,8 @@ public class Game implements View.OnTouchListener {
 
 
                     recordHelper.close();
-
-
                 }
+                boardGame.invalidate();
             }
         }
         return true;
