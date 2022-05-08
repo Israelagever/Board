@@ -51,7 +51,7 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
         actionBar.setDisplayHomeAsUpEnabled(true);
 
 
-        saveSetting = getSharedPreferences("settings",0);
+        saveSetting = getSharedPreferences("data",0);
 
         choiceOfSize = saveSetting.getInt("size",4);
         choiceOfColor = saveSetting.getString("colorOfTile name",null);

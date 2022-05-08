@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_main);
-        getSetting = getSharedPreferences("settings",0);
+        getSetting = getSharedPreferences("data",0);
         if (getSetting.getString("orderBy",null) == null) {
             SharedPreferences.Editor editor = getSetting.edit();
             editor.putString("orderBy", "move");
@@ -116,10 +116,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mStartForResult.launch(intent);
 
 
-            return true;
+
         }
         else if (item.getItemId() == R.id.records)
             createRecordsDialog();
+        else if (item.getItemId() == R.id.contact) {
+            Intent intent = new Intent(MainActivity.this,SmsActivity.class);
+            passToIntent = true;
+            mStartForResult.launch(intent);
+        }
         return true;
 
     }
