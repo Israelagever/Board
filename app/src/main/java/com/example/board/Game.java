@@ -56,7 +56,7 @@ public class Game implements View.OnTouchListener {
         l = ((Activity)context).findViewById(R.id.lGame);
         l.removeView(l.getChildAt(0));
 
-        getSetting = context.getSharedPreferences("settings",0);
+        getSetting = context.getSharedPreferences("data",0);
         update();
         moves = 0;
         createBoardGame();
