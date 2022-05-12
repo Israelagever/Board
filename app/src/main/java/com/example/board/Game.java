@@ -43,15 +43,7 @@ public class Game implements View.OnTouchListener {
 
         tvTime = ((Activity)context).findViewById(R.id.tvTime);
         tvMoves = ((Activity)context).findViewById(R.id.tvMoves);
-        if (time!=null) time.isRun = false;
-        ifStart=false;
-        doHandler();
-        time = new Time(handler);
-        tvTime.setText("00:00.0");
-        tvMoves.setText("num of moves: 0");
-        btnPause.setText("pause");
-        btnPause.setEnabled(false);
-
+        startMode();
 
         l = ((Activity)context).findViewById(R.id.lGame);
         l.removeView(l.getChildAt(0));
@@ -63,6 +55,7 @@ public class Game implements View.OnTouchListener {
 
 
     }
+
     public void createBoardGame(){
 
         if (sizeOfBoard != 0 && colorOfTile != 0)
@@ -88,7 +81,8 @@ public class Game implements View.OnTouchListener {
             public boolean handleMessage(Message msg)
             {
 
-                tvTime.setText(String.format("%02d",time.getMinute())+":"+String.format("%02d",msg.arg2) +"."+ msg.arg1);
+                if (time.isRun)
+                    tvTime.setText(String.format("%02d",time.getMinute())+":"+String.format("%02d",msg.arg2) +"."+ msg.arg1);
                 if (ifStart = false)
                     tvTime.setText("00:00.0");
                 return true;
@@ -96,7 +90,21 @@ public class Game implements View.OnTouchListener {
 
         });
     }
+    public void startMode(){
+        if (time != null) {
 
+            time.isRun = false;
+            time.handler = null;
+        }
+
+        doHandler();
+        time = new Time(handler);
+        tvTime.setText("00:00.0");
+        tvMoves.setText("num of moves: 0");
+        btnPause.setText("pause");
+        btnPause.setEnabled(false);
+
+    }
     public void runMode(){
         if (time!=null) time.isRun = true;
         btnPause.setEnabled(true);
@@ -117,12 +125,9 @@ public class Game implements View.OnTouchListener {
     @Override
     public boolean onTouch(View view, MotionEvent event) {
         if (ifOne){
-
             time.start();
-
             runMode();
         }
-
         ifOne = false;
 
         if (!ifPause) {
@@ -154,70 +159,7 @@ public class Game implements View.OnTouchListener {
         }
         return true;
     }
-/*
-    @SuppressLint({"SetTextI18n", "Range"})
-    @Override
-    public void onClick(View v) {
 
-
-
-
-        if (v == btnStart) {
-
-            resetGame();
-            /*
-            ifStart = true;
-            if(ifPause)
-            {
-                btnPause.setText("pause");
-                //ifPause = false;
-
-            }
-
-
-
-        }
-        else if (v == btnPause)
-        {
-
-
-            if (!ifPause) {
-                stopGame();
-                btnPause.setText("continue");
-            }
-
-            else {
-                time.isRun = true;
-                btnPause.setText("pause");
-                ifPause = false;
-
-
-            }
-        }
-        else {
-            resetGame();
-            ifStart = true;
-            solvedD.dismiss();
-        }
-
-    }
-    */
-    public void stopGame(){
-        if (time!=null) time.isRun = false;
-        ifPause = true;
-
-    }
-    public void startMode()
-    {
-
-        if (time != null)
-            time.isRun = false;
-        btnPause.setEnabled(false);
-        ifStart = false;
-        ifPause = true;
-        ifOne = true;
-
-    }
     public void update()
     {
         int size = getSetting.getInt("size", 0);

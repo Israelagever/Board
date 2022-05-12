@@ -26,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import android.view.MotionEvent;
 import android.view.View;
 
 import android.view.WindowManager;
@@ -93,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void init(){
         btnStart = findViewById(R.id.btnStart);
         btnStart.setOnClickListener(this);
+
         btnPause = findViewById(R.id.btnPause);
         btnPause.setOnClickListener(this);
         game = new Game(this);
@@ -138,8 +140,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (v == btnStart) {
 
 
-            game.tvTime.setText("00:00.0");
+
             game = new Game(this);
+            game.tvTime.setText("00:00.0");
 
         }
         else if (v == btnPause)
@@ -167,7 +170,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
                         passToIntent = false;
+
                         game = new Game(MainActivity.this);
+
                     }
                 }
             });
