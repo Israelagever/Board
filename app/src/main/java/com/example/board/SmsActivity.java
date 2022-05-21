@@ -89,7 +89,7 @@ public class SmsActivity extends AppCompatActivity implements View.OnClickListen
         String msg=message.getText().toString();
 
         //Getting intent and PendingIntent instance
-        Intent intent=new Intent(getApplicationContext(),SmsActivity.class);
+        Intent intent=new Intent(getApplicationContext(),MainActivity.class);
         PendingIntent pi=PendingIntent.getActivity(getApplicationContext(), 0, intent,0);
 
         //Get the SmsManager instance and call the sendTextMessage method to send message

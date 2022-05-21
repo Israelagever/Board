@@ -85,11 +85,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         startNotification();
-
-        update();
-
         init();
-        //doHandler();
+
     }
     private void init(){
         btnStart = findViewById(R.id.btnStart);
@@ -98,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnPause = findViewById(R.id.btnPause);
         btnPause.setOnClickListener(this);
         game = new Game(this);
+        game.update();
     }
 
 
@@ -200,15 +198,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    public void update()
-    {
-        int size = getSetting.getInt("size", 0);
-        if (size != 0) sizeOfBoard =size;
-        int color = getSetting.getInt("color", 0);
-        if (color != 0) colorOfTile = color;
-        recordHelper = new RecordHelper(this,"tblrecords"+sizeOfBoard, getSetting.getString("orderBy",null));
 
-    }
 
 
 
@@ -280,7 +270,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     btnOrder.setText("order by move");
                 }
                 editor.commit();
-                update();
+                game.update();
                 recordHelper.open();
                 RecordAdapter recordAdapter = new RecordAdapter(MainActivity.this, createRecordListForShow());
                 recyclerView.setAdapter(recordAdapter);
