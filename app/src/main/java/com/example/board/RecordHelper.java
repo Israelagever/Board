@@ -37,7 +37,7 @@ public class RecordHelper extends SQLiteOpenHelper {
         this.table_records = table_records;
         this.orderBy = orderBy;
         CREATE_TABLE_RECORD = "CREATE TABLE IF NOT EXISTS " +
-                table_records + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_MOVE + " INTEGER," + COLUMN_TIME + " VARCHAR,"
+                this.table_records + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_MOVE + " INTEGER," + COLUMN_TIME + " VARCHAR,"
                 + COLUMN_DATE + " INTEGER " + ");";
     }
 

@@ -33,7 +33,7 @@ public class Game implements View.OnTouchListener {
     LinearLayout l;
 
     boolean ifOne = true, ifStart=false, ifPause = true;
-    int moves, sizeOfBoard, colorOfTile;
+    int moves, sizeOfBoard=4, colorOfTile;
     Handler handler;
     RecordHelper recordHelper;
 

@@ -47,12 +47,11 @@ import static com.example.board.BoardGame.time;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    static Button btnStart, btnPause, btnOrder;
+    static Button btnStart, btnPause;
+    Button btnOrder;
 
 
 
-     int sizeOfBoard = 4;
-     int colorOfTile = Color.MAGENTA;
 
     SharedPreferences getSetting;
     Dialog recordsD;
@@ -78,24 +77,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         setContentView(R.layout.activity_main);
         getSetting = getSharedPreferences("data",0);
+        SharedPreferences.Editor editor = getSetting.edit();
+
         if (getSetting.getString("orderBy",null) == null) {
-            SharedPreferences.Editor editor = getSetting.edit();
             editor.putString("orderBy", "move");
             editor.commit();
         }
 
-        startNotification();
+        if(getSetting.getBoolean("firstLaunch",true)) {
+            startNotification();
+            editor.putBoolean("firstLaunch", false);
+            editor.commit();
+        }
+
         init();
 
     }
     private void init(){
         btnStart = findViewById(R.id.btnStart);
         btnStart.setOnClickListener(this);
-
         btnPause = findViewById(R.id.btnPause);
         btnPause.setOnClickListener(this);
+
         game = new Game(this);
         game.update();
+        recordHelper = game.recordHelper;
     }
 
 
@@ -113,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (item.getItemId() == R.id.setting) {
             Intent intent = new Intent(MainActivity.this,SettingActivity.class);
             passToIntent = true;
-            mStartForResult.launch(intent);
+            StartForResult.launch(intent);
 
 
 
@@ -123,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if (item.getItemId() == R.id.contact) {
             Intent intent = new Intent(MainActivity.this,SmsActivity.class);
             passToIntent = true;
-            mStartForResult.launch(intent);
+            StartForResult.launch(intent);
         }
         return true;
 
@@ -160,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
-    ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+    ActivityResultLauncher<Intent> StartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
@@ -198,21 +204,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
-
-
-
     @Override
     protected void onPause() {
         super.onPause();
 
         if (!game.ifPause) {
             game.stopMode();
-            /*
-            if (passToIntent) btnPause.setText("pause");
-            else btnPause.setText("continue");
 
-             */
+            if (passToIntent) btnPause.setText("pause");
+
+
+
         }
     }
 
