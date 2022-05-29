@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     boolean passToIntent = false;
 
 
-    RecordHelper recordHelper;
+    //RecordHelper recordHelper;
 
     RecyclerView recyclerView;
 
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         game = new Game(this);
         game.update();
-        recordHelper = game.recordHelper;
+        //recordHelper = game.recordHelper;
     }
 
 
@@ -227,15 +227,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public List<Record> createRecordListForShow()
     {
-        recordHelper.open();
-        ArrayList<Record> oldList = recordHelper.getAllRecord();
+        game.recordHelper.open();
+        ArrayList<Record> oldList = game.recordHelper.getAllRecord();
         ArrayList<Record> newList = new ArrayList<>();
         if (oldList.size()>10) {
             for (int i = 0; i < 10; i++) {
 
                 newList.add(oldList.get(i));
             }
-            recordHelper.close();
+            game.recordHelper.close();
             return newList;
         }
         else return oldList;
@@ -258,7 +258,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         btnOrder = recordsD.findViewById(R.id.btnOrder);
-        if(recordHelper.getOrderBy().equals("time")) btnOrder.setText("order by time");
+        if(game.recordHelper.getOrderBy().equals("time")) btnOrder.setText("order by time");
         btnOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -273,11 +273,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 editor.commit();
                 game.update();
-                recordHelper.open();
+                game.recordHelper.open();
                 RecordAdapter recordAdapter = new RecordAdapter(MainActivity.this, createRecordListForShow());
                 recyclerView.setAdapter(recordAdapter);
                 recordsD.show();
-                recordHelper.close();
+                game.recordHelper.close();
             }
         });
 
