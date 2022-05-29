@@ -124,8 +124,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         }
-        else if (item.getItemId() == R.id.records)
+        else if (item.getItemId() == R.id.records) {
+            game.stopMode();
             createRecordsDialog();
+        }
         else if (item.getItemId() == R.id.contact) {
             Intent intent = new Intent(MainActivity.this,SmsActivity.class);
             passToIntent = true;
