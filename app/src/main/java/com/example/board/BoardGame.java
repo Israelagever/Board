@@ -20,10 +20,10 @@ import java.util.Random;
 
 public class BoardGame extends View {
 
-    boolean ifOne1 = true;
+    boolean ifOne = true;//בודק אם זה פעם ראשונה לצייר את הלוח
     int size,color;
 
-    int[] theSort;
+    int[] theSort;//מערך עם הסדר של הבלגון של המספרים
     Random r;
     int all;
 
@@ -32,7 +32,7 @@ public class BoardGame extends View {
 
     Context context;
 
-    static Square blank;
+    static Square blank;//המקום הריק
     int moves;
 
     static Time time;
@@ -44,7 +44,7 @@ public class BoardGame extends View {
         squares = new Square[size][size];
         tiles = new Tile[size][size];
         r = new Random();
-        all = size*size;
+        all = size*size;//לדוגמא 4x4 = 16
         theSort = new int[all];
 
 
@@ -54,41 +54,40 @@ public class BoardGame extends View {
     }
 
 
-
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(Canvas canvas) {//פעולה של view ובה מציירים על הלוח עם canvas
         super.onDraw(canvas);
         drawBoard(canvas);
 
 
     }
 
-    public void resetArr(int[] arr){
+    public void resetArr(int[] arr){//ריסוט המערך שכל אבריו יהיו 1-
         Arrays.fill(arr, -1);
     }
 
-    public void swap(){
+    public void swap(){//ערבוב המערך במספרים מ1 עד all
         int temp;
         for (int i = 0;i<all;i++) {
 
             do {
                 temp = r.nextInt(all);
-            }while (findInArray(temp,theSort));
+            }while (findInArray(temp,theSort,i));
 
             theSort[i] = temp;
         }
     }
 
-    public boolean findInArray(int n,int[] arr)
+    public boolean findInArray(int n,int[] arr,int temp)//בדיקה אם מספר כבר נמצא במערך
     {
-        for (int j : arr) {
-            if (j == n)
+        for (int i = 0; i < temp; i++) {
+            if (arr[i] == n)
                 return true;
         }
         return false;
     }
 
-    public boolean isSolvable(int[] puzzle)
+    public boolean isSolvable(int[] puzzle)//פעולה עם אלגוריתמיקה מתקדמת שבודקת אם המערך פתיר במשחק הזה
     {
         int parity = 0;
         int gridWidth = (int) Math.sqrt(puzzle.length);
@@ -125,8 +124,8 @@ public class BoardGame extends View {
     }
 
 
-    public void drawBoard(Canvas canvas){
-        if(ifOne1) {
+    public void drawBoard(Canvas canvas){//הפעולה שמציירת את הלוח
+        if(ifOne) {
 
             //int count =1;
             do {
@@ -149,15 +148,6 @@ public class BoardGame extends View {
             for (int i = 0; i < squares.length; i++) {
                 for (int j = 0; j < squares.length; j++) {
 
-
-                    /*
-                    if(i==size-1&&j==size-1){
-                        squares[i][j] = new Square(this, x, y, w, h, colorOfTile,tiles[i][j],count);
-                        break;
-                    }
-
-                     */
-
                     if (theSort[count - 1] != 0) {
 
                         tiles[i][j] = new Tile(this, x, y, w, h, theSort[count - 1], color);
@@ -173,9 +163,9 @@ public class BoardGame extends View {
                 x = 15;
             }
         }
-        ifOne1 = false;
+
         blank = blank();
-        if (!ifOne1) {
+        if (!ifOne) {
             for (int i = 0; i < squares.length; i++) {
                 for (int j = 0; j < squares.length; j++) {
                     if (squares[i][j].number != blank.number)
@@ -184,11 +174,10 @@ public class BoardGame extends View {
                 }
             }
         }
-
-
+        ifOne = false;
     }
 
-    public Square blank(){
+    public Square blank(){//פעולה שמחזירה את המקום הריק
         for (int i = 0; i < squares.length; i++) {
             for (int j = 0; j < squares.length; j++) {
                 if (squares[i][j].getTile() == null)
@@ -199,7 +188,7 @@ public class BoardGame extends View {
         return null;
 
     }
-    public void slide(Square from,Square to){
+    public void slide(Square from,Square to) {//פעולה שמזיזה אריח מקום למקום
         if (from.getTile()!=null)
         {
             to.setTile(from.getTile());
@@ -211,14 +200,14 @@ public class BoardGame extends View {
 
 
 
-    public boolean checkBlank(float x, float y) {
+    public boolean checkBlank(float x, float y) {//בודק אם הx והy נמצאים על המקום הריק
         float distant = squares[0][0].h;
         if (blank.didXAndYInSquare(x,y+distant) || blank.didXAndYInSquare(x,y-distant) || blank.didXAndYInSquare(x+distant,y) || blank.didXAndYInSquare(x-distant,y))
             return true;
         return false;
     }
 
-    public boolean isWin() {
+    public boolean isWin() {//בודק אם הלוח פתור
         for(int i = 0;i<squares.length;i++) {
             for (int j = 0; j < squares.length; j++) {
                 if (squares[i][j].getTile()==null)
@@ -234,7 +223,7 @@ public class BoardGame extends View {
         return true;
     }
 
-    public Square findSquare(float x, float y) {
+    public Square findSquare(float x, float y) {//מקבלת x וy ומחזירה את הsquare שנמצא שם
         for(int i = 0;i<squares.length;i++) {
             for (int j = 0; j < squares.length; j++) {
                 if(squares[i][j].didXAndYInSquare(x,y))

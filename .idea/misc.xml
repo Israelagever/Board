@@ -3,8 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/student/Board/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.221" />
         <entry key="..\:/Users/student/Board/app/src/main/res/layout/activity_main.xml" value="0.2554347826086957" />
-        <entry key="..\:/Users/student/Board/app/src/main/res/layout/activity_setting.xml" value="0.24094202898550723" />
+        <entry key="..\:/Users/student/Board/app/src/main/res/layout/activity_setting.xml" value="0.25" />
+        <entry key="..\:/Users/student/Board/app/src/main/res/layout/activity_sms.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/student/Board/app/src/main/res/layout/custom_dialog_records.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/student/Board/app/src/main/res/layout/custom_solved.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/student/Board/app/src/main/res/layout/records_layuot.xml" value="0.25" />
