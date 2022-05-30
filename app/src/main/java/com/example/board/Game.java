@@ -83,7 +83,7 @@ public class Game implements View.OnTouchListener {
 
                 if (time.isRun)
                     tvTime.setText(String.format("%02d",time.getMinute())+":"+String.format("%02d",msg.arg2) +"."+ msg.arg1);
-                if (ifStart = false)
+                if (!ifStart)
                     tvTime.setText("00:00.0");
                 return true;
             }

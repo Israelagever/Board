@@ -84,7 +84,6 @@ public class BoardGame extends View {
         for (int j : arr) {
             if (j == n)
                 return true;
-
         }
         return false;
     }
