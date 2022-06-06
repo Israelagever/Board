@@ -1,10 +1,10 @@
 package com.example.board;
 
 public class Record {
-    private int move;
-    private String time;
-    private String date;
-    private long recordId;
+    private int move;//מהלכים
+    private String time;//זמן
+    private String date;//תאריך
+    private long recordId;//מספר שיא
 
     public Record(long recordId,int move, String time, String date) {
         this.move = move;

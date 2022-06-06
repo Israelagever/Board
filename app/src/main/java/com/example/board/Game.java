@@ -24,11 +24,11 @@ import static com.example.board.BoardGame.time;
 import static com.example.board.MainActivity.btnPause;
 
 public class Game implements View.OnTouchListener {
-    private BoardGame boardGame;
+    private BoardGame boardGame;//הלוח
     Button btnSolved;
     Dialog solvedD;
     TextView tvTime, tvMoves;
-    private Context context;
+    private final Context context;
     SharedPreferences getSetting;
     LinearLayout l;
 
@@ -38,7 +38,7 @@ public class Game implements View.OnTouchListener {
     RecordHelper recordHelper;
 
 
-    public Game(Context context) {
+    public Game(Context context) {//הפעולה הבונה
         this.context = context;
 
         tvTime = ((Activity)context).findViewById(R.id.tvTime);
@@ -56,25 +56,26 @@ public class Game implements View.OnTouchListener {
 
     }
 
-    public void createBoardGame(){
+    @SuppressLint("ClickableViewAccessibility")
+    public void createBoardGame(){//יצירת הלוח
 
         if (sizeOfBoard != 0 && colorOfTile != 0)
             boardGame = new BoardGame(context,sizeOfBoard, colorOfTile);
-        else
+        else//במקרה שזה פעם ראשונה שמופעלת האפליקצה
             boardGame = new BoardGame(context,4, Color.MAGENTA);
 
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);//מציאת הרוחב של המסך
         int width = displayMetrics.widthPixels;
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width,width);
-        boardGame.setLayoutParams(params);
+        boardGame.setLayoutParams(params);//הגדרת הגודל של הלוח
         boardGame.setOnTouchListener(this);
         l.addView(boardGame);
     }
 
-    public void doHandler(){
+    public void doHandler(){//פעולה שמקושרת לhandler ומקבלת ממנו messages
         handler=new Handler(new Handler.Callback() {
             @SuppressLint({"DefaultLocale", "SetTextI18n"})
             @Override
@@ -82,7 +83,7 @@ public class Game implements View.OnTouchListener {
             {
 
                 if (time.isRun)
-                    tvTime.setText(String.format("%02d",time.getMinute())+":"+String.format("%02d",msg.arg2) +"."+ msg.arg1);
+                    tvTime.setText(String.format("%02d",time.getMinute())+":"+String.format("%02d",msg.arg2) +"."+ msg.arg1);//שינוי הזמן בכל עשירית שניה
                 if (!ifStart)
                     tvTime.setText("00:00.0");
                 return true;
@@ -90,7 +91,7 @@ public class Game implements View.OnTouchListener {
 
         });
     }
-    public void startMode(){
+    public void startMode(){//מצב התחלתי
         if (time != null) {
 
             time.isRun = false;
@@ -105,7 +106,7 @@ public class Game implements View.OnTouchListener {
         btnPause.setEnabled(false);
 
     }
-    public void runMode(){
+    public void runMode(){//מעבר למצב ריצה
         if (time!=null) time.isRun = true;
         btnPause.setEnabled(true);
         btnPause.setText("pause");
@@ -113,7 +114,7 @@ public class Game implements View.OnTouchListener {
         ifPause = false;
     }
 
-    public void stopMode(){
+    public void stopMode(){//מעבר למצב עצירה
         if (time!=null) time.isRun = false;
         btnPause.setText("continue");
         ifStart = true;
@@ -123,44 +124,44 @@ public class Game implements View.OnTouchListener {
 
 
     @Override
-    public boolean onTouch(View view, MotionEvent event) {
-        if (ifOne){
+    public boolean onTouch(View view, MotionEvent event) {//ברגע שנוגעים בלוח
+        if (ifOne){//פעם ראשונה
             time.start();
             runMode();
         }
         ifOne = false;
 
         if (!ifPause) {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                Square mySquare = boardGame.findSquare(event.getX(), event.getY());
-                //Square target = blank();
-                if (mySquare != null && boardGame.checkBlank(event.getX(), event.getY())) {
+            if (event.getAction() == MotionEvent.ACTION_UP) {//ברגע שהורמה האצבע
+                Square mySquare = boardGame.findSquare(event.getX(), event.getY());//מציאת הריבוע שנלחץ
+
+                if (mySquare != null && boardGame.checkBlank(event.getX(), event.getY())) {//בודקת אם אפשר לעשות מהלך חוקי
                     boardGame.slide(mySquare, blank);
 
                     moves++;
                     tvMoves.setText("num of moves: " + moves);
                 }
-                if (boardGame.isWin()) {
-
+                if (boardGame.isWin()) {//במצב של ניצחון
+                    ifPause = true;
                     time.isRun = false;
                     createSolvedDialog();
                     //Toast.makeText(context, "ניצחת אלוף!!", Toast.LENGTH_SHORT).show();
-                    recordHelper.open();
-                    String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
-                    Record r = new Record(moves,tvTime.getText().toString(),currentDate);
-                    System.out.println(recordHelper.createRecord(r).getRecordId());
-
-
-
-                    recordHelper.close();
+                    addNewRecord();
                 }
-                boardGame.invalidate();
+                boardGame.invalidate();//קריאה לonDraw בשביל לצייר את הלוח מחדש
             }
         }
         return true;
     }
+    public void addNewRecord(){//פעולה שמוסיפה שיא חדש
+        recordHelper.open();
+        String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());//מציאת התאריך הנוכחי
+        Record r = new Record(moves,tvTime.getText().toString(),currentDate);//יצירת שיר חדש
+        System.out.println(recordHelper.createRecord(r).getRecordId());//הוספת השיא החדש
+        recordHelper.close();
+    }
 
-    public void update()
+    public void update()//SharedPreferencesפעולה שמעדכנת את הנתונים מה
     {
         int size = getSetting.getInt("size", 0);
         if (size != 0) sizeOfBoard =size;
@@ -169,7 +170,7 @@ public class Game implements View.OnTouchListener {
         recordHelper = new RecordHelper(context,"tblrecords"+sizeOfBoard, getSetting.getString("orderBy",null));
 
     }
-    public void createSolvedDialog()
+    public void createSolvedDialog()//פתיחת דיאלוג כשמנצחים
     {
         solvedD=new Dialog(context);
         solvedD.setContentView(R.layout.custom_solved);

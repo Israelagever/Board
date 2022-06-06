@@ -30,13 +30,13 @@ public class RecordAdapter extends  RecyclerView.Adapter<RecordAdapter.RecordVie
 
 
 
-    //this context we will use to inflate the layout
-    private final Context context;
-    //we are storing all the products in a list
-    private final List<Record> recordList;
-    //getting the context and product list with constructor
 
-    public RecordAdapter(Context context, List<Record> recordList)
+    private final Context context;
+
+    private final List<Record> recordList;//הרשימה של השיאים
+
+
+    public RecordAdapter(Context context, List<Record> recordList)//פעולה בונה
 
     {
         this.context = context;
@@ -45,9 +45,9 @@ public class RecordAdapter extends  RecyclerView.Adapter<RecordAdapter.RecordVie
 
 
     @Override
-    public RecordViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecordViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {//יצירת holder בשביל הview הכללי של השיאים
 
-        //inflating and returning our view holder
+
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.records_layuot, null);
         return new RecordViewHolder(view);
@@ -55,9 +55,9 @@ public class RecordAdapter extends  RecyclerView.Adapter<RecordAdapter.RecordVie
     }
 
     @Override
-    public void onBindViewHolder(RecordViewHolder holder, int position) {
+    public void onBindViewHolder(RecordViewHolder holder, int position) {//הכנסת כל שיא בRecyclerView
 
-        //getting the product of the specified position
+
         Record record = recordList.get(position);
         //binding the data with the viewholder views
         holder.tvId.setText(String.valueOf(position+1));
@@ -67,16 +67,15 @@ public class RecordAdapter extends  RecyclerView.Adapter<RecordAdapter.RecordVie
     }
 
     @Override
-
     public int getItemCount() {
         return recordList.size();
-    }
+    }//פעולה שמחזירה את הגודל של הרשימה
 
-    class RecordViewHolder extends RecyclerView.ViewHolder {
+    class RecordViewHolder extends RecyclerView.ViewHolder {//הclass שיורש מViewHolder
 
         TextView tvId, tvMove, tvTime,tvDate;
 
-        public RecordViewHolder(View itemView) {
+        public RecordViewHolder(View itemView) {//מאתחל את הview הנוכחי
             super(itemView);
 
             tvId = itemView.findViewById(R.id.tvId);

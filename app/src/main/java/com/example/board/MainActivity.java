@@ -50,16 +50,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     static Button btnStart, btnPause;
     Button btnOrder;
 
-
-
-
     SharedPreferences getSetting;
     Dialog recordsD;
 
-    boolean passToIntent = false;
+    boolean passToIntent = false;//בודק אם עשינו onStop דרך intent
 
-
-    //RecordHelper recordHelper;
 
     RecyclerView recyclerView;
 
@@ -73,9 +68,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);//הופף את הactivity למסך מלא
 
         setContentView(R.layout.activity_main);
+
+        init();
+
+    }
+    private void init(){//פעולה שמאתחלת את האובייקטים ומעדכנת את הSharedPreferences
+
         getSetting = getSharedPreferences("data",0);
         SharedPreferences.Editor editor = getSetting.edit();
 
@@ -90,10 +91,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             editor.commit();
         }
 
-        init();
-
-    }
-    private void init(){
         btnStart = findViewById(R.id.btnStart);
         btnStart.setOnClickListener(this);
         btnPause = findViewById(R.id.btnPause);
@@ -101,14 +98,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         game = new Game(this);
         game.update();
-        //recordHelper = game.recordHelper;
+
     }
 
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
+    public boolean onCreateOptionsMenu(Menu menu) {//פעולה שיוצרת את התפריט
 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_setting,menu);
@@ -116,21 +112,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.setting) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {//כשלוחצים על אפשרות בתפריט
+        if (item.getItemId() == R.id.setting) {//כניסה להגדרות
             Intent intent = new Intent(MainActivity.this,SettingActivity.class);
             passToIntent = true;
             StartForResult.launch(intent);
-
-
-
         }
-        else if (item.getItemId() == R.id.records) {
+
+        else if (item.getItemId() == R.id.records) {//פתיחת הטבלת שיאים
             if(game.ifStart)
                 game.stopMode();
             createRecordsDialog();
         }
-        else if (item.getItemId() == R.id.contact) {
+
+        else if (item.getItemId() == R.id.contact) {//פתיחת המסך של ה"contact us"
             Intent intent = new Intent(MainActivity.this,SmsActivity.class);
             passToIntent = true;
             StartForResult.launch(intent);
@@ -142,28 +137,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
 
-
-
-
-        if (v == btnStart) {
-
-
-
+        if (v == btnStart) {//אם לחצו על start
             game = new Game(this);
             game.tvTime.setText("00:00.0");
 
         }
-        else if (v == btnPause)
+        else if (v == btnPause)//אם לחצו על pause
         {
-
-
             if (!game.ifPause)
                 game.stopMode();
             else
                 game.runMode();
 
         }
-        else {
+        else {//טיפול בכפתור הsolved
             game.solvedD.dismiss();
             game = new Game(this);
 
@@ -173,13 +160,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ActivityResultLauncher<Intent> StartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
-                public void onActivityResult(ActivityResult result) {
+                public void onActivityResult(ActivityResult result) {//חזרה מintent
                     if (result.getResultCode() == Activity.RESULT_OK) {
 
 
                         passToIntent = false;
 
-                        game = new Game(MainActivity.this);
+                        game = new Game(MainActivity.this);//אתחול המשחק
 
                     }
                 }
@@ -187,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-    public void startNotification(){
+    public void startNotification(){//הגדרת ההתראות
 
         Intent intent = new Intent(this, receiverNotification.class);
         pendingIntent = PendingIntent.getBroadcast(
@@ -197,13 +184,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Calendar calendar = Calendar.getInstance();
 
-        calendar.set(Calendar.HOUR_OF_DAY, 20);
+        calendar.set(Calendar.HOUR_OF_DAY, 20);//הגדרת השעה של ההתראה ל20:30
         calendar.set(Calendar.MINUTE, 30);
         calendar.set(Calendar.SECOND, 0);
 
 
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                alarmManager.INTERVAL_DAY, pendingIntent);
+                alarmManager.INTERVAL_DAY, pendingIntent);//הפעלת החזרה היומית
 
     }
 
@@ -229,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-    public List<Record> createRecordListForShow()
+    public List<Record> createRecordListForShow()//צמצום המערךנ שיאים ל10 שיאים הראשונים
     {
         game.recordHelper.open();
         ArrayList<Record> oldList = game.recordHelper.getAllRecord();
@@ -245,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else return oldList;
 
     }
-    public void createRecordsDialog()
+    public void createRecordsDialog()//יצירת הדיאלוג של השיאים
     {
 
         recordsD=new Dialog(this);
@@ -267,14 +254,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View view) {
                 SharedPreferences.Editor editor = getSetting.edit();
-                if (getSetting.getString("orderBy",null).equals("move")) {
+                if (getSetting.getString("orderBy",null).equals("move")) {//שינוי מסידור לפי מהלכים לסידור לפי זמן
                     editor.putString("orderBy", "time");
                     btnOrder.setText("order by time");
                 }
-                else {
+                else {//שינוי מסידור לפי זמן לסידור לפי מהלכים
                     editor.putString("orderBy", "move");
                     btnOrder.setText("order by move");
                 }
+                //אתחול הטבלה לפי ההגדרה החדשה
                 editor.commit();
                 game.update();
                 game.recordHelper.open();

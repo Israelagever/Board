@@ -18,16 +18,19 @@ import java.util.Random;
 public class receiverNotification extends BroadcastReceiver {
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(Context context, Intent intent) {//כשהBroadcast מופעל
 
+        createNotification(context);
+    }
+    public void createNotification(Context context){
         int icon = android.R.drawable.star_on;
 
-        long when = System.currentTimeMillis();
+        long when = System.currentTimeMillis();//הזמן הנוכחי
         String title = "important message";
         String ticker = "ticker";
         int random = new Random().nextInt(5)+1;
         String message = "";
-        switch (random) {
+        switch (random) {//השמת הודעה רנדומלית
             case 1:
                 message = context.getResources().getString(R.string.message1);
                 break;
@@ -35,7 +38,7 @@ public class receiverNotification extends BroadcastReceiver {
                 message = context.getResources().getString(R.string.message2);
                 break;
             case 3:
-            message = context.getResources().getString(R.string.message3);
+                message = context.getResources().getString(R.string.message3);
                 break;
             case 4:
                 message = context.getResources().getString(R.string.message4);
@@ -45,17 +48,14 @@ public class receiverNotification extends BroadcastReceiver {
                 break;
         }
 
-
-
-
         //phase 2
         Intent intent1 = new Intent(context, MainActivity.class);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent1, 0);
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);//חיבור לservice של המערכת
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "M_CH_ID");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//אם הגרסה מעל אוראו חובה להוסיף channel
             String channelId = "YOUR_CHANNEL_ID";
             NotificationChannel channel = new NotificationChannel(channelId,
                     "Channel human readable title",
@@ -68,8 +68,8 @@ public class receiverNotification extends BroadcastReceiver {
                 .setSmallIcon(icon).setTicker(ticker).setWhen(when)
                 .setAutoCancel(true).setContentTitle(title)
                 .setContentText(message).build();
-        notificationManager.notify(3, notification);
+        notificationManager.notify(3, notification);//יצירת האובייקט של ההתראה
 
-        Toast.makeText(context, "Alarm....", Toast.LENGTH_LONG).show();
+        //Toast.makeText(context, "Alarm....", Toast.LENGTH_LONG).show();
     }
 }
