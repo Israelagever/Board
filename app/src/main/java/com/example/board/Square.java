@@ -12,7 +12,7 @@ public class Square  {
 
     BoardGame boardGame;
     Tile tile;
-    float x,y,w,h;//top left
+    float x,y,w,h;
 
     Paint p;
     int number;
@@ -22,14 +22,14 @@ public class Square  {
     {
 
 
-        this.number = number;
-        this.x = x;
-        this.y = y;
+        this.number = number;//המספר של הריבוע
+        this.x = x;//מיקום לפי x
+        this.y = y;//מיקום לפי y
 
         this.boardGame = boardGame;
         p = new Paint();
 
-        this.w = w;
+        this.w = w;//גודל של הריבוע
         this.h = h;
         this.tile = tile;
     }
@@ -56,13 +56,7 @@ public class Square  {
         return y;
     }
 
-    public void draw(Canvas canvas)
-    {
-        canvas.drawRect(x,y,x+w,y+h,p);
-
-    }
-
-    public boolean didXAndYInSquare(float xo, float yo)
+    public boolean didXAndYInSquare(float xo, float yo)//פעולה שמקבלת x וy ובודקת אם הם נמצאים על הריבוע
     {
         if(xo > x && xo < x + w && yo > y && yo < y + h )
             return true;

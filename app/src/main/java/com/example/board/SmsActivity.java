@@ -160,11 +160,11 @@ public class SmsActivity extends AppCompatActivity implements View.OnClickListen
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {//פעולה שמופעלת אחרי בקשת הרשאה
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 100) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {//אם המשתמש הרשה
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {//אם המשתמש אישר
                 isGranted = true;
                 System.out.println("PLAYGROUND Permission has been granted");
 
-            } else {
+            } else {//המשתמש לא אישר
                 System.out.println("PLAYGROUND Permission has been denied or request cancelled");
                 isGranted = false;
             }
@@ -174,10 +174,8 @@ public class SmsActivity extends AppCompatActivity implements View.OnClickListen
                 isGranted = true;
                 System.out.println("PLAYGROUND Permission has been granted");
 
-            } else {
-
+            } else
                 isGranted = false;
-            }
         }
     }
 

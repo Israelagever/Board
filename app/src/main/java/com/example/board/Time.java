@@ -11,7 +11,7 @@ public class Time extends Thread {
 
     Handler handler;
 
-    int milliSeconds, seconds, minute;
+    int milliSeconds, seconds, minute;//מילי שניות,שניות,דקות
     public Time(Handler handler)
     {
         this.handler=handler;
@@ -25,7 +25,7 @@ public class Time extends Thread {
     }
 
     @Override
-    public void run() {
+    public void run() {//מימוש הפעולה run שרצה מתי שהthread מתחיל
         super.run();
         while(true)
 
@@ -33,7 +33,7 @@ public class Time extends Thread {
             if(isRun)
             {
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(100);//מחכה עשירית שניה
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -41,10 +41,13 @@ public class Time extends Thread {
                 if (isRun) {
                     Message msg = new Message();
                     milliSeconds++;
+
+                    //העלאת שניה אחרי 10 מילי שניות
                     if (milliSeconds == 10) {
                         milliSeconds = 0;
                         seconds++;
                     }
+                    //העלאת דקה אחרי 60 שניות
                     if (seconds == 60) {
                         minute++;
                         seconds = 0;
@@ -52,7 +55,7 @@ public class Time extends Thread {
                     msg.arg1 = milliSeconds;
                     msg.arg2 = seconds;
 
-                    handler.sendMessage(msg);
+                    handler.sendMessage(msg);//שליחת הזמן המעודכן לhandler
                 }
 
             }

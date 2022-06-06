@@ -9,7 +9,7 @@ import android.os.Build;
 
 public class Tile {
     float lastx, lasty;
-    float x, y, w, h, radius = 40;
+    float x, y, w, h;
 
 
     int number, color;
@@ -27,16 +27,23 @@ public class Tile {
 
         this.number = num;
         this.color = color;
+
+        init();
+
+    }
+
+    private void init() {
+
+        //אתחול הpaint של הרקע של האריח
         p = new Paint();
         p.setColor(color);
 
-
+        //אתחול הpaint של המספרים
         paintTitle = new Paint();
-
         paintTitle.setARGB(255, 255, 255, 255);
         paintTitle.setTextAlign(Paint.Align.CENTER);
         paintTitle.setTextSize(70);
-        //textp.setColor(Color.GREEN);
+
 
         p2 = new Paint();
         p2.setColor(color);
@@ -59,26 +66,24 @@ public class Tile {
         return y;
     }
 
-    public void draw(Canvas canvas) {
-        canvas.drawRect(x,y,x+w,y+h,p);
+    public void draw(Canvas canvas) {//פעולה שמציירת את האריח
+        canvas.drawRect(x,y,x+w,y+h,p);//מצייר את הרקע של האריח
 
         //drawRoundRect(x, y, x + w, y + h, p2, canvas);
 
+        //מצייר את המספר שעל האריח
         canvas.drawText(String.valueOf(number), x + (w / 2), (y + (h / 2))-(paintTitle.descent()+paintTitle.ascent())/2, paintTitle);
     }
 
-    public boolean didUserTouchMe(float xu, float yu) {
-        if (xu > x && xu < x + w && yu > y && yu < yu + h)
-            return true;
-        return false;
-    }
 
-    public void slide(Square to) {
+
+    public void slide(Square to) {//פעולה שמעבירה את האריח הנוכחי לריבוע אחר
 
         this.setX(to.getX());
         this.setY(to.getY());
     }
 
+    /*
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void drawRoundRect(float left, float top, float right, float bottom, Paint paint, Canvas canvas) {
 
@@ -115,5 +120,7 @@ public class Tile {
 
         canvas.drawPath(path, paint);
     }
+
+     */
 }
 

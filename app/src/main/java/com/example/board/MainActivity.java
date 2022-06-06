@@ -254,7 +254,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View view) {
                 SharedPreferences.Editor editor = getSetting.edit();
-                if (getSetting.getString("orderBy",null).equals("move")) {//שינוי מסידור לפי מהלכים לסידור לפי זמן
+
+                //שינוי מסידור לפי מהלכים לסידור לפי זמן
+                if (getSetting.getString("orderBy",null).equals("move")) {
                     editor.putString("orderBy", "time");
                     btnOrder.setText("order by time");
                 }
@@ -266,7 +268,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 editor.commit();
                 game.update();
                 game.recordHelper.open();
-                RecordAdapter recordAdapter = new RecordAdapter(MainActivity.this, createRecordListForShow());
+                RecordAdapter recordAdapter = new RecordAdapter(MainActivity.this,
+                        createRecordListForShow());
                 recyclerView.setAdapter(recordAdapter);
                 recordsD.show();
                 game.recordHelper.close();
