@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">15 puzzle</string>
     <string name="spinner_title">spinner title</string>
+    <string name="message1">Don\'t forget to play today !!</string>
+    <string name="message2">Playing the game will improve your mind !</string>
+    <string name="message3">You still did not play today !? Go ahead !!</string>
+    <string name="message4">sad?? Bored?? This game will improve your mood instantly !!!</string>
+    <string name="message5">Come on! Take a minute and enjoy</string>
 </resources>

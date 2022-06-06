@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -20,10 +21,10 @@ import java.util.Random;
 
 public class BoardGame extends View {
 
-    boolean ifOne1 = true;
+    boolean ifOne = true;//בודק אם זה פעם ראשונה לצייר את הלוח
     int size,color;
 
-    int[] theSort;
+    int[] theSort;//מערך עם הסדר של הבלגון של המספרים
     Random r;
     int all;
 
@@ -32,7 +33,7 @@ public class BoardGame extends View {
 
     Context context;
 
-    static Square blank;
+    static Square blank;//המקום הריק
     int moves;
 
     static Time time;
@@ -44,7 +45,7 @@ public class BoardGame extends View {
         squares = new Square[size][size];
         tiles = new Tile[size][size];
         r = new Random();
-        all = size*size;
+        all = size*size;//לדוגמא 4x4 = 16
         theSort = new int[all];
 
 
@@ -54,80 +55,80 @@ public class BoardGame extends View {
     }
 
 
-
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(Canvas canvas) {//פעולה של view ובה מציירים על הלוח עם canvas
         super.onDraw(canvas);
         drawBoard(canvas);
 
 
     }
 
-    public void resetArr(int[] arr){
+    public void resetArr(int[] arr){//ריסוט המערך שכל אבריו יהיו 1-
         Arrays.fill(arr, -1);
+
+
     }
 
-    public void swap(){
+    public void swap(){//ערבוב המערך במספרים מ1 עד all
         int temp;
         for (int i = 0;i<all;i++) {
 
             do {
                 temp = r.nextInt(all);
-            }while (findInArray(temp,theSort));
+            }while (findInArray(temp,theSort,i));
 
             theSort[i] = temp;
         }
     }
 
-    public boolean findInArray(int n,int[] arr)
+    public boolean findInArray(int n,int[] arr,int temp)//בדיקה אם מספר כבר נמצא במערך
     {
-        for (int j : arr) {
-            if (j == n)
+        for (int i = 0; i < temp; i++) {
+            if (arr[i] == n)
                 return true;
-
         }
         return false;
     }
 
-    public boolean isSolvable(int[] puzzle)
+    public boolean isSolvable(int[] puzzle)// פעולה עם אלגוריתמיקה מתקדמת שבודקת אם המערך פתיר במשחק הזה, קישור עם הסבר מפורט על האלגוריתם - https://www.geeksforgeeks.org/check-instance-15-puzzle-solvable/
     {
-        int parity = 0;
+        int parity = 0;// מספר ההיפוכים
         int gridWidth = (int) Math.sqrt(puzzle.length);
-        int row = 0; // the current row we are on
-        int blankRow = 0; // the row with the blank tile
+        int row = 0; // השורה הנוכחית שאנחנו עליה
+        int blankRow = 0; // השורה שבה נמצא החור
 
         for (int i = 0; i < puzzle.length; i++)
         {
-            if (i % gridWidth == 0) { // advance to next row
+            if (i % gridWidth == 0) { // התקדמות לשורה הבאה
                 row++;
             }
-            if (puzzle[i] == 0) { // the blank tile
-                blankRow = row; // save the row on which encountered
+            if (puzzle[i] == 0) { // החור
+                blankRow = row; // שומר את השורה שבו החור נמצא
                 continue;
             }
             for (int j = i + 1; j < puzzle.length; j++)
             {
-                if (puzzle[i] > puzzle[j] && puzzle[j] != 0)
+                if (puzzle[i] > puzzle[j] && puzzle[j] != 0)//
                 {
-                    parity++;
+                    parity++;//סופר את מספר ההיפוכים
                 }
             }
         }
 
-        if (gridWidth % 2 == 0) { // even grid
-            if (blankRow % 2 == 0) { // blank on odd row; counting from bottom
+        if (gridWidth % 2 == 0) { // האם הגודל זוגי
+            if (blankRow % 2 == 0) { // האם החור בשורה אי זוגית מלמטה
                 return parity % 2 == 0;
-            } else { // blank on even row; counting from bottom
+            } else { // החור בשורה זוגית מלמטה
                 return parity % 2 != 0;
             }
-        } else { // odd grid
+        } else { // הגודל אי זוגי
             return parity % 2 == 0;
         }
     }
 
 
-    public void drawBoard(Canvas canvas){
-        if(ifOne1) {
+    public void drawBoard(Canvas canvas){//הפעולה שמציירת את הלוח
+        if(ifOne) {
 
             //int count =1;
             do {
@@ -138,8 +139,8 @@ public class BoardGame extends View {
             int count = 1;
             int x = 15;
             int y = 15;
-            int e = canvas.getWidth(),f = canvas.getHeight();
-            int h = ((canvas.getWidth()-15)/size)-15;
+
+            int h = ((canvas.getWidth()-15)/size)-15;//חישוב של הגודל של האריחים בצורה שיישאר רווחים שווים בהתחלה, באמצע ובסוף
             int w = ((canvas.getWidth()-15)/size)-15;
 
 
@@ -150,46 +151,36 @@ public class BoardGame extends View {
             for (int i = 0; i < squares.length; i++) {
                 for (int j = 0; j < squares.length; j++) {
 
-
-                    /*
-                    if(i==size-1&&j==size-1){
-                        squares[i][j] = new Square(this, x, y, w, h, color,tiles[i][j],count);
-                        break;
-                    }
-
-                     */
-
-                    if (theSort[count - 1] != 0) {
+                    if (theSort[count - 1] != 0) {//אם זה לא החור
 
                         tiles[i][j] = new Tile(this, x, y, w, h, theSort[count - 1], color);
                         tiles[i][j].draw(canvas);
 
                     }
                     squares[i][j] = new Square(this, x, y, w, h,tiles[i][j],count);
-                    x = x + w + 15;
+                    x = x + w + 15;//התקדמות אופקית
                     count++;
 
                 }
-                y = y + h + 15;
+                y = y + h + 15;//התקדמות אנכית
                 x = 15;
             }
         }
-        ifOne1 = false;
+
         blank = blank();
-        if (!ifOne1) {
+        if (!ifOne) {
             for (int i = 0; i < squares.length; i++) {
                 for (int j = 0; j < squares.length; j++) {
                     if (squares[i][j].number != blank.number)
-                        squares[i][j].getTile().draw(canvas);
+                        squares[i][j].getTile().draw(canvas);//ציור מחדש של כל האריחים
 
                 }
             }
         }
-
-
+        ifOne = false;
     }
 
-    public Square blank(){
+    public Square blank(){//פעולה שמחזירה את המקום הריק
         for (int i = 0; i < squares.length; i++) {
             for (int j = 0; j < squares.length; j++) {
                 if (squares[i][j].getTile() == null)
@@ -200,7 +191,7 @@ public class BoardGame extends View {
         return null;
 
     }
-    public void slide(Square from,Square to){
+    public void slide(Square from,Square to) {//פעולה שמזיזה אריח מקום למקום
         if (from.getTile()!=null)
         {
             to.setTile(from.getTile());
@@ -212,14 +203,14 @@ public class BoardGame extends View {
 
 
 
-    public boolean checkBlank(float x, float y) {
+    public boolean checkBlank(float x, float y) {//בודק אם הx והy נמצאים על המקום הריק
         float distant = squares[0][0].h;
         if (blank.didXAndYInSquare(x,y+distant) || blank.didXAndYInSquare(x,y-distant) || blank.didXAndYInSquare(x+distant,y) || blank.didXAndYInSquare(x-distant,y))
             return true;
         return false;
     }
 
-    public boolean isWin() {
+    public boolean isWin() {//בודק אם הלוח פתור
         for(int i = 0;i<squares.length;i++) {
             for (int j = 0; j < squares.length; j++) {
                 if (squares[i][j].getTile()==null)
@@ -235,7 +226,7 @@ public class BoardGame extends View {
         return true;
     }
 
-    public Square findSquare(float x, float y) {
+    public Square findSquare(float x, float y) {//מקבלת x וy ומחזירה את הsquare שנמצא שם
         for(int i = 0;i<squares.length;i++) {
             for (int j = 0; j < squares.length; j++) {
                 if(squares[i][j].didXAndYInSquare(x,y))

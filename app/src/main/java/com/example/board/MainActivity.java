@@ -12,78 +12,99 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.util.DisplayMetrics;
-import android.util.Log;
+
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
 import android.view.MotionEvent;
 import android.view.View;
 
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
+import java.util.Calendar;
 
-import static com.example.board.BoardGame.blank;
+import java.util.List;
+
+
+
 import static com.example.board.BoardGame.time;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
-    DisplayMetrics displayMetrics;
-    Button btnStart, btnSolved, btnPause;
 
-    BoardGame boardGame;
-    TextView tvTime, tvMoves;
-     int sizeOfBoard = 4;
-     int colorOfTile = Color.MAGENTA;
-    LinearLayout l;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+
+    static Button btnStart, btnPause;
+    Button btnOrder;
+
     SharedPreferences getSetting;
-    Dialog solvedD,recordsD;
-    int moves;
-    boolean ifStart, ifPause = true, passToIntent = false, ifOne = true;
-    Handler handler;
+    Dialog recordsD;
 
-    RecordHelper RecordHelper;
-    ArrayList<Record> records;
+    boolean passToIntent = false;//בודק אם עשינו onStop דרך intent
+
+
     RecyclerView recyclerView;
+
+    AlarmManager alarmManager;
+    PendingIntent pendingIntent;
+
+    Game game;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);//הופף את הactivity למסך מלא
+
         setContentView(R.layout.activity_main);
-        getSetting = getSharedPreferences("settings",0);
 
-        update();
         init();
-        doHandler();
+
+    }
+    private void init(){//פעולה שמאתחלת את האובייקטים ומעדכנת את הSharedPreferences
+
+        getSetting = getSharedPreferences("data",0);
+        SharedPreferences.Editor editor = getSetting.edit();
+
+        if (getSetting.getString("orderBy",null) == null) {
+            editor.putString("orderBy", "move");
+            editor.commit();
+        }
+
+        if(getSetting.getBoolean("firstLaunch",true)) {
+            startNotification();
+            editor.putBoolean("firstLaunch", false);
+            editor.commit();
+        }
+
+        btnStart = findViewById(R.id.btnStart);
+        btnStart.setOnClickListener(this);
+        btnPause = findViewById(R.id.btnPause);
+        btnPause.setOnClickListener(this);
+
+        game = new Game(this);
+        game.update();
+
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    public void createBoardGame(){
 
-        int width = displayMetrics.widthPixels;
-        boardGame = new BoardGame(this, sizeOfBoard,colorOfTile);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width,width);
-        boardGame.setLayoutParams(params);
-        boardGame.setOnTouchListener(this);
-        l.addView(boardGame);
-    }
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu) {//פעולה שיוצרת את התפריט
 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_setting,menu);
@@ -91,171 +112,129 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.setting) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {//כשלוחצים על אפשרות בתפריט
+        if (item.getItemId() == R.id.setting) {//כניסה להגדרות
             Intent intent = new Intent(MainActivity.this,SettingActivity.class);
-//          if (!ifPause && !boardGame.getIfPause()) stopGame();
             passToIntent = true;
-            mStartForResult.launch(intent);
-
-
-            return true;
+            StartForResult.launch(intent);
         }
-        else if (item.getItemId() == R.id.records)
+
+        else if (item.getItemId() == R.id.records) {//פתיחת הטבלת שיאים
+            if(game.ifStart)
+                game.stopMode();
             createRecordsDialog();
+        }
+
+        else if (item.getItemId() == R.id.contact) {//פתיחת המסך של ה"contact us"
+            Intent intent = new Intent(MainActivity.this,SmsActivity.class);
+            passToIntent = true;
+            StartForResult.launch(intent);
+        }
         return true;
 
     }
+    @SuppressLint({"SetTextI18n", "Range"})
+    @Override
+    public void onClick(View v) {
 
-    ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+        if (v == btnStart) {//אם לחצו על start
+            game = new Game(this);
+            game.tvTime.setText("00:00.0");
+
+        }
+        else if (v == btnPause)//אם לחצו על pause
+        {
+            if (!game.ifPause)
+                game.stopMode();
+            else
+                game.runMode();
+
+        }
+        else {//טיפול בכפתור הsolved
+            game.solvedD.dismiss();
+            game = new Game(this);
+
+        }
+
+    }
+    ActivityResultLauncher<Intent> StartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
-                public void onActivityResult(ActivityResult result) {
+                public void onActivityResult(ActivityResult result) {//חזרה מintent
                     if (result.getResultCode() == Activity.RESULT_OK) {
-                        update();
-                        btnPause.setText("pause");
-                        ifPause = true;
-                        ifStart = true;
+
+
                         passToIntent = false;
-                        resetGame();
+
+                        game = new Game(MainActivity.this);//אתחול המשחק
+
                     }
                 }
             });
 
 
 
-    private void init(){
+    public void startNotification(){//הגדרת ההתראות
 
-        displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
-
-        btnStart = findViewById(R.id.btnStart);
-        btnStart.setOnClickListener(this);
-        tvTime = findViewById(R.id.tvTime);
-        tvMoves = findViewById(R.id.tvMoves);
-
-        btnPause = findViewById(R.id.btnPause);
-        btnPause.setOnClickListener(this);
-
-        getSetting = getSharedPreferences("settings",0);
-
-        l = findViewById(R.id.lGame);
-        createBoardGame();
+        Intent intent = new Intent(this, receiverNotification.class);
+        pendingIntent = PendingIntent.getBroadcast(
+                this.getApplicationContext(), 234324243, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
 
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.set(Calendar.HOUR_OF_DAY, 20);//הגדרת השעה של ההתראה ל20:30
+        calendar.set(Calendar.MINUTE, 30);
+        calendar.set(Calendar.SECOND, 0);
 
 
-        moves = 0;
-
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                alarmManager.INTERVAL_DAY, pendingIntent);//הפעלת החזרה היומית
 
     }
-
-    @SuppressLint({"SetTextI18n", "Range"})
-    @Override
-    public void onClick(View v) {
-
-
-
-
-        if (v == btnStart) {
-            resetGame();
-            ifStart = true;
-            if(ifPause)
-            {
-                btnPause.setText("pause");
-                ifPause = false;
-
-            }
-
-        }
-        else if (v == btnPause)
-        {
-
-
-            if (!ifPause) {
-                stopGame();
-                btnPause.setText("continue");
-            }
-
-            else {
-                time.isRun = true;
-                btnPause.setText("pause");
-                ifPause = false;
-
-
-            }
-        }
-        else {
-            resetGame();
-            ifStart = true;
-            solvedD.dismiss();
-        }
-
-    }
-
-    public void doHandler(){
-        handler=new Handler(new Handler.Callback() {
-            @SuppressLint({"DefaultLocale", "SetTextI18n"})
-            @Override
-            public boolean handleMessage(Message msg)
-            {
-
-                tvTime.setText(String.format("%02d",time.getMinute())+":"+String.format("%02d",msg.arg2) +"."+ msg.arg1);
-                if (ifStart) {
-                    tvTime.setText("00:00.0");
-                    ifStart = false;
-                }
-                return true;
-            }
-
-        });
-    }
-
-    public void resetGame()
-    {
-        l.removeView(boardGame);
-        createBoardGame();
-        if (time != null)
-            time.isRun = false;
-        tvMoves.setText("num of moves: 0");
-        tvTime.setText("00:00.0");
-        moves = 0;
-        btnPause.setEnabled(false);
-        ifOne = true;
-    }
-
-    public void stopGame(){
-        if (time!=null) time.isRun = false;
-        ifPause = true;
-
-    }
-
-    public void update()
-    {
-        int size = getSetting.getInt("size", 0);
-        if (size != 0) sizeOfBoard =size;
-        int color = getSetting.getInt("color", 0);
-        if (color != 0) colorOfTile = color;
-        RecordHelper = new RecordHelper(this,"tblrecords"+sizeOfBoard);
-
-    }
-
 
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (!ifPause) {
-            stopGame();
+
+        if (!game.ifPause) {
+            game.stopMode();
+
             if (passToIntent) btnPause.setText("pause");
-            else btnPause.setText("continue");
+
+
+
         }
     }
 
-    public void createRecordsDialog()
+
+
+
+
+
+
+
+    public List<Record> createRecordListForShow()//צמצום המערךנ שיאים ל10 שיאים הראשונים
     {
-        RecordHelper.open();
+        game.recordHelper.open();
+        ArrayList<Record> oldList = game.recordHelper.getAllRecord();
+        ArrayList<Record> newList = new ArrayList<>();
+        if (oldList.size()>10) {
+            for (int i = 0; i < 10; i++) {
+
+                newList.add(oldList.get(i));
+            }
+            game.recordHelper.close();
+            return newList;
+        }
+        else return oldList;
+
+    }
+    public void createRecordsDialog()//יצירת הדיאלוג של השיאים
+    {
+
         recordsD=new Dialog(this);
         recordsD.setContentView(R.layout.custom_dialog_records);
         recordsD.setCancelable(true);
@@ -263,64 +242,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        RecordAdapter recordAdapter = new RecordAdapter(this, RecordHelper.getAllRecord());
+        RecordAdapter recordAdapter = new RecordAdapter(this, createRecordListForShow());
+
         recyclerView.setAdapter(recordAdapter);
         recordsD.show();
-        RecordHelper.close();
 
-    }
-    public void createSolvedDialog()
-    {
-        solvedD=new Dialog(this);
-        solvedD.setContentView(R.layout.custom_solved);
-        solvedD.setCancelable(false);
-        btnSolved = solvedD.findViewById(R.id.btnSolved);
-        btnSolved.setOnClickListener((View.OnClickListener) this);
-        solvedD.show();
-    }
 
-    @Override
-    public boolean onTouch(View view, MotionEvent event) {
-        if (ifOne){
-            time = new Time(handler);
-            time.start();
-            btnPause.setEnabled(true);
-            ifPause = false;
-        }
-
-        ifOne = false;
-
-        if (!ifPause) {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                Square mySquare = boardGame.findSquare(event.getX(), event.getY());
-                //Square target = blank();
-                if (mySquare != null && boardGame.checkBlank(event.getX(), event.getY())) {
-                    boardGame.slide(mySquare, blank);
-
-                    moves++;
-                    tvMoves.setText("num of moves: " + moves);
+        btnOrder = recordsD.findViewById(R.id.btnOrder);
+        if(game.recordHelper.getOrderBy().equals("time")) btnOrder.setText("order by time");
+        btnOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences.Editor editor = getSetting.edit();
+                if (getSetting.getString("orderBy",null).equals("move")) {//שינוי מסידור לפי מהלכים לסידור לפי זמן
+                    editor.putString("orderBy", "time");
+                    btnOrder.setText("order by time");
                 }
-                boardGame.invalidate();
-
-                if (boardGame.isWin()) {
-                    //Toast.makeText(context, "ניצחת אלוף!!", Toast.LENGTH_SHORT).show();
-                    RecordHelper.open();
-                    String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
-                    Record r = new Record(moves,tvTime.getText().toString(),currentDate);
-                    System.out.println(RecordHelper.createRecord(r).getRecordId());
-
-
-                    records = RecordHelper.getAllRecord();
-                    if (records.size() > 0) {
-                        Log.d("data1", records.toString());
-                    }
-                    RecordHelper.close();
-                    time.isRun = false;
-                    createSolvedDialog();
-
+                else {//שינוי מסידור לפי זמן לסידור לפי מהלכים
+                    editor.putString("orderBy", "move");
+                    btnOrder.setText("order by move");
                 }
+                //אתחול הטבלה לפי ההגדרה החדשה
+                editor.commit();
+                game.update();
+                game.recordHelper.open();
+                RecordAdapter recordAdapter = new RecordAdapter(MainActivity.this, createRecordListForShow());
+                recyclerView.setAdapter(recordAdapter);
+                recordsD.show();
+                game.recordHelper.close();
             }
-        }
-        return true;
+        });
+
     }
+
 }
