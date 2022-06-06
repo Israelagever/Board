@@ -73,10 +73,14 @@ public class SmsActivity extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        permission();//בקשת הרשאה
-        if (isGranted) {
-            sendSmsFunction();
+        if (!message.getText().toString().equals("")) {
+            permission();//בקשת הרשאה
+            if (isGranted) {
+                sendSmsFunction();
+            }
         }
+        else
+            Toast.makeText(getApplicationContext(), "massage cannot br null", Toast.LENGTH_LONG).show();
 
     }
     public void dialog()//בונה את הדיאלוג אם המשתמש לא נתן הרשאה ומנסה עוד פעם לשלוח הודעה
