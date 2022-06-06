@@ -17,10 +17,10 @@ public class RecordHelper extends SQLiteOpenHelper {
     public static  String table_records;
     public static final int DATABASEVERSION = 1;
 
-    public static final String COLUMN_ID = "recordId";
-    public static final String COLUMN_MOVE = "move";
-    public static final String COLUMN_TIME = "time";
-    public static final String COLUMN_DATE = "date";
+    public final String COLUMN_ID = "recordId";
+    public final String COLUMN_MOVE = "move";
+    public final String COLUMN_TIME = "time";
+    public final String COLUMN_DATE = "date";
 
     SQLiteDatabase database;
 
@@ -28,17 +28,16 @@ public class RecordHelper extends SQLiteOpenHelper {
 
     private String orderBy;
 
-    String[] allColumns = {RecordHelper.COLUMN_ID, RecordHelper.COLUMN_MOVE, RecordHelper.COLUMN_TIME,
-            RecordHelper.COLUMN_DATE};
+    String[] allColumns = {COLUMN_ID, COLUMN_MOVE, COLUMN_TIME, COLUMN_DATE};//כל העמודות
 
 
     public RecordHelper(Context context, final String table_records,String orderBy) {
         super(context, DATABASENAME, null, DATABASEVERSION);
-        this.table_records = table_records;
-        this.orderBy = orderBy;
+        this.table_records = table_records;//הגדרת איזה טבלה
+        this.orderBy = orderBy;//הגדרת איזה סידור
         CREATE_TABLE_RECORD = "CREATE TABLE IF NOT EXISTS " +
                 this.table_records + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_MOVE + " INTEGER," + COLUMN_TIME + " VARCHAR,"
-                + COLUMN_DATE + " INTEGER " + ");";
+                + COLUMN_DATE + " INTEGER " + ");";//פקודה בsql ליצירת טבלה
     }
 
     public String getOrderBy() {
@@ -47,48 +46,48 @@ public class RecordHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_TABLE_RECORD);
+        db.execSQL(CREATE_TABLE_RECORD);//מריץ את הפקודה ליצירת טבלה
         Log.d("data1", "Table customer created");
     }
 
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {//עדכון הבסיס נתונים
         db.execSQL("DROP TABLE IF EXISTS " + table_records);
         onCreate(db);
     }
 
-    public void open() {
+    public void open() {//נותן הרשאת כתיבה בבסיס נתונים
         database = this.getWritableDatabase();
         Log.d("data1", "Database connection open");
     }
 
-    public Record createRecord(Record r) {
-        ContentValues values = new ContentValues();
-        values.put(RecordHelper.COLUMN_MOVE, r.getMove());
-        values.put(RecordHelper.COLUMN_TIME, r.getTime());
-        values.put(RecordHelper.COLUMN_DATE, r.getDate());
+    public Record createRecord(Record r) {//פעולה שמוסיפה עוד שיא לבסיס נתונים
+        ContentValues values = new ContentValues();//אובייקט שמיועד להכניס נתונים לבסיס נתונים
+        values.put(this.COLUMN_MOVE, r.getMove());
+        values.put(this.COLUMN_TIME, r.getTime());
+        values.put(this.COLUMN_DATE, r.getDate());
 
-        long insertId = database.insert(RecordHelper.table_records, null, values);
+        long insertId = database.insert(RecordHelper.table_records, null, values);//הפקודה שמוסיפה את השיא החדש
         Log.d("data1", "Record " + insertId + " insert to database");
         r.setRecordId(insertId);
         return r;
     }
     @SuppressLint("Range")
-    public ArrayList<Record> getAllRecord() {
+    public ArrayList<Record> getAllRecord() {//פעולה שמחזירה את כל השיאים
 
         onCreate(database);
         ArrayList<Record> l = new ArrayList<Record>();
-        Cursor cursor=database.query(this.table_records, allColumns, null, null, null, null, orderBy+ " ASC");
+        Cursor cursor=database.query(this.table_records, allColumns, null, null, null, null, orderBy+ " ASC");//פקודה שמוציאה את כל הנתונים מהטבלה
 
         if(cursor.getCount()>0)
         {
-            while(cursor.moveToNext())
+            while(cursor.moveToNext())//כל עוד יש עוד שיא
             {
-                 long id=cursor.getLong(cursor.getColumnIndex(RecordHelper.COLUMN_ID));
-                int move=cursor.getInt(cursor.getColumnIndex(RecordHelper.COLUMN_MOVE));
-                String time=cursor.getString(cursor.getColumnIndex(RecordHelper.COLUMN_TIME));
-                String date=cursor.getString(cursor.getColumnIndex(RecordHelper.COLUMN_DATE));
+                long id=cursor.getLong(cursor.getColumnIndex(this.COLUMN_ID));
+                int move=cursor.getInt(cursor.getColumnIndex(this.COLUMN_MOVE));
+                String time=cursor.getString(cursor.getColumnIndex(this.COLUMN_TIME));
+                String date=cursor.getString(cursor.getColumnIndex(this.COLUMN_DATE));
                 Record r=new Record(id,move,time,date);
                 l.add(r);
             }

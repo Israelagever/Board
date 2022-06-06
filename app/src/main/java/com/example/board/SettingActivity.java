@@ -27,7 +27,8 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
     int choiceOfSize;
     String  choiceOfColor;
 
-    ArrayAdapter<String> dataAdapter;
+
+    ArrayAdapter<String> dataAdapter;//אובייקט שמכין את הarrayList לspinner
     SharedPreferences saveSetting;
 
     @Override
@@ -35,7 +36,7 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
         super.onCreate(savedInstanceState);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);//הופף את הactivity למסך מלא
 
         setContentView(R.layout.activity_setting);
 
@@ -43,12 +44,11 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
 
     }
 
-    public void init() {
+    public void init() {//פעולה שמאתחלת את האובייקטים ומקבלת מהSharedPreferences את ההגדרות הנוכחיות
 
         ActionBar actionBar = getSupportActionBar();
 
-        // showing the back button in action bar
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);//מראה כפתור חזרה בלמעלה של המסך
 
 
         saveSetting = getSharedPreferences("data",0);
@@ -62,37 +62,37 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
 
     }
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {//מה קורה כשלוחצים על הכפתור חזרה
         if (item.getItemId() == android.R.id.home) {
-            this.finish();
+            this.finish();//סוגר את הactivity
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
 
-    public void createSpinnerOfSize() {
+    public void createSpinnerOfSize() {//יצירת הספינר של הגדרת הגודל של הלוח
         sizeOption = new ArrayList<String>();
         for (int i = 3; i <= 10; i++)
-            sizeOption.add(String.valueOf(i));
-        dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, sizeOption);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sizeOption.add(String.valueOf(i));//הכנסת הגדלים לArrayList
+        dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, sizeOption);//יצירת המתאם עם הרשימה של הגדלים
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);//שינוי העיצוב של התצוגה כשהספינר נפתח
 
         spinnerSize.setAdapter(dataAdapter);
-        spinnerSize.setSelection(choiceOfSize - 3);
+        spinnerSize.setSelection(choiceOfSize - 3);//מכיוון שהגודל הכי קטן הוא 3 אז הבחירה צריכה להיות פחות 3
 
 
         spinnerSize.setOnItemSelectedListener(this);
     }
 
-    private void createSpinnerOfColor() {
-        SharedPreferences.Editor editor = saveSetting.edit();
+    private void createSpinnerOfColor() {//יצירת הספינר של הגדרת הצבע של האריחים
+
 
         colorOption = new ArrayList<String>();
         colorOption.add("magenta");
         colorOption.add("green");colorOption.add("yellow");
         colorOption.add("black");colorOption.add("gray");
-        colorOption.add("purple");colorOption.add("red");
+        colorOption.add("purple");colorOption.add("red");//הכנסת סוגי הצבעים לרשימה
 
 
         dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, colorOption);
@@ -105,68 +105,63 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
         for (int i = 0;i<7;i++)
         {
             if (spinnerColor.getAdapter().getItem(i).equals(choiceOfColor)){
-                spinnerColor.setSelection(i);
+                spinnerColor.setSelection(i);//מציאת הצבע שמוגדר עכשיו
                 break;
             }
         }
-
-
-        spinnerColor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String temp = adapterView.getItemAtPosition(i).toString();
-
-
-                switch (temp) {
-                    case "magenta":
-                        editor.putInt("color",Color.MAGENTA);
-                        editor.putString("colorOfTile name","magenta");
-                        break;
-                    case "green":
-                        editor.putInt("color",Color.parseColor("#4CAF50"));
-                        editor.putString("colorOfTile name","green");
-                        break;
-                    case "yellow":
-                        editor.putInt("color",Color.parseColor("#FFC107"));
-                        editor.putString("colorOfTile name","yellow");
-                        break;
-                    case "black":
-                        editor.putInt("color",Color.BLACK);
-                        editor.putString("colorOfTile name","black");
-                        break;
-                    case "gray":
-                        editor.putInt("color",Color.parseColor("#8E8E8E"));
-                        editor.putString("colorOfTile name","gray");
-                        break;
-                    case "purple":
-                        editor.putInt("color",Color.parseColor("#5F4195"));
-                        editor.putString("colorOfTile name","purple");
-                        break;
-                    case "red":
-                        editor.putInt("color",Color.parseColor("#C61E1E"));
-                        editor.putString("colorOfTile name","red");
-                        break;
-                }
-                editor.commit();
-                setResult(RESULT_OK, intent);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
+        spinnerColor.setOnItemSelectedListener(this);//
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {//מתי שנבחר משהו
         SharedPreferences.Editor editor = saveSetting.edit();
-        String temp = adapterView.getItemAtPosition(i).toString();
-        editor.putInt("size", Integer.parseInt(temp));
-        editor.commit();
 
-        setResult(RESULT_OK, intent);
+        if (view.getParent() == spinnerSize) {//בודק אם נלחץ בספינר של הגדלים
+
+            String temp = adapterView.getItemAtPosition(i).toString();//מוצא את הבחירה
+            editor.putInt("size", Integer.parseInt(temp));//מעדכן את ההגדרה
+            editor.commit();
+
+            setResult(RESULT_OK, intent);
+        }
+        else//נלחץ בספינר של הצבעים
+        {
+            String temp = adapterView.getItemAtPosition(i).toString();
+
+
+            switch (temp) {//מעדכן איזה צבע להגדיר לפי הבחירה
+                case "magenta":
+                    editor.putInt("color",Color.MAGENTA);
+                    editor.putString("colorOfTile name","magenta");
+                    break;
+                case "green":
+                    editor.putInt("color",Color.parseColor("#4CAF50"));
+                    editor.putString("colorOfTile name","green");
+                    break;
+                case "yellow":
+                    editor.putInt("color",Color.parseColor("#FFC107"));
+                    editor.putString("colorOfTile name","yellow");
+                    break;
+                case "black":
+                    editor.putInt("color",Color.BLACK);
+                    editor.putString("colorOfTile name","black");
+                    break;
+                case "gray":
+                    editor.putInt("color",Color.parseColor("#8E8E8E"));
+                    editor.putString("colorOfTile name","gray");
+                    break;
+                case "purple":
+                    editor.putInt("color",Color.parseColor("#5F4195"));
+                    editor.putString("colorOfTile name","purple");
+                    break;
+                case "red":
+                    editor.putInt("color",Color.parseColor("#C61E1E"));
+                    editor.putString("colorOfTile name","red");
+                    break;
+            }
+            editor.commit();
+            setResult(RESULT_OK, intent);
+        }
     }
 
     @Override
