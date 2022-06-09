@@ -36,7 +36,7 @@ public class RecordHelper extends SQLiteOpenHelper {
         this.table_records = table_records;//הגדרת איזה טבלה
         this.orderBy = orderBy;//הגדרת איזה סידור
         CREATE_TABLE_RECORD = "CREATE TABLE IF NOT EXISTS " +
-                this.table_records + "(" + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_MOVE + " INTEGER," + COLUMN_TIME + " VARCHAR,"
+                this.table_records + "(" + COLUMN_MOVE + " INTEGER," + COLUMN_TIME + " VARCHAR,"
                 + COLUMN_DATE + " INTEGER " + ");";//פקודה בsql ליצירת טבלה
     }
 
