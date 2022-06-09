@@ -1,0 +1,209 @@
+@startuml
+class com.example.board.RecordHelper {
++ {static} String DATABASENAME
++ {static} String table_records
++ {static} int DATABASEVERSION
++ String COLUMN_ID
++ String COLUMN_MOVE
++ String COLUMN_TIME
++ String COLUMN_DATE
+~ SQLiteDatabase database
+- {static} String CREATE_TABLE_RECORD
+- String orderBy
+~ String[] allColumns
++ <<Create>> RecordHelper(Context,String,String)
++ String getOrderBy()
++ void onCreate(SQLiteDatabase)
++ void onUpgrade(SQLiteDatabase,int,int)
++ void open()
++ Record createRecord(Record)
++ ArrayList<Record> getAllRecord()
+}
+class com.example.board.RecordAdapter {
+- Context context
+- List<Record> recordList
++ <<Create>> RecordAdapter(Context,List<Record>)
++ RecordViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(RecordViewHolder,int)
++ int getItemCount()
+}
+class com.example.board.RecordAdapter.RecordViewHolder {
+~ TextView tvId
++ <<Create>> RecordViewHolder(View)
+}
+class com.example.board.BoardGame {
+~ boolean ifOne
+~ int size
+~ int[] theSort
+~ Random r
+~ int all
+~ Tile[][] tiles
+~ Square[][] squares
+~ Context context
+~ {static} Square blank
+~ int moves
+~ {static} Time time
++ <<Create>> BoardGame(Context,int,int)
+# void onDraw(Canvas)
++ void resetArr(int[])
++ void swap()
++ boolean findInArray(int,int[],int)
++ boolean isSolvable(int[])
++ void drawBoard(Canvas)
++ Square blank()
++ void slide(Square,Square)
++ boolean checkBlank(float,float)
++ boolean isWin()
++ Square findSquare(float,float)
+}
+class com.example.board.SettingActivity {
+~ Spinner spinnerSize
+~ List<String> sizeOption
+~ Intent intent
+~ int choiceOfSize
+~ String choiceOfColor
+~ ArrayAdapter<String> dataAdapter
+~ SharedPreferences saveSetting
+# void onCreate(Bundle)
++ void init()
++ boolean onOptionsItemSelected(MenuItem)
++ void createSpinnerOfSize()
+- void createSpinnerOfColor()
++ void onItemSelected(AdapterView<?>,View,int,long)
++ void onNothingSelected(AdapterView<?>)
+}
+class com.example.board.Game {
+- BoardGame boardGame
+~ Button btnSolved
+~ Dialog solvedD
+~ TextView tvTime
+- Context context
+~ SharedPreferences getSetting
+~ LinearLayout l
+~ boolean ifOne
+~ int moves
+~ Handler handler
+~ RecordHelper recordHelper
++ <<Create>> Game(Context)
++ void createBoardGame()
++ void doHandler()
++ void startMode()
++ void runMode()
++ void stopMode()
++ boolean onTouch(View,MotionEvent)
++ void addNewRecord()
++ void update()
++ void createSolvedDialog()
+}
+class com.example.board.Time {
+~ boolean isRun
+~ Handler handler
+~ int milliSeconds
++ <<Create>> Time(Handler)
++ int getMinute()
++ void run()
+}
+class com.example.board.Square {
+~ BoardGame boardGame
+~ Tile tile
+~ float x
+~ Paint p
+~ int number
++ <<Create>> Square(BoardGame,float,float,float,float,Tile,int)
++ void setTile(Tile)
++ void setX(float)
++ void setY(float)
++ Tile getTile()
++ float getX()
++ float getY()
++ boolean didXAndYInSquare(float,float)
+}
+class com.example.board.receiverNotification {
++ void onReceive(Context,Intent)
++ void createNotification(Context)
+}
+class com.example.board.Tile {
+~ float lastx
+~ float x
+~ int number
+~ BoardGame boardGame
+~ Paint p
++ <<Create>> Tile(BoardGame,float,float,float,float,int,int)
+- void init()
++ void setX(float)
++ void setY(float)
++ float getX()
++ float getY()
++ void draw(Canvas)
++ void slide(Square)
+}
+class com.example.board.Record {
+- int move
+- String time
+- String date
+- long recordId
++ <<Create>> Record(long,int,String,String)
++ <<Create>> Record(int,String,String)
++ int getMove()
++ void setMove(int)
++ String getTime()
++ void setTime(String)
++ String getDate()
++ void setDate(String)
++ long getRecordId()
++ void setRecordId(long)
++ String toString()
+}
+class com.example.board.SmsActivity {
+~ SharedPreferences sp
+~ SharedPreferences.Editor editor
+~ EditText message
+~ Button sendSms
+~ boolean isGranted
+# void onCreate(Bundle)
++ void init()
++ boolean onOptionsItemSelected(MenuItem)
++ void onClick(View)
++ void dialog()
++ void sendSmsFunction()
++ void permission()
++ void onRequestPermissionsResult(int,String[],int[])
+}
+class com.example.board.MainActivity {
+~ {static} Button btnStart
+~ Button btnOrder
+~ SharedPreferences getSetting
+~ Dialog recordsD
+~ boolean passToIntent
+~ RecyclerView recyclerView
+~ AlarmManager alarmManager
+~ PendingIntent pendingIntent
+~ Game game
+~ ActivityResultLauncher<Intent> StartForResult
+# void onCreate(Bundle)
+- void init()
++ boolean onCreateOptionsMenu(Menu)
++ boolean onOptionsItemSelected(MenuItem)
++ void onClick(View)
++ void startNotification()
+# void onPause()
++ List<Record> createRecordListForShow()
++ void createRecordsDialog()
+}
+
+
+android.database.sqlite.SQLiteOpenHelper <|-- com.example.board.RecordHelper
+com.example.board.Adapter <|-- com.example.board.RecordAdapter
+com.example.board.RecordAdapter +.. com.example.board.RecordAdapter.RecordViewHolder
+com.example.board.ViewHolder <|-- com.example.board.RecordAdapter.RecordViewHolder
+android.view.View <|-- com.example.board.BoardGame
+com.example.board.OnItemSelectedListener <|.. com.example.board.SettingActivity
+androidx.appcompat.app.AppCompatActivity <|-- com.example.board.SettingActivity
+com.example.board.OnTouchListener <|.. com.example.board.Game
+com.example.board.Thread <|-- com.example.board.Time
+android.content.BroadcastReceiver <|-- com.example.board.receiverNotification
+android.view.View.OnClickListener <|.. com.example.board.SmsActivity
+androidx.appcompat.app.AppCompatActivity <|-- com.example.board.SmsActivity
+com.example.board.OnClickListener <|.. com.example.board.MainActivity
+androidx.appcompat.app.AppCompatActivity <|-- com.example.board.MainActivity
+@enduml
