@@ -7,8 +7,6 @@
     android:orientation="vertical"
     tools:context=".SmsActivity">
 
-
-
     <EditText
         android:id="@+id/etSms"
         android:layout_width="match_parent"
@@ -17,8 +15,6 @@
         android:hint="your message here"
         android:ems="10"
         android:inputType="textMultiLine" />
-
-
 
     <Button
         android:id="@+id/btnSms"

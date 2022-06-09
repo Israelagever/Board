@@ -59,7 +59,7 @@ public class RecordAdapter extends  RecyclerView.Adapter<RecordAdapter.RecordVie
 
 
         Record record = recordList.get(position);
-        //binding the data with the viewholder views
+
         holder.tvId.setText(String.valueOf(position+1));
         holder.tvMove.setText(String.valueOf(record.getMove()));
         holder.tvTime.setText(record.getTime());

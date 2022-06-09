@@ -101,7 +101,7 @@ public class Game implements View.OnTouchListener {
         doHandler();
         time = new Time(handler);
         tvTime.setText("00:00.0");
-        tvMoves.setText("num of moves: 0");
+        tvMoves.setText("number of moves: 0");
         btnPause.setText("pause");
         btnPause.setEnabled(false);
 
@@ -139,7 +139,7 @@ public class Game implements View.OnTouchListener {
                     boardGame.slide(mySquare, blank);
 
                     moves++;
-                    tvMoves.setText("num of moves: " + moves);
+                    tvMoves.setText("number of moves: " + moves);
                 }
                 if (boardGame.isWin()) {//במצב של ניצחון
                     ifPause = true;

@@ -17,7 +17,6 @@ import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 
 
 import android.os.Bundle;
@@ -26,23 +25,17 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import android.view.MotionEvent;
 import android.view.View;
 
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import java.util.List;
-
-
-
-import static com.example.board.BoardGame.time;
-
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
@@ -107,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onCreateOptionsMenu(Menu menu) {//פעולה שיוצרת את התפריט
 
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_setting,menu);
+        inflater.inflate(R.menu.menu_main,menu);
         return true;
     }
 
@@ -209,13 +202,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
-
-
-
-
-
-
     public List<Record> createRecordListForShow()//צמצום המערךנ שיאים ל10 שיאים הראשונים
     {
         game.recordHelper.open();
@@ -234,6 +220,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     public void createRecordsDialog()//יצירת הדיאלוג של השיאים
     {
+
 
         recordsD=new Dialog(this);
         recordsD.setContentView(R.layout.custom_dialog_records);
@@ -275,7 +262,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 game.recordHelper.close();
             }
         });
-
     }
 
 }

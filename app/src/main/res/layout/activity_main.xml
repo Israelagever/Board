@@ -8,13 +8,10 @@
     android:background="#5C92AA"
     tools:context=".MainActivity">
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-
-
 
         <Button
             android:id="@+id/btnStart"
@@ -24,11 +21,9 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:text="start"
-
             android:textSize="25sp"/>
 
         <Button
-
             android:id="@+id/btnPause"
             android:layout_width="wrap_content"
             android:layout_height="80dp"
@@ -38,7 +33,6 @@
             android:text="pause"
             android:enabled="false"
             android:textSize="25sp" />
-
 
     </RelativeLayout>
 
@@ -50,9 +44,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:orientation="vertical">
-
 
             <TextView
                 android:id="@+id/tvMoves"
@@ -60,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:layout_marginLeft="20dp"
-                android:text="num of moves: 0"
+                android:text="number of moves: 0"
                 android:textColor="@color/black"
                 android:textSize="30sp" />
 
@@ -73,14 +65,10 @@
                 android:text="00:00.0"
                 android:textColor="@color/black"
                 android:textSize="30sp" />
-
-
         </LinearLayout>
 
-
-
     </LinearLayout>
-
+    <!--בתוך הLinearLayout מכניסים את הלוח של המשחק-->
     <LinearLayout
         android:layout_gravity="center"
         android:layout_width="match_parent"
@@ -88,9 +76,4 @@
         android:id="@+id/lGame"
         android:orientation="vertical" >
     </LinearLayout>
-
-
-
-
-
 </LinearLayout>
