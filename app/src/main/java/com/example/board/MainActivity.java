@@ -68,7 +68,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         init();
 
     }
-    private void init(){//פעולה שמאתחלת את האובייקטים ומעדכנת את הSharedPreferences
+    //פעולה שמאתחלת את האובייקטים ומעדכנת את הSharedPreferences
+    private void init(){
 
         getSetting = getSharedPreferences("data",0);
         SharedPreferences.Editor editor = getSetting.edit();
@@ -94,18 +95,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-
-
+    //פעולה שיוצרת את התפריט
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {//פעולה שיוצרת את התפריט
+    public boolean onCreateOptionsMenu(Menu menu) {
 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main,menu);
         return true;
     }
 
+
+    //כשלוחצים על אפשרות בתפריט
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {//כשלוחצים על אפשרות בתפריט
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.setting) {//כניסה להגדרות
             Intent intent = new Intent(MainActivity.this,SettingActivity.class);
             passToIntent = true;
@@ -126,6 +128,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
 
     }
+
+    //פעולה שמופעלת כשלוחצים על כפתור
     @SuppressLint({"SetTextI18n", "Range"})
     @Override
     public void onClick(View v) {
@@ -166,8 +170,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             });
 
 
-
-    public void startNotification(){//הגדרת ההתראות
+    //הגדרת ההתראות
+    public void startNotification(){
 
         Intent intent = new Intent(this, receiverNotification.class);
         pendingIntent = PendingIntent.getBroadcast(
@@ -202,7 +206,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public List<Record> createRecordListForShow()//צמצום המערךנ שיאים ל10 שיאים הראשונים
+    //צמצום המערך שיאים ל10 שיאים הראשונים
+    public List<Record> createRecordListForShow()
     {
         game.recordHelper.open();
         ArrayList<Record> oldList = game.recordHelper.getAllRecord();
@@ -218,7 +223,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else return oldList;
 
     }
-    public void createRecordsDialog()//יצירת הדיאלוג של השיאים
+
+    //יצירת הדיאלוג של השיאים
+    public void createRecordsDialog()
     {
 
 

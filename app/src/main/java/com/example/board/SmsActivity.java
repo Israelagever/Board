@@ -46,7 +46,8 @@ public class SmsActivity extends AppCompatActivity implements View.OnClickListen
 
     }
 
-    public void init(){//פעולה שמאתחלת את האובייקטים
+    //פעולה שמאתחלת את האובייקטים
+    public void init(){
         ActionBar actionBar = getSupportActionBar();
 
         // showing the back button in action bar
@@ -62,8 +63,10 @@ public class SmsActivity extends AppCompatActivity implements View.OnClickListen
         sendSms.setOnClickListener(this);
 
     }
+
+    //מה קורה כשלוחצים על הכפתור חזרה
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {//מה קורה כשלוחצים על הכפתור חזרה
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             this.finish();
             return true;
@@ -115,7 +118,7 @@ public class SmsActivity extends AppCompatActivity implements View.OnClickListen
     }
 
 
-    public void sendSmsFunction(){//פעולה ששלוחת sms למפתח
+    public void sendSmsFunction(){//פעולה ששולחת sms למפתח
         String msg=message.getText().toString();//מוציא את ההודעה מהeditText
 
 

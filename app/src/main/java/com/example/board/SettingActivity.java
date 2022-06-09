@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
+
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -23,7 +23,6 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
     Spinner spinnerSize, spinnerColor;
     List<String> sizeOption, colorOption;
 
-    Intent intent;
     int choiceOfSize;
     String  choiceOfColor;
 
@@ -44,7 +43,7 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
 
     }
 
-    public void init() {//פעולה שמאתחלת את האובייקטים ומקבלת מהSharedPreferences את ההגדרות הנוכחיות
+    private void init() {//פעולה שמאתחלת את האובייקטים ומקבלת מהSharedPreferences את ההגדרות הנוכחיות
 
         ActionBar actionBar = getSupportActionBar();
 
@@ -85,7 +84,7 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
         spinnerSize.setOnItemSelectedListener(this);
     }
 
-    private void createSpinnerOfColor() {//יצירת הספינר של הגדרת הצבע של האריחים
+    public void createSpinnerOfColor() {//יצירת הספינר של הגדרת הצבע של האריחים
 
 
         colorOption = new ArrayList<String>();
@@ -122,7 +121,7 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
             editor.putInt("size", Integer.parseInt(temp));//מעדכן את ההגדרה
             editor.commit();
 
-            setResult(RESULT_OK, intent);
+            setResult(RESULT_OK);
         }
         else//נלחץ בספינר של הצבעים
         {
@@ -160,7 +159,7 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
                     break;
             }
             editor.commit();
-            setResult(RESULT_OK, intent);
+            setResult(RESULT_OK);
         }
     }
 

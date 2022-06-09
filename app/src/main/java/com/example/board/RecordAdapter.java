@@ -60,7 +60,7 @@ public class RecordAdapter extends  RecyclerView.Adapter<RecordAdapter.RecordVie
 
         Record record = recordList.get(position);
 
-        holder.tvId.setText(String.valueOf(position+1));
+        holder.tvNum.setText(String.valueOf(position+1));
         holder.tvMove.setText(String.valueOf(record.getMove()));
         holder.tvTime.setText(record.getTime());
         holder.tvDate.setText(record.getDate());
@@ -73,12 +73,12 @@ public class RecordAdapter extends  RecyclerView.Adapter<RecordAdapter.RecordVie
 
     class RecordViewHolder extends RecyclerView.ViewHolder {//הclass שיורש מViewHolder
 
-        TextView tvId, tvMove, tvTime,tvDate;
+        TextView tvNum, tvMove, tvTime,tvDate;
 
         public RecordViewHolder(View itemView) {//מאתחל את הview הנוכחי
             super(itemView);
 
-            tvId = itemView.findViewById(R.id.tvId);
+            tvNum = itemView.findViewById(R.id.tvId);
             tvMove = itemView.findViewById(R.id.tvMoves);
             tvTime = itemView.findViewById(R.id.tvTime);
             tvDate = itemView.findViewById(R.id.tvDate);

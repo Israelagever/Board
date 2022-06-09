@@ -157,7 +157,7 @@ public class Game implements View.OnTouchListener {
         recordHelper.open();
         String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());//מציאת התאריך הנוכחי
         Record r = new Record(moves,tvTime.getText().toString(),currentDate);//יצירת שיר חדש
-        System.out.println(recordHelper.createRecord(r).getRecordId());//הוספת השיא החדש
+        recordHelper.createRecord(r);//הוספת השיא החדש
         recordHelper.close();
     }
 

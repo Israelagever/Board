@@ -17,7 +17,7 @@ public class RecordHelper extends SQLiteOpenHelper {
     public static  String table_records;
     public static final int DATABASEVERSION = 1;
 
-    public final String COLUMN_ID = "recordId";
+
     public final String COLUMN_MOVE = "move";
     public final String COLUMN_TIME = "time";
     public final String COLUMN_DATE = "date";
@@ -28,7 +28,7 @@ public class RecordHelper extends SQLiteOpenHelper {
 
     private String orderBy;
 
-    String[] allColumns = {COLUMN_ID, COLUMN_MOVE, COLUMN_TIME, COLUMN_DATE};//כל העמודות
+    String[] allColumns = { COLUMN_MOVE, COLUMN_TIME, COLUMN_DATE};//כל העמודות
 
 
     public RecordHelper(Context context, final String table_records,String orderBy) {
@@ -36,7 +36,7 @@ public class RecordHelper extends SQLiteOpenHelper {
         this.table_records = table_records;//הגדרת איזה טבלה
         this.orderBy = orderBy;//הגדרת איזה סידור
         CREATE_TABLE_RECORD = "CREATE TABLE IF NOT EXISTS " +
-                this.table_records + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_MOVE + " INTEGER," + COLUMN_TIME + " VARCHAR,"
+                this.table_records + "(" + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_MOVE + " INTEGER," + COLUMN_TIME + " VARCHAR,"
                 + COLUMN_DATE + " INTEGER " + ");";//פקודה בsql ליצירת טבלה
     }
 
@@ -70,7 +70,7 @@ public class RecordHelper extends SQLiteOpenHelper {
 
         long insertId = database.insert(RecordHelper.table_records, null, values);//הפקודה שמוסיפה את השיא החדש
         Log.d("data1", "Record " + insertId + " insert to database");
-        r.setRecordId(insertId);
+
         return r;
     }
     @SuppressLint("Range")
@@ -84,11 +84,11 @@ public class RecordHelper extends SQLiteOpenHelper {
         {
             while(cursor.moveToNext())//כל עוד יש עוד שיא
             {
-                long id=cursor.getLong(cursor.getColumnIndex(this.COLUMN_ID));
+
                 int move=cursor.getInt(cursor.getColumnIndex(this.COLUMN_MOVE));
                 String time=cursor.getString(cursor.getColumnIndex(this.COLUMN_TIME));
                 String date=cursor.getString(cursor.getColumnIndex(this.COLUMN_DATE));
-                Record r=new Record(id,move,time,date);
+                Record r=new Record(move,time,date);
                 l.add(r);
             }
 
