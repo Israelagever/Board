@@ -74,9 +74,9 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
         sizeOption = new ArrayList<String>();
         for (int i = 3; i <= 10; i++)
             sizeOption.add(String.valueOf(i));//הכנסת הגדלים לArrayList
+
         dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, sizeOption);//יצירת המתאם עם הרשימה של הגדלים
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);//שינוי העיצוב של התצוגה כשהספינר נפתח
-
         spinnerSize.setAdapter(dataAdapter);
         spinnerSize.setSelection(choiceOfSize - 3);//מכיוון שהגודל הכי קטן הוא 3 אז הבחירה צריכה להיות פחות 3
 
@@ -100,7 +100,6 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
 
 
 
-
         for (int i = 0;i<7;i++)
         {
             if (spinnerColor.getAdapter().getItem(i).equals(choiceOfColor)){
@@ -108,7 +107,7 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
                 break;
             }
         }
-        spinnerColor.setOnItemSelectedListener(this);//
+        spinnerColor.setOnItemSelectedListener(this);
     }
 
     @Override
@@ -127,8 +126,8 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
         {
             String temp = adapterView.getItemAtPosition(i).toString();
 
-
-            switch (temp) {//מעדכן איזה צבע להגדיר לפי הבחירה
+            //מעדכן איזה צבע להגדיר לפי הבחירה
+            switch (temp) {
                 case "magenta":
                     editor.putInt("color",Color.MAGENTA);
                     editor.putString("colorOfTile name","magenta");

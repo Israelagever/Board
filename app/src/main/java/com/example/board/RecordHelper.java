@@ -62,7 +62,7 @@ public class RecordHelper extends SQLiteOpenHelper {
         Log.d("data1", "Database connection open");
     }
 
-    public Record createRecord(Record r) {//פעולה שמוסיפה עוד שיא לבסיס נתונים
+    public Record createRecord(Record r) {//פעולה שמקבלת שיא ומוסיפה אותו לבסיס נתונים
         ContentValues values = new ContentValues();//אובייקט שמיועד להכניס נתונים לבסיס נתונים
         values.put(this.COLUMN_MOVE, r.getMove());
         values.put(this.COLUMN_TIME, r.getTime());

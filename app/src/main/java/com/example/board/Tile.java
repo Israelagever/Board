@@ -1,25 +1,21 @@
 package com.example.board;
 
-import android.annotation.TargetApi;
+
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
-import android.os.Build;
+
 
 public class Tile {
-    float lastx, lasty;
-    float x, y, w, h;
 
 
-    int number, color;
     BoardGame boardGame;
-    Paint p, paintTitle, p2;
+    float x, y, w, h;
+    int number, color;
+    Paint p, paintTitle;
 
     public Tile(BoardGame boardGame, float x, float y, float w, float h, int num, int color) {
         this.boardGame = boardGame;
-        this.lastx = x;
-        this.lasty = y;
+
         this.x = x;
         this.y = y;
         this.w = w;
@@ -45,8 +41,6 @@ public class Tile {
         paintTitle.setTextSize(70);
 
 
-        p2 = new Paint();
-        p2.setColor(color);
     }
 
 
@@ -77,7 +71,7 @@ public class Tile {
 
 
 
-    public void slide(Square to) {//פעולה שמעבירה את האריח הנוכחי לריבוע אחר
+    public void slide(Square to) {//פעולה שמקבלת ריבוע ומעבירה את האריח הנוכחי לריבוע הזה
 
         this.setX(to.getX());
         this.setY(to.getY());

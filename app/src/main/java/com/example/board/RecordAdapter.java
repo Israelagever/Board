@@ -18,21 +18,9 @@ import java.util.List;
 
 
 
-/**
-
- * Created by asafamir on 09/01/2019.
-
- */
-
-
-
 public class RecordAdapter extends  RecyclerView.Adapter<RecordAdapter.RecordViewHolder> {
 
-
-
-
     private final Context context;
-
     private final List<Record> recordList;//הרשימה של השיאים
 
 

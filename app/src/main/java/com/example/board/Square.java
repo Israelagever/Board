@@ -14,7 +14,7 @@ public class Square  {
     Tile tile;
     float x,y,w,h;
 
-    Paint p;
+
     int number;
 
 
@@ -27,7 +27,7 @@ public class Square  {
         this.y = y;//מיקום לפי y
 
         this.boardGame = boardGame;
-        p = new Paint();
+
 
         this.w = w;//גודל של הריבוע
         this.h = h;

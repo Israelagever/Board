@@ -210,32 +210,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public List<Record> createRecordListForShow()
     {
         game.recordHelper.open();
-        ArrayList<Record> oldList = game.recordHelper.getAllRecord();
-        ArrayList<Record> newList = new ArrayList<>();
-        if (oldList.size()>10) {
-            for (int i = 0; i < 10; i++) {
+        ArrayList<Record> list = game.recordHelper.getAllRecord();
 
-                newList.add(oldList.get(i));
-            }
-            game.recordHelper.close();
+
+        //אם המערך של השיאים גדול מ10
+        if (list.size()>10) {
+            List<Record> newList = list.subList(0, 10);//לקיחת ה10 שיאים הראשונים
             return newList;
         }
-        else return oldList;
+
+        game.recordHelper.close();
+        return list;
 
     }
+
+
+
+
 
     //יצירת הדיאלוג של השיאים
     public void createRecordsDialog()
     {
 
-
+        //אתחול והגדרת הדיאלוג
         recordsD=new Dialog(this);
         recordsD.setContentView(R.layout.custom_dialog_records);
         recordsD.setCancelable(true);
+
+        //אתחול הrecyclerView
         recyclerView = (RecyclerView) recordsD.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        //יצירת adapter עם list של השיאים
         RecordAdapter recordAdapter = new RecordAdapter(this, createRecordListForShow());
 
         recyclerView.setAdapter(recordAdapter);
@@ -260,15 +267,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 //אתחול הטבלה לפי ההגדרה החדשה
                 editor.commit();
+                //עדכון הסידור החדש והצגתו בדיאלוג
                 game.update();
-                game.recordHelper.open();
                 RecordAdapter recordAdapter = new RecordAdapter(MainActivity.this,
                         createRecordListForShow());
                 recyclerView.setAdapter(recordAdapter);
                 recordsD.show();
-                game.recordHelper.close();
+
             }
         });
+
     }
 
 }
