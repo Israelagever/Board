@@ -28,7 +28,7 @@ public class receiverNotification extends BroadcastReceiver {
         long when = System.currentTimeMillis();//הזמן הנוכחי
         String title = "important message";
         String ticker = "ticker";
-        int random = new Random().nextInt(5)+1;
+        int random = new Random().nextInt(5)+1;//הגרלת מספר הודעה
         String message = "";
         switch (random) {//השמת הודעה רנדומלית
             case 1:
@@ -49,11 +49,12 @@ public class receiverNotification extends BroadcastReceiver {
         }
 
         //phase 2
-        Intent intent1 = new Intent(context, MainActivity.class);
+        Intent intent1 = new Intent(context, MainActivity.class);//זה intent ששולח מפה לmainActivity
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent1, 0);
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);//חיבור לservice של המערכת
 
+        //הכנת הבנאי של ההתראה
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "M_CH_ID");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//אם הגרסה מעל אוראו חובה להוסיף channel
             String channelId = "YOUR_CHANNEL_ID";
@@ -63,12 +64,13 @@ public class receiverNotification extends BroadcastReceiver {
             notificationManager.createNotificationChannel(channel);
             builder.setChannelId(channelId);
         }
-        //phase 3
+        //יצירת אובייקט של התראה והכנסת אליו כל הרכיבים שהכנו קודם
         Notification notification = builder.setContentIntent(pendingIntent)
                 .setSmallIcon(icon).setTicker(ticker).setWhen(when)
-                .setAutoCancel(true).setContentTitle(title)
-                .setContentText(message).build();
-        notificationManager.notify(3, notification);//יצירת האובייקט של ההתראה
+                .setAutoCancel(true).setContentTitle(title).setStyle(new NotificationCompat.BigTextStyle()
+                .bigText(message)).build();
+
+        notificationManager.notify(3, notification);//קריאה להתראה
 
         //Toast.makeText(context, "Alarm....", Toast.LENGTH_LONG).show();
     }

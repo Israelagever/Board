@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 
+import android.net.MacAddress;
 import android.os.Bundle;
 
 import android.view.Menu;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);//הופף את הactivity למסך מלא
 
@@ -174,10 +176,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void startNotification(){
 
         Intent intent = new Intent(this, receiverNotification.class);
+
+        //שליחה לברודקסט receiverNotification.class
         pendingIntent = PendingIntent.getBroadcast(
                 this.getApplicationContext(), 234324243, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);//התחברות לservice של המערכת
 
         Calendar calendar = Calendar.getInstance();
 
@@ -188,7 +191,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 alarmManager.INTERVAL_DAY, pendingIntent);//הפעלת החזרה היומית
-
     }
 
 
@@ -200,9 +202,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             game.stopMode();
 
             if (passToIntent) btnPause.setText("pause");
-
-
-
         }
     }
 
@@ -223,10 +222,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return list;
 
     }
-
-
-
-
 
     //יצירת הדיאלוג של השיאים
     public void createRecordsDialog()

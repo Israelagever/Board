@@ -1,5 +1,6 @@
 package com.example.board;
 
+import android.net.MacAddress;
 import android.os.Handler;
 import android.os.Message;
 
@@ -28,6 +29,7 @@ public class Time extends Thread {
     public void run() {//מימוש הפעולה run שרצה מתי שהthread מתחיל
         super.run();
         while(true)
+
 
         {
             if(isRun)

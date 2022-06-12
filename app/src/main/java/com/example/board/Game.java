@@ -81,7 +81,6 @@ public class Game implements View.OnTouchListener {
             @Override
             public boolean handleMessage(Message msg)
             {
-
                 if (time.isRun)
                     tvTime.setText(String.format("%02d",time.getMinute())+":"+String.format("%02d",msg.arg2) +"."+ msg.arg1);//שינוי הזמן בכל עשירית שניה
                 if (!ifStart)
