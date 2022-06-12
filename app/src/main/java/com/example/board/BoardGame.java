@@ -34,9 +34,9 @@ public class BoardGame extends View {
     Context context;
 
     static Square blank;//המקום הריק
-    int moves;
 
     static Time time;
+
     public BoardGame(Context context,int size,int color) {
         super(context);
         this.context = context;
@@ -50,7 +50,7 @@ public class BoardGame extends View {
 
 
 
-        this.setBackgroundColor(Color.parseColor("#393939"));
+        this.setBackgroundColor(Color.parseColor("#393939"));//שינוי הצבע של הרקע לאפור
 
     }
 
@@ -69,6 +69,15 @@ public class BoardGame extends View {
 
     }
 
+    public boolean findInArray(int n,int[] arr,int temp)//בדיקה אם מספר כבר נמצא במערך
+    {
+        for (int i = 0; i < temp; i++) {
+            if (arr[i] == n)
+                return true;
+        }
+        return false;
+    }
+
     public void swap(){//ערבוב המערך במספרים מ1 עד all
         int temp;
         for (int i = 0;i<all;i++) {
@@ -81,14 +90,7 @@ public class BoardGame extends View {
         }
     }
 
-    public boolean findInArray(int n,int[] arr,int temp)//בדיקה אם מספר כבר נמצא במערך
-    {
-        for (int i = 0; i < temp; i++) {
-            if (arr[i] == n)
-                return true;
-        }
-        return false;
-    }
+
 
     public boolean isSolvable(int[] puzzle)// פעולה עם אלגוריתמיקה מתקדמת שבודקת אם המערך פתיר במשחק הזה, קישור עם הסבר מפורט על האלגוריתם - https://www.geeksforgeeks.org/check-instance-15-puzzle-solvable/
     {
@@ -126,15 +128,20 @@ public class BoardGame extends View {
         }
     }
 
+    public void buildArrayTheSort()//פעולה שמשתמשת בפעולות resetArr, swap וisSolveable בשביל ליצור את המערך הסופי של הבלגון
+    {
+        do {
+            resetArr(theSort);
+            swap();
+        }while (!isSolvable(theSort));
+    }
+
 
     public void drawBoard(Canvas canvas){//הפעולה שמציירת את הלוח
         if(ifOne) {
 
-            //int count =1;
-            do {
-                resetArr(theSort);
-                swap();
-            }while (!isSolvable(theSort));
+
+            buildArrayTheSort();
 
             int count = 1;
             int x = 15;
@@ -144,7 +151,7 @@ public class BoardGame extends View {
             int w = ((canvas.getWidth()-15)/size)-15;
 
 
-            moves=0;
+
 
 
 
@@ -203,7 +210,7 @@ public class BoardGame extends View {
 
 
 
-    public boolean checkBlank(float x, float y) {//בודק אם הx והy נמצאים על המקום הריק
+    public boolean checkBlankNear(float x, float y) {//בודק אם הx והy נמצאים ליד המקום הריק
         float distant = squares[0][0].h;
         if (blank.didXAndYInSquare(x,y+distant) || blank.didXAndYInSquare(x,y-distant) || blank.didXAndYInSquare(x+distant,y) || blank.didXAndYInSquare(x-distant,y))
             return true;
@@ -213,11 +220,10 @@ public class BoardGame extends View {
     public boolean isWin() {//בודק אם הלוח פתור
         for(int i = 0;i<squares.length;i++) {
             for (int j = 0; j < squares.length; j++) {
-                if (squares[i][j].getTile()==null)
+                if (squares[i][j].getTile()==null)//אם אנחנו על הריבוע הריק
                 {
-                    if (i!=size-1||j!=size-1)
-                        return false;
-                    continue;
+                    //אם הגענו לריובע האחרון והחור נמצא שם בהכרח הלוח פתור מכיוון שעברנו על כל המספרים ובדקנו שהם נמצאים במקום
+                    return i == size - 1 && j == size - 1;
                 }
                 if(squares[i][j].number != squares[i][j].getTile().number)
                     return false;

@@ -133,11 +133,10 @@ public class Game implements View.OnTouchListener {
 
         if (!ifPause) {
             if (event.getAction() == MotionEvent.ACTION_UP) {//ברגע שהורמה האצבע
+
                 Square mySquare = boardGame.findSquare(event.getX(), event.getY());//מציאת הריבוע שנלחץ
-
-                if (mySquare != null && boardGame.checkBlank(event.getX(), event.getY())) {//בודקת אם אפשר לעשות מהלך חוקי
+                if (mySquare != null && boardGame.checkBlankNear(event.getX(), event.getY())) {//בודקת אם אפשר לעשות מהלך חוקי
                     boardGame.slide(mySquare, blank);
-
                     moves++;
                     tvMoves.setText("number of moves: " + moves);
                 }
