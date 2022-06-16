@@ -60,8 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        
+        setTheme(R.style.Theme_Board);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);//הופף את הactivity למסך מלא
 
@@ -179,13 +178,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //שליחה לברודקסט receiverNotification.class
         pendingIntent = PendingIntent.getBroadcast(
-                this.getApplicationContext(), 234324243, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                this.getApplicationContext(), 234324243, intent, PendingIntent.FLAG_IMMUTABLE);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);//התחברות לservice של המערכת
 
         Calendar calendar = Calendar.getInstance();
 
-        calendar.set(Calendar.HOUR_OF_DAY, 20);//הגדרת השעה של ההתראה ל20:30
-        calendar.set(Calendar.MINUTE, 30);
+        calendar.set(Calendar.HOUR_OF_DAY, 12);//הגדרת השעה של ההתראה ל20:30
+        calendar.set(Calendar.MINUTE, 7);
         calendar.set(Calendar.SECOND, 0);
 
 

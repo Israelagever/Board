@@ -39,6 +39,7 @@ public class SmsActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.Theme_Board);
         setContentView(R.layout.activity_sms);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,

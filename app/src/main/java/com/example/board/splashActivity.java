@@ -3,6 +3,8 @@ package com.example.board;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -23,9 +25,12 @@ public class splashActivity extends AppCompatActivity implements Animation.Anima
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.Theme_Board);
         setContentView(R.layout.activity_splash);
         init();
         iv15.startAnimation(animFadeIn);//הפעלת האנימציה
+
+
         //מחכה את כמות הזמן שהגדרנו לו ולאחר מכן מעביר אותנו למסך הראשי
         new Handler().postDelayed(new Runnable(){
             @Override
@@ -40,10 +45,11 @@ public class splashActivity extends AppCompatActivity implements Animation.Anima
 
     //פעולה שמאתחלת את האובייקטים ומגדירה כמה הגדרות
     private void init(){
+
+
+        getSupportActionBar().hide();//מסתיר את הסרגל למעלה
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);//הופף את הactivity למסך מלא
-        getSupportActionBar().hide();//מסתיר את הסרגל למעלה
-
         iv15 = findViewById(R.id.tv15);
 
         tvPuzzle = findViewById(R.id.tvPuzzle);
