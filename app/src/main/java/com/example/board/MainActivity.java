@@ -19,7 +19,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 
-import android.net.MacAddress;
 import android.os.Bundle;
 
 import android.view.Menu;
@@ -30,7 +29,6 @@ import android.view.View;
 
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ProgressBar;
 
 
 import java.util.ArrayList;
@@ -174,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //הגדרת ההתראות
     public void startNotification(){
 
-        Intent intent = new Intent(this, receiverNotification.class);
+        Intent intent = new Intent(this, ReceiverNotification.class);
 
         //שליחה לברודקסט receiverNotification.class
         pendingIntent = PendingIntent.getBroadcast(
@@ -183,8 +181,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Calendar calendar = Calendar.getInstance();
 
-        calendar.set(Calendar.HOUR_OF_DAY, 12);//הגדרת השעה של ההתראה ל20:30
-        calendar.set(Calendar.MINUTE, 7);
+        calendar.set(Calendar.HOUR_OF_DAY, 8);//הגדרת השעה של ההתראה ל20:30
+        calendar.set(Calendar.MINUTE, 30);
         calendar.set(Calendar.SECOND, 0);
 
 

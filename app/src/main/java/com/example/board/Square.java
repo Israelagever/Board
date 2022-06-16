@@ -6,8 +6,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.View;
 
-
-
 public class Square  {
 
     BoardGame boardGame;
@@ -20,7 +18,6 @@ public class Square  {
 
     public Square(BoardGame boardGame,float x,float y,float w,float h,Tile tile,int number)
     {
-
 
         this.number = number;//המספר של הריבוע
         this.x = x;//מיקום לפי x

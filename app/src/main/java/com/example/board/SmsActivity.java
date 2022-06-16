@@ -89,7 +89,7 @@ public class SmsActivity extends AppCompatActivity implements View.OnClickListen
                 sendSmsFunction();
         }
         else
-            Toast.makeText(getApplicationContext(), "massage cannot br null", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "message cannot br null", Toast.LENGTH_LONG).show();
 
     }
     public void dialog()//בונה את הדיאלוג אם המשתמש לא נתן הרשאה ומנסה עוד פעם לשלוח הודעה

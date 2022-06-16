@@ -3,8 +3,6 @@ package com.example.board;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -14,7 +12,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class splashActivity extends AppCompatActivity implements Animation.AnimationListener {
+public class SplashActivity extends AppCompatActivity implements Animation.AnimationListener {
 
     ImageView iv15;
     TextView tvPuzzle;
@@ -36,9 +34,9 @@ public class splashActivity extends AppCompatActivity implements Animation.Anima
             @Override
             public void run() {
                 // יצירת intent שיעביר אותנו למסך הראשי
-                Intent mainIntent = new Intent(splashActivity.this,MainActivity.class);
-                splashActivity.this.startActivity(mainIntent);
-                splashActivity.this.finish();
+                Intent mainIntent = new Intent(SplashActivity.this,MainActivity.class);
+                SplashActivity.this.startActivity(mainIntent);
+                SplashActivity.this.finish();
             }
         }, SPLASH_DISPLAY_LENGTH);
     }

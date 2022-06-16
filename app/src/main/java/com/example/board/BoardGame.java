@@ -1,17 +1,11 @@
 package com.example.board;
 
-import android.annotation.SuppressLint;
-import android.app.Dialog;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 
-import android.graphics.Paint;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
-
-
 import java.util.Arrays;
 import java.util.Random;
 
@@ -91,8 +85,8 @@ public class BoardGame extends View {
     }
 
 
-
-    public boolean isSolvable(int[] puzzle)// פעולה עם אלגוריתמיקה מתקדמת שבודקת אם המערך פתיר במשחק הזה, קישור עם הסבר מפורט על האלגוריתם - https://www.geeksforgeeks.org/check-instance-15-puzzle-solvable/
+    // פעולה עם אלגוריתמיקה מתקדמת שבודקת אם המערך פתיר במשחק הזה, קישור עם הסבר מפורט על האלגוריתם - https://www.geeksforgeeks.org/check-instance-15-puzzle-solvable/
+    public boolean isSolvable(int[] puzzle)
     {
         int parity = 0;// מספר ההיפוכים
         int gridWidth = (int) Math.sqrt(puzzle.length);
@@ -212,7 +206,8 @@ public class BoardGame extends View {
 
     public boolean checkBlankNear(float x, float y) {//בודק אם הx והy נמצאים ליד המקום הריק
         float distant = squares[0][0].h;
-        if (blank.didXAndYInSquare(x,y+distant) || blank.didXAndYInSquare(x,y-distant) || blank.didXAndYInSquare(x+distant,y) || blank.didXAndYInSquare(x-distant,y))
+        if (blank.didXAndYInSquare(x,y+distant) || blank.didXAndYInSquare(x,y-distant) ||
+                blank.didXAndYInSquare(x+distant,y) || blank.didXAndYInSquare(x-distant,y))
             return true;
         return false;
     }

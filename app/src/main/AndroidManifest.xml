@@ -14,7 +14,7 @@
         android:theme="@style/splashScreenTheme"
         >
         <activity
-            android:name=".splashActivity"
+            android:name=".SplashActivity"
             android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
@@ -39,7 +39,7 @@
         </activity>
 
         <receiver
-            android:name=".receiverNotification"
+            android:name=".ReceiverNotification"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

@@ -1,6 +1,5 @@
 package com.example.board;
 
-import android.net.MacAddress;
 import android.os.Handler;
 import android.os.Message;
 
@@ -12,17 +11,17 @@ public class Time extends Thread {
 
     Handler handler;
 
-    int milliSeconds, seconds, minute;//מילי שניות,שניות,דקות
+    int milliSeconds, seconds, minutes;//מילי שניות,שניות,דקות
     public Time(Handler handler)
     {
         this.handler=handler;
         milliSeconds = 0;
         seconds = 0;
-        minute = 0;
+        minutes = 0;
     }
 
-    public int getMinute() {
-        return minute;
+    public int getMinutes() {
+        return minutes;
     }
 
     @Override
@@ -51,7 +50,7 @@ public class Time extends Thread {
                     }
                     //העלאת דקה אחרי 60 שניות
                     if (seconds == 60) {
-                        minute++;
+                        minutes++;
                         seconds = 0;
                     }
                     msg.arg1 = milliSeconds;

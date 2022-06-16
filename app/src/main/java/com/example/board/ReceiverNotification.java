@@ -15,7 +15,7 @@ import androidx.core.app.NotificationCompat;
 
 import java.util.Random;
 
-public class receiverNotification extends BroadcastReceiver {
+public class ReceiverNotification extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {//כשהBroadcast מופעל
