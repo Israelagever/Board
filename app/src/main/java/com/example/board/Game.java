@@ -166,6 +166,9 @@ public class Game implements View.OnTouchListener {
         int color = getSetting.getInt("color", 0);
         if (color != 0) colorOfTile = color;
         recordHelper = new RecordHelper(context,"tblrecords"+sizeOfBoard, getSetting.getString("orderBy",null));
+        recordHelper.open();
+        recordHelper.onCreate(recordHelper.database);
+        recordHelper.close();
 
     }
     public void createSolvedDialog()//פתיחת דיאלוג כשמנצחים

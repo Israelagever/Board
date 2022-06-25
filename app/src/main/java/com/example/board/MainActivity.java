@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnPause.setOnClickListener(this);
 
         game = new Game(this);
-        game.update();
+
 
     }
 
