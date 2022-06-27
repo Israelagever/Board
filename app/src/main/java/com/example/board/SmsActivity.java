@@ -2,6 +2,7 @@ package com.example.board;
 
 import android.Manifest;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -53,7 +54,9 @@ public class SmsActivity extends AppCompatActivity implements View.OnClickListen
         ActionBar actionBar = getSupportActionBar();
 
         // showing the back button in action bar
-        actionBar.setDisplayHomeAsUpEnabled(true);//מראה כפתור חזרה בלמעלה של המסך
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);//מראה כפתור חזרה בלמעלה של המסך
+        }
 
 
         sp = getSharedPreferences("data",0);
@@ -90,8 +93,9 @@ public class SmsActivity extends AppCompatActivity implements View.OnClickListen
         }
         else
             Toast.makeText(getApplicationContext(), "message cannot br null", Toast.LENGTH_LONG).show();
-
     }
+
+    
     public void dialog()//בונה את הדיאלוג אם המשתמש לא נתן הרשאה ומנסה עוד פעם לשלוח הודעה
     {
         AlertDialog.Builder builder = new AlertDialog
@@ -124,6 +128,7 @@ public class SmsActivity extends AppCompatActivity implements View.OnClickListen
     }
 
 
+    @SuppressLint("UnlocalizedSms")
     public void sendSmsFunction(){//פעולה ששולחת sms למפתח
         String msg=message.getText().toString();//מוציא את ההודעה מהeditText
 
@@ -152,7 +157,7 @@ public class SmsActivity extends AppCompatActivity implements View.OnClickListen
 
             }
             else{//אם זה כבר פעם שלישית מפנים את המשתמש להגדרות של האפליקציה
-                Toast.makeText(this, "Please allow sms permission setting", Toast.LENGTH_LONG);
+                Toast.makeText(this, "Please allow sms permission setting", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent();
                 intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);//הגדרת הintent להגדרות של האפליקציה
                 Uri uri = Uri.fromParts("package", this.getPackageName(), null);

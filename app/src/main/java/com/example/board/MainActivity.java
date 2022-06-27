@@ -211,8 +211,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //אם המערך של השיאים גדול מ10
         if (list.size()>10) {
-            List<Record> newList = list.subList(0, 10);//לקיחת ה10 שיאים הראשונים
-            return newList;
+            return list.subList(0, 10);
         }
 
         game.recordHelper.close();
