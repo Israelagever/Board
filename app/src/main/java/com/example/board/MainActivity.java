@@ -5,6 +5,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,8 +20,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -53,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     AlarmManager alarmManager;
     PendingIntent pendingIntent;
 
+    Bitmap bitmap;
     Game game;
 
     @Override
@@ -89,7 +94,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnPause = findViewById(R.id.btnPause);
         btnPause.setOnClickListener(this);
 
-        game = new Game(this);
+        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.picture_21);
+        game = new Game(this,bitmap);
 
 
     }
@@ -134,8 +140,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
 
         if (v == btnStart) {//אם לחצו על start
-            game = new Game(this);
+            game = new Game(this, bitmap);
             game.tvTime.setText("00:00.0");
+
 
         }
         else if (v == btnPause)//אם לחצו על pause
@@ -148,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         else {//טיפול בכפתור הsolved
             game.solvedD.dismiss();
-            game = new Game(this);
+            game = new Game(this, bitmap);
 
         }
 
@@ -162,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         passToIntent = false;
 
-                        game = new Game(MainActivity.this);//אתחול המשחק
+                        game = new Game(MainActivity.this, bitmap);//אתחול המשחק
 
                     }
                 }
@@ -269,5 +276,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
     }
-
 }

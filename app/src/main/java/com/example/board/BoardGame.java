@@ -2,6 +2,8 @@ package com.example.board;
 
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 
@@ -31,7 +33,10 @@ public class BoardGame extends View {
 
     static Time time;
 
-    public BoardGame(Context context,int size,int color) {
+    Bitmap bitmap;
+    Bitmap[] parts;
+
+    public BoardGame(Context context,int size,int color, Bitmap bitmap) {
         super(context);
         this.context = context;
         this.size = size;
@@ -42,7 +47,11 @@ public class BoardGame extends View {
         all = size*size;//לדוגמא 4x4 = 16
         theSort = new int[all];
 
+        this.bitmap = bitmap;
 
+
+        parts = new Bitmap[all];
+        cutBitmap();
 
         this.setBackgroundColor(Color.parseColor("#393939"));//שינוי הצבע של הרקע לאפור
 
@@ -130,6 +139,25 @@ public class BoardGame extends View {
         }while (!isSolvable(theSort));
     }
 
+    public void cutBitmap(){
+
+        int s = bitmap.getWidth() / size, xB = 0, yB = 0;
+        int counter = 0;
+
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                Bitmap part = Bitmap.createBitmap(bitmap, xB, yB, s,s);
+                parts[counter] = part;
+                xB += s;
+                counter++;
+            }
+            yB += s;
+
+            xB = 0;
+        }
+    }
+
 
     public void drawBoard(Canvas canvas){//הפעולה שמציירת את הלוח
         if(ifOne) {
@@ -149,21 +177,25 @@ public class BoardGame extends View {
 
 
 
-            for (int i = 0; i < squares.length; i++) {
-                for (int j = 0; j < squares.length; j++) {
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
 
                     if (theSort[count - 1] != 0) {//אם זה לא החור
 
-                        tiles[i][j] = new Tile(this, x, y, w, h, theSort[count - 1], color);
+
+
+                        tiles[i][j] = new Tile(this, x, y, w, h, theSort[count - 1], color, parts[theSort[count-1]-1]);
                         tiles[i][j].draw(canvas);
 
                     }
                     squares[i][j] = new Square(this, x, y, w, h,tiles[i][j],count);
                     x = x + w + 15;//התקדמות אופקית
+
                     count++;
 
                 }
                 y = y + h + 15;//התקדמות אנכית
+
                 x = 15;
             }
         }
@@ -237,7 +269,6 @@ public class BoardGame extends View {
         }
         return null;
     }
-
 
 
 

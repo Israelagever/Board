@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
@@ -37,8 +39,9 @@ public class Game implements View.OnTouchListener {
     Handler handler;
     RecordHelper recordHelper;
 
+    Bitmap bitmap;
 
-    public Game(Context context) {//הפעולה הבונה
+    public Game(Context context, Bitmap bitmap) {//הפעולה הבונה
         this.context = context;
 
         tvTime = ((Activity)context).findViewById(R.id.tvTime);
@@ -51,7 +54,9 @@ public class Game implements View.OnTouchListener {
         getSetting = context.getSharedPreferences("data",0);
         update();
         moves = 0;
+        this.bitmap = bitmap;
         createBoardGame();
+
 
 
     }
@@ -59,10 +64,12 @@ public class Game implements View.OnTouchListener {
     @SuppressLint("ClickableViewAccessibility")
     public void createBoardGame(){//יצירת הלוח
 
+
+
         if (sizeOfBoard != 0 && colorOfTile != 0)
-            boardGame = new BoardGame(context,sizeOfBoard, colorOfTile);
+            boardGame = new BoardGame(context,sizeOfBoard, colorOfTile,bitmap);
         else//במקרה שזה פעם ראשונה שמופעלת האפליקצה
-            boardGame = new BoardGame(context,4, Color.MAGENTA);
+            boardGame = new BoardGame(context,4, Color.MAGENTA,bitmap);
 
 
         DisplayMetrics displayMetrics = new DisplayMetrics();

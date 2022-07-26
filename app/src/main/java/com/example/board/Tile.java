@@ -1,8 +1,10 @@
 package com.example.board;
 
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 
 
 public class Tile {
@@ -12,8 +14,8 @@ public class Tile {
     float x, y, w, h;
     int number, color;
     Paint p, paintTitle;
-
-    public Tile(BoardGame boardGame, float x, float y, float w, float h, int num, int color) {
+    Bitmap bitmap;
+    public Tile(BoardGame boardGame, float x, float y, float w, float h, int num, int color, Bitmap bitmap) {
         this.boardGame = boardGame;
 
         this.x = x;
@@ -23,7 +25,7 @@ public class Tile {
 
         this.number = num;
         this.color = color;
-
+        this.bitmap = bitmap;
         init();
 
     }
@@ -61,12 +63,15 @@ public class Tile {
     }
 
     public void draw(Canvas canvas) {//פעולה שמציירת את האריח
-        canvas.drawRect(x,y,x+w,y+h,p);//מצייר את הרקע של האריח
+
+        Rect rect = new Rect((int)x,(int)y,(int)(x+w), (int)(y+h));
+        //canvas.drawRect(x,y,x+w,y+h,p);//מצייר את הרקע של האריח
 
         //drawRoundRect(x, y, x + w, y + h, p2, canvas);
-
+        canvas.drawBitmap(bitmap,null,rect,p);
         //מצייר את המספר שעל האריח
-        canvas.drawText(String.valueOf(number), x + (w / 2), (y + (h / 2))-(paintTitle.descent()+paintTitle.ascent())/2, paintTitle);
+        //canvas.drawText(String.valueOf(number), x + (w / 2), (y + (h / 2))-(paintTitle.descent()+paintTitle.ascent())/2, paintTitle);
+
     }
 
 
